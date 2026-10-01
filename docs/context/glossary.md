@@ -64,6 +64,10 @@ Classless Inter-Domain Routing. The notation, such as `10.0.0.0/16`, that descri
 
 Command-line interface, such as the `gcloud` tool.
 
+## CMEK
+
+Customer-managed encryption key. A Cloud KMS key that the customer creates and controls and that a Google Cloud service uses to protect the customer's data, instead of a Google-managed key.
+
 ## COI
 
 Conflict of Interest. A source relationship that could influence a claim; project research flags vendor-owned statements with this marker.
@@ -122,7 +126,7 @@ Google Kubernetes Engine. Google Cloud's managed Kubernetes service.
 
 ## Guide consideration
 
-One bullet point under an exam-guide objective, such as "Compute volatility configuration" under objective 2.3. The current guide has 96 considerations across 22 objectives.
+One bullet point under an exam-guide objective, such as "Compute volatility configuration" under objective 2.3. The current guide has 96 considerations across 22 objectives. Five objectives in section 6 have no bullet points, so the coverage matrix gives each of them one identifier, such as `6.3.a`, for 101 consideration identifiers.
 
 ## HSM
 
@@ -158,7 +162,11 @@ A question that states the required number of choices and is correct only when t
 
 ## Near-miss pair
 
-Two options that share the same skeleton and differ in one decisive component, so the candidate must read both to the end.
+Two options that share the same skeleton and differ in one decisive component, so the candidate must read both to the end. The style guide measures it as two options that share a run of at least 7 identical words, ignoring case and punctuation.
+
+## OIDC
+
+OpenID Connect. An identity protocol built on OAuth 2.0 in which an identity provider issues signed tokens that describe a user or workload. Workload Identity Federation accepts OIDC tokens from external providers, such as a CI system.
 
 ## PCA
 
@@ -178,7 +186,7 @@ The testing provider that delivers the real exam at test centers; the exam can a
 
 ## Plan table
 
-The table in a practice exam's issue record that lists, for each planned question, its consideration, question type, whether AI is decisive, case study, decisive feature, correct letter, distractor mechanisms, and difficulty levers.
+The table in a practice exam's issue record that lists, for each planned question, its kind (single choice or choose-two), consideration, question type, whether AI is decisive, case study, decisive feature, correct letters, distractor mechanisms, and difficulty levers.
 
 ## PMLE
 
@@ -191,6 +199,10 @@ Product Requirements Document. An append-only specification of the user problem,
 ## Preview
 
 A pre-GA launch stage whose offerings Google provides under its Pre-GA Offering Terms. A Preview feature is never the decisive feature of a practice question.
+
+## Primary topic
+
+The guide consideration that a question's `objective` field names. The question's correct answer depends on a decision from that consideration, and the coverage rules count questions by primary topic.
 
 ## Question bank
 
@@ -228,6 +240,10 @@ The machine-readable JSON block in an indexed rejected review report. It binds r
 
 A shorter Professional Cloud Architect exam for certified candidates: 25 questions in one hour about one generative AI case study. This simulator does not reproduce it.
 
+## REST
+
+Representational State Transfer. The style of HTTP API that Google Cloud services expose; client libraries call these APIs for the developer.
+
 ## Review record
 
 The independently authored document under `docs/reviews/` that records a successful semantic audit. Its JSON record identifies the exact question-set version and SHA-256 content digest, reviewer, authors, review date, successful source-check command, unique source count, and every accepted question identifier.
@@ -239,6 +255,10 @@ The section, draft, and candidate modules owned by one practice exam under `src/
 ## SHA-256
 
 A cryptographic hash function. Review records store the SHA-256 digest of a candidate's canonical JSON content so that any later content change invalidates the record.
+
+## SOC 2
+
+System and Organization Controls 2. A third-party audit report, defined by the American Institute of Certified Public Accountants (AICPA), on a service organization's controls for security, availability, processing integrity, confidentiality, or privacy. Google Cloud customers download Google's SOC 2 reports from Compliance Reports Manager; the reports attest to Google's controls, not the customer's own.
 
 ## Source evidence
 
