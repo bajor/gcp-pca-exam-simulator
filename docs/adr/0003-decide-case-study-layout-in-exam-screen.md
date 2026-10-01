@@ -20,7 +20,7 @@ timestamp: 2026-10-01T00:00:00Z
 
 ## Decision
 
-- `src/components/ExamScreen.tsx` alone decides whether the current case-study question embeds the document: the browser reports an inline PDF viewer (`navigator.pdfViewerEnabled`), and the screen matches `(min-width: 1100px)`. The exam screen re-evaluates the decision when the width query changes.
+- `src/components/ExamScreen.tsx` alone decides whether the current case-study question embeds the document: the browser reports an inline PDF viewer (`navigator.pdfViewerEnabled`), and the screen matches `(min-width: 1100px)`. The exam screen re-reads the decision on every render and when the width query changes.
 - The exam screen marks its layout with `data-case-study="document"` or `data-case-study="link"` and passes the decision to `src/components/CaseStudyPane.tsx`, which only renders it. A question without a case study gets no attribute.
 - `src/styles.css` selects the split screen or the link layout from the attribute, not from a width query. The 800-pixel narrow layout stays a width query, because it applies to every exam layout.
 
@@ -41,7 +41,6 @@ Easier or gained:
 Harder or accepted trade-offs:
 
 - The split screen depends on the attribute, so the stylesheet cannot reproduce it without the exam screen. The exam screen is client-rendered, so the attribute is present whenever the layout is.
-- The exam screen re-evaluates the decision only when the width query changes; a browser does not change `navigator.pdfViewerEnabled` while a page is open.
 
 ## Verification
 
