@@ -18,8 +18,7 @@ test("renders the production catalog at the project path", async ({ page }) => {
 
 test("does not overflow the configured viewport", async ({ page }) => {
   await page.goto("./");
-  const fitsViewport = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
-  expect(fitsViewport).toBe(true);
+  expect(await fitsViewport(page)).toBe(true);
 });
 
 test("completes and reviews a marked practice attempt", async ({ page }) => {
@@ -67,8 +66,7 @@ test("keeps attempt controls within the configured viewport", async ({ page }) =
   await page.goto(harnessUrl);
   await openFixtureExam(page);
   await page.getByRole("button", { name: "Start practice exam" }).click();
-  const fitsViewport = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
-  expect(fitsViewport).toBe(true);
+  expect(await fitsViewport(page)).toBe(true);
 });
 
 test("renders question and answer text at the same font size", async ({ page }) => {
@@ -116,6 +114,21 @@ test("embeds the case study beside its question on a wide screen", async ({ page
   const link = (await page.getByRole("link", { name: "Open the EHR Healthcare case study in a new tab" }).boundingBox())!;
   const next = (await page.getByRole("button", { name: "Next" }).boundingBox())!;
   expect(link.x).toBeGreaterThan(next.x + next.width);
+  expect(await fitsViewport(page)).toBe(true);
+  expect(downloads()).toBe(0);
+});
+
+test("links the case study below its question on a medium-width screen", async ({ page, isMobile }) => {
+  test.skip(isMobile, "This checks the layout between the phone and split-screen widths.");
+  await page.setViewportSize({ width: 1024, height: 768 });
+  const downloads = countDownloads(page);
+  await openCaseStudyQuestion(page);
+  await expect(page.getByTitle("EHR Healthcare case study document")).toHaveCount(0);
+  const link = (await page.getByRole("link", { name: "Open the EHR Healthcare case study in a new tab" }).boundingBox())!;
+  const next = (await page.getByRole("button", { name: "Next" }).boundingBox())!;
+  const questionNavigator = (await page.getByRole("complementary", { name: "Question navigator" }).boundingBox())!;
+  expect(link.y).toBeGreaterThan(next.y + next.height);
+  expect(link.x + link.width).toBeLessThanOrEqual(questionNavigator.x);
   expect(await fitsViewport(page)).toBe(true);
   expect(downloads()).toBe(0);
 });

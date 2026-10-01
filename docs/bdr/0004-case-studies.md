@@ -43,7 +43,8 @@ The bounds come from the certification page: each exam includes 2 case studies, 
 | Element | Presentation |
 |---|---|
 | Instruction | Above the question text, a case-study question shows "For this question, refer to the <name> case study." in the exam text size. |
-| Split screen | On screens wider than 800 pixels, the case study appears between the question and the navigator. The case study takes three fifths of the width left of the navigator and the question two fifths, because the embedded document scales to its column. The case study shows a title bar, a link that opens Google's document in a new tab, and, in a browser with an inline PDF viewer, an embedded view of the document fitted to the column width, with the accessible name "<name> case study document". |
+| Split screen | On screens at least 1100 pixels wide, the case study appears between the question and the navigator. The case study takes three fifths of the width left of the navigator and the question two fifths, because the embedded document scales to its column. The case study shows a title bar, a link that opens Google's document in a new tab, and, in a browser with an inline PDF viewer, an embedded view of the document fitted to the column width, with the accessible name "<name> case study document". |
+| Medium screens | On screens 801 to 1099 pixels wide, the question keeps the full width left of the navigator, and the case study's title bar and link appear under the question, because a split at these widths leaves too little width for both. |
 | Narrow screens | On screens up to 800 pixels wide, the question, the case study, and the navigator stack from the top of the page, and the case study shows only its title bar and link. |
 | Browsers without a PDF viewer | On any screen, a browser that reports no inline PDF viewer, such as most phone browsers, gets only the title bar and the link, because it would download an embedded PDF instead of showing it. |
 | Start screen | The start screen names the set's case studies with links to their documents, so the candidate can read them before starting. |
@@ -51,7 +52,7 @@ The bounds come from the certification page: each exam includes 2 case studies, 
 
 Questions without a case study show none of these elements. The case study follows the question in the reading and keyboard order, so focus still moves from the question to mark for review, as [BDR 0003](/bdr/0003-exam-presentation.md) requires. Where the document is embedded, Tab moves from Previous and Next to the case-study link and through the PDF viewer's controls before the navigator; focus is not trapped.
 
-For case-study questions, this record replaces two rows of the BDR 0003 presentation table: question and answer text span only the question column, not the full width left of the navigator, and on narrow screens the case study sits between the question and the navigator.
+For case-study questions, this record replaces two rows of the BDR 0003 presentation table: on the split screen, question and answer text span only the question column, not the full width left of the navigator, and on narrow screens the case study sits between the question and the navigator.
 
 ## Scenarios
 
@@ -103,9 +104,10 @@ For case-study questions, this record replaces two rows of the BDR 0003 presenta
 | Draft limits | Unit | Drafts that refer to 3 case studies, or contain 18 or 19 case-study questions | Validation reports the at-most-2 rule and the at-most-18 rule, and accepts 18 | Authors learn of a set-level breach before assembly. |
 | Content digest | Unit | The same set with an absent case study omitted or written as undefined | Both bind the same SHA-256 digest | Equivalent content cannot invalidate a review record. |
 | Split screen | Component | Case-study question in a browser with a PDF viewer and a wide layout, and a question without a case study | The document and link appear only for the case-study question | The pane follows the current question. |
-| No PDF viewer | Component | Case-study question in a browser that reports no PDF viewer | Only the link appears | Such browsers do not download the document. |
+| Guard conditions | Component | Case-study question at the split-screen width without a PDF viewer, and below that width with one | Only the link appears in both | Each condition of the guard is needed: a browser without a viewer does not download the document, and a narrow layout does not load it. |
 | Start and results | Component | Set with a case-study question | The start screen and the result review name the case study with a link | The candidate can reach the case study outside the attempt. |
 | Desktop split screen | End-to-end | Case-study question at 1280 by 720 pixels in a browser with a PDF viewer | The document is embedded to the right of the question, nothing downloads, and the page does not scroll horizontally | The split screen works in a real browser. |
+| Medium layout | End-to-end | Case-study question at 1024 by 768 pixels in a browser with a PDF viewer | The link sits below the question and left of the navigator, no document is embedded, nothing downloads, and the page does not scroll horizontally | The split starts only at 1100 pixels. |
 | Phone layout | End-to-end | Case-study question at 390 by 844 pixels in a browser without a PDF viewer | The link sits below the question, no document is embedded, nothing downloads, and the page does not scroll horizontally | Phones get a usable, compact layout. |
 
 ## Related

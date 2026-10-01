@@ -3,8 +3,8 @@ import type { CaseStudy } from "../domain/caseStudies";
 
 // Chromium's PDF viewer reads these fragment options; other browsers ignore them.
 const pdfViewerOptions = "#navpanes=0&view=FitH";
-// Must match the narrow-layout media query in src/styles.css.
-const wideLayoutQuery = "(min-width: 801px)";
+// Must match the split-screen media query in src/styles.css.
+const wideLayoutQuery = "(min-width: 1100px)";
 
 interface CaseStudyPaneProps {
   readonly caseStudy: CaseStudy;

@@ -174,7 +174,7 @@ it("confirms before replacing a completed result", async () => {
 
 it("shows the referenced case study next to a case-study question", async () => {
   const user = userEvent.setup();
-  allowInlineCaseStudyDocuments();
+  stubBrowser({ wide: true, pdfViewer: true });
   renderFixtureApp();
   await user.click(screen.getByRole("button", { name: "Start practice exam" }));
   await user.click(screen.getByRole("button", { name: "Next" }));
@@ -189,8 +189,12 @@ it("shows the referenced case study next to a case-study question", async () => 
   );
 });
 
-it("embeds no case-study document in a browser that cannot display PDF documents", async () => {
+it.each([
+  { wide: true, pdfViewer: false },
+  { wide: false, pdfViewer: true },
+])("embeds no case-study document when wide is $wide and the PDF viewer is $pdfViewer", async (browser) => {
   const user = userEvent.setup();
+  stubBrowser(browser);
   renderFixtureApp();
   await user.click(screen.getByRole("button", { name: "Start practice exam" }));
   await user.click(screen.getByRole("button", { name: "Next" }));
@@ -200,7 +204,7 @@ it("embeds no case-study document in a browser that cannot display PDF documents
 
 it("shows no case study next to a question without one", async () => {
   const user = userEvent.setup();
-  allowInlineCaseStudyDocuments();
+  stubBrowser({ wide: true, pdfViewer: true });
   renderFixtureApp();
   await user.click(screen.getByRole("button", { name: "Start practice exam" }));
   expect(screen.queryByText(/refer to the EHR Healthcare case study/)).not.toBeInTheDocument();
@@ -224,11 +228,11 @@ it("names the case study of a question in the result review", () => {
   );
 });
 
-// Simulates a wide layout in a browser with an inline PDF viewer; jsdom has neither.
-function allowInlineCaseStudyDocuments() {
+// Simulates the split-screen width and an inline PDF viewer, which jsdom lacks.
+function stubBrowser({ wide, pdfViewer }: { readonly wide: boolean; readonly pdfViewer: boolean }) {
   const matchMedia = window.matchMedia;
-  vi.spyOn(window, "matchMedia").mockImplementation((media) => ({ ...matchMedia(media), matches: true }));
-  Object.defineProperty(navigator, "pdfViewerEnabled", { configurable: true, value: true });
+  vi.spyOn(window, "matchMedia").mockImplementation((media) => ({ ...matchMedia(media), matches: wide }));
+  Object.defineProperty(navigator, "pdfViewerEnabled", { configurable: true, value: pdfViewer });
 }
 
 function renderFixtureApp() {

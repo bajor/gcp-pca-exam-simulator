@@ -146,10 +146,18 @@ details { margin-top: 8px; font-size: var(--small-text-size); }
 summary { padding: 4px 0; cursor: pointer; }
 details li { margin: 4px 0; }
 
-/* The narrow layout; src/components/CaseStudyPane.tsx embeds the case-study document only above this width. */
+/* Below the split-screen width, a case-study question keeps the question and navigator columns and shows the
+   case-study link under the question; src/components/CaseStudyPane.tsx embeds the document only from 1100 pixels. */
+@media (max-width: 1099px) {
+  .exam-layout[data-case-study="true"] { grid-template-columns: minmax(0, 1fr) 13rem; grid-template-rows: auto 1fr; }
+  .exam-layout[data-case-study="true"] > .case-study-pane { grid-column: 1; grid-row: 2; border-top: 1px solid var(--rule); border-left: 0; }
+  .exam-layout[data-case-study="true"] > .navigator { grid-column: 2; grid-row: 1 / span 2; }
+}
+
+/* The narrow layout. */
 @media (max-width: 800px) {
-  .exam-layout, .exam-layout[data-case-study="true"] { grid-template-columns: 1fr; align-content: start; }
-  .case-study-pane { border-top: 1px solid var(--rule); border-left: 0; }
+  .exam-layout, .exam-layout[data-case-study="true"] { grid-template-columns: 1fr; grid-template-rows: none; align-content: start; }
+  .exam-layout[data-case-study="true"] > .case-study-pane, .exam-layout[data-case-study="true"] > .navigator { grid-column: auto; grid-row: auto; }
   .navigator { border-top: 1px solid var(--rule); border-left: 0; }
   .question-grid { grid-template-columns: repeat(10, 1fr); }
   .catalog-grid { grid-template-columns: 1fr; }
