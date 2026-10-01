@@ -13,6 +13,13 @@ const evidence: Evidence = {
   claim: "Fixture evidence.",
 };
 
+const caseStudyEvidence: Evidence = {
+  id: "case-study",
+  title: "EHR Healthcare case study",
+  url: "https://services.google.com/fh/files/misc/v6.1_pca_ehr_healthcare_case_study_english.pdf",
+  claim: "Fixture case-study fact.",
+};
+
 function choice(id: Choice["id"], text: string): Choice {
   return { id, text, feedback: `${text} feedback.`, evidenceIds: [evidence.id] };
 }
@@ -36,8 +43,9 @@ export const multipleQuestion = {
   section: "provision",
   objective: "Fixture multiple objective",
   prompt: "Which two fixture answers are correct?",
+  caseStudyId: "ehr-healthcare",
   verifiedOn: "2026-08-31",
-  evidence: [evidence],
+  evidence: [evidence, caseStudyEvidence],
   choices: [
     choice("a", "Correct A"),
     choice("b", "Wrong B"),

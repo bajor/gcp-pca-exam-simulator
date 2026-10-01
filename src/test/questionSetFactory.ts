@@ -1,12 +1,15 @@
+import { caseStudies, type CaseStudyId } from "../domain/caseStudies";
 import {
   createRejectionRecord,
   createReviewRecord,
   examSectionIds,
   expectedSectionCounts,
+  minimumCaseStudyQuestions,
   minimumChoiceWords,
   minimumQuestionWords,
   type AnyQuestionSection,
   type DraftQuestionSet,
+  type Evidence,
   type ExamSection,
   type QuestionSet,
   type RejectionRecord,
@@ -14,11 +17,17 @@ import {
   type SingleChoiceQuestion,
 } from "../domain/questions";
 
-export function buildValidQuestionSet(): QuestionSet {
+// The first `caseStudyQuestionCount` questions refer to the given case studies in turn.
+export function buildValidQuestionSet(
+  caseStudyQuestionCount = minimumCaseStudyQuestions,
+  caseStudyIds: readonly CaseStudyId[] = ["ehr-healthcare", "cymbal-retail"],
+): QuestionSet {
   const questions: SingleChoiceQuestion[] = [];
   for (const section of examSectionIds) {
     for (let index = 0; index < expectedSectionCounts[section]; index += 1) {
-      questions.push(question(section, index + 1));
+      const position = questions.length;
+      const caseStudyId = position < caseStudyQuestionCount ? caseStudyIds[position % caseStudyIds.length] : undefined;
+      questions.push(question(section, index + 1, caseStudyId));
     }
   }
   return {
@@ -32,8 +41,7 @@ export function buildValidQuestionSet(): QuestionSet {
   };
 }
 
-export function buildValidDraft(): DraftQuestionSet {
-  const set = buildValidQuestionSet();
+export function buildValidDraft(set = buildValidQuestionSet()): DraftQuestionSet {
   const sections = examSectionIds.map((section) => ({
     section,
     author: "author",
@@ -67,15 +75,18 @@ export function buildRejectionDocument(review: RejectionRecord): string {
   return `# Rejection\n\n## Rejection Record\n\n\`\`\`json\n${JSON.stringify(review)}\n\`\`\``;
 }
 
-function question(section: ExamSection, number: number): SingleChoiceQuestion {
+function question(section: ExamSection, number: number, caseStudyId?: CaseStudyId): SingleChoiceQuestion {
+  const evidence: Evidence[] = [{ id: "source", title: "Docs", url: "https://docs.cloud.google.com/docs", claim: "Claim" }];
+  if (caseStudyId) evidence.push(caseStudyEvidence(caseStudyId));
   return {
     id: `${section}-q${number}`,
     kind: "single",
     section,
     objective: "Objective",
     prompt: words("prompt", minimumQuestionWords),
+    ...(caseStudyId && { caseStudyId }),
     verifiedOn: "2026-08-31",
-    evidence: [{ id: "source", title: "Docs", url: "https://docs.cloud.google.com/docs", claim: "Claim" }],
+    evidence,
     choices: [
       { id: "a", text: words("a", minimumChoiceWords), feedback: "A feedback", evidenceIds: ["source"] },
       { id: "b", text: words("b", minimumChoiceWords), feedback: "B feedback", evidenceIds: ["source"] },
@@ -84,6 +95,11 @@ function question(section: ExamSection, number: number): SingleChoiceQuestion {
     ],
     correctChoiceId: "a",
   };
+}
+
+function caseStudyEvidence(caseStudyId: CaseStudyId): Evidence {
+  const caseStudy = caseStudies[caseStudyId];
+  return { id: "case-study", title: `${caseStudy.title} case study`, url: caseStudy.url, claim: "Case-study fact." };
 }
 
 export function words(label: string, count: number): string {

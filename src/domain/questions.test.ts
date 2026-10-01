@@ -3,6 +3,8 @@ import type { AnyQuestionSection, QuestionSet, SingleChoiceQuestion } from "./qu
 import {
   assembleCandidateQuestionSets,
   assembleQuestionSet,
+  maximumCaseStudyQuestions,
+  minimumCaseStudyQuestions,
   minimumChoiceWords,
   minimumPromptWords,
   minimumQuestionWords,
@@ -263,4 +265,34 @@ it("refuses a candidate ID without a registered draft", () => {
   expect(() => assembleCandidateQuestionSets([], ["missing-set"])).toThrow(
     "missing-set: candidate has no registered draft question set.",
   );
+});
+
+it("rejects a question set that refers to only one case study", () => {
+  expect(validateQuestionSet(validSet(minimumCaseStudyQuestions, ["ehr-healthcare"]))).toContain(
+    "Question set must refer to exactly 2 case studies.",
+  );
+});
+
+it("rejects a question set with too few case-study questions", () => {
+  expect(validateQuestionSet(validSet(minimumCaseStudyQuestions - 1))).toContain(
+    "Question set must contain 12 to 18 case-study questions.",
+  );
+});
+
+it("accepts the minimum and maximum numbers of case-study questions", () => {
+  const errors = [minimumCaseStudyQuestions, maximumCaseStudyQuestions].flatMap((count) => validateQuestionSet(validSet(count)));
+  expect(errors).toEqual([]);
+});
+
+it("rejects a case-study question that does not cite its case study", () => {
+  const set = validSet();
+  const question = set.questions[0] as SingleChoiceQuestion;
+  const uncited = { ...question, evidence: question.evidence.filter((source) => source.id !== "case-study") };
+  const invalid = { ...set, questions: [uncited, ...set.questions.slice(1)] } as QuestionSet;
+  expect(validateQuestionSet(invalid)).toContain(`${question.id}: case-study question must cite its case study.`);
+});
+
+it("rejects a draft that refers to a third case study", () => {
+  const draft = validDraft(validSet(minimumCaseStudyQuestions, ["ehr-healthcare", "cymbal-retail", "altostrat-media"]));
+  expect(validateDraftQuestionSet(draft)).toContain("Draft must refer to at most 2 case studies.");
 });

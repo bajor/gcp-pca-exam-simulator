@@ -106,6 +106,13 @@ fieldset { display: grid; gap: 2px; margin: 0; padding: 0; border: 0; }
 .question-number[data-answered="true"] { border-bottom: 4px solid var(--answered); }
 .finish-button { width: 100%; color: var(--wrong); }
 
+.case-study-reference { margin: 6px 0 0; font-weight: bold; }
+.exam-layout[data-case-study="true"] { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 13rem; }
+.case-study-pane { display: flex; flex-direction: column; gap: 6px; border-left: 1px solid var(--rule); padding: 0 10px 10px; background: #f7f7f7; font-size: var(--small-text-size); overflow-wrap: anywhere; }
+.case-study-pane > .eyebrow { margin: 0 -10px; padding: 4px 10px; color: #fff; background: var(--title-bar); }
+.case-study-pane iframe { flex: 1; width: 100%; min-height: 32rem; border: 1px solid var(--rule); background: var(--panel); }
+.case-study-list { margin: 4px 0 12px; padding-left: 20px; }
+
 .confirm-dialog { width: min(420px, calc(100% - 2rem)); border: 1px solid #555; padding: 0 0 12px; color: var(--ink); background: var(--panel); box-shadow: 4px 4px 0 rgb(0 0 0 / 35%); }
 .confirm-dialog::backdrop { background: rgb(0 0 0 / 35%); }
 .confirm-dialog h2 { margin: 0 0 8px; padding: 4px 12px; color: #fff; background: var(--title-bar); font-size: var(--exam-text-size); }
@@ -139,7 +146,10 @@ summary { padding: 4px 0; cursor: pointer; }
 details li { margin: 4px 0; }
 
 @media (max-width: 800px) {
-  .exam-layout { grid-template-columns: 1fr; }
+  .exam-layout, .exam-layout[data-case-study="true"] { grid-template-columns: 1fr; align-content: start; }
+  .case-study-pane { border-top: 1px solid var(--rule); border-left: 0; }
+  /* Most phone browsers cannot display PDF documents inline; the link remains. */
+  .case-study-pane iframe { display: none; }
   .navigator { border-top: 1px solid var(--rule); border-left: 0; }
   .question-grid { grid-template-columns: repeat(10, 1fr); }
   .catalog-grid { grid-template-columns: 1fr; }

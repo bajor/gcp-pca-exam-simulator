@@ -36,6 +36,10 @@ A complete 60-question set listed for structural, source, and independent semant
 
 A Google-published document that describes a fictitious business, its solution concept, existing technical environment, business and technical requirements, and an executive statement. The exam guide version 6.1 names four: Altostrat Media, Cymbal Retail, EHR Healthcare, and KnightMotives Automotive. Each standard exam uses two of them, and 20 to 30% of its questions refer to one, shown on a split screen.
 
+## Case-study question
+
+A question that refers to one of the four case studies through its `caseStudyId`. It must cite its case study's document as evidence, and the exam screen shows that document next to it.
+
 ## CI
 
 Continuous Integration. The GitHub Actions workflows that run the repository quality gates on pull requests and on pushes to `main`.

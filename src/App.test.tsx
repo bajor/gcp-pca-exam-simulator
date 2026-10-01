@@ -9,6 +9,7 @@ import {
   createAttempt,
   saveAttempt,
 } from "./domain/attempt";
+import { caseStudies } from "./domain/caseStudies";
 import { fixtureCatalog, fixtureQuestionSet } from "./test/fixtures";
 
 beforeEach(() => localStorage.clear());
@@ -165,6 +166,39 @@ it("confirms before replacing a completed result", async () => {
   renderFixtureApp();
   await user.click(screen.getByRole("button", { name: "Start a new attempt" }));
   expect(screen.getByRole("dialog", { name: "Replace this result?" })).toBeVisible();
+});
+
+it("shows the referenced case study next to a case-study question", async () => {
+  const user = userEvent.setup();
+  renderFixtureApp();
+  await user.click(screen.getByRole("button", { name: "Start practice exam" }));
+  await user.click(screen.getByRole("button", { name: "Next" }));
+  expect(screen.getByText("For this question, refer to the EHR Healthcare case study.")).toBeVisible();
+  expect(screen.getByTitle("EHR Healthcare case study document")).toHaveAttribute(
+    "src",
+    expect.stringContaining(caseStudies["ehr-healthcare"].url),
+  );
+});
+
+it("shows no case study next to a question without one", async () => {
+  const user = userEvent.setup();
+  renderFixtureApp();
+  await user.click(screen.getByRole("button", { name: "Start practice exam" }));
+  expect(screen.queryByRole("complementary", { name: /case study/ })).not.toBeInTheDocument();
+});
+
+it("links the set's case studies before the attempt starts", () => {
+  renderFixtureApp();
+  expect(screen.getByRole("link", { name: "EHR Healthcare case study" })).toHaveAttribute(
+    "href",
+    caseStudies["ehr-healthcare"].url,
+  );
+});
+
+it("names the case study of a question in the result review", () => {
+  saveAttempt(completeAttempt(createAttempt(fixtureQuestionSet)));
+  renderFixtureApp();
+  expect(screen.getByRole("link", { name: "EHR Healthcare" })).toHaveAttribute("href", caseStudies["ehr-healthcare"].url);
 });
 
 function renderFixtureApp() {

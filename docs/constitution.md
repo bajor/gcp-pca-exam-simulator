@@ -36,7 +36,7 @@ Explicitly out of scope:
 
 ## Data Model Foundation
 
-A question set contains exactly 60 questions: 15 `design`, 11 `provision`, 11 `secure`, 9 `analyze`, 7 `implement`, and 7 `operate` questions, one group for each section of the current exam guide, which the code identifies as version 6.1. Each question has single-choice or multiple-select answer semantics, cites one or more Google-owned sources, and meets the reading-length floors in `src/domain/questions.ts`: at least 59 prompt words, at least 9 words in every choice, and at least 117 words across the prompt and all choices, the length of the median official sample question. An attempt records answers, review flags, position, start time, and deadline for one question set. A completed attempt produces a result without changing the question set.
+A question set contains exactly 60 questions: 15 `design`, 11 `provision`, 11 `secure`, 9 `analyze`, 7 `implement`, and 7 `operate` questions, one group for each section of the current exam guide, which the code identifies as version 6.1. Each question has single-choice or multiple-select answer semantics, cites one or more Google-owned sources, and meets the reading-length floors in `src/domain/questions.ts`: at least 59 prompt words, at least 9 words in every choice, and at least 117 words across the prompt and all choices, the length of the median official sample question. A question may refer to one of the four case studies the exam guide links; a question set refers to exactly 2 of them in 12 to 18 questions, and every case-study question cites its case study's document. An attempt records answers, review flags, position, start time, and deadline for one question set. A completed attempt produces a result without changing the question set.
 
 Invalid question states must be rejected by TypeScript types and question-bank validation. Answer identifiers must exist among the choices, multiple-select questions must declare the required selection count, and every choice must have feedback supported by cited evidence.
 
@@ -54,3 +54,4 @@ Invalid question states must be rejected by TypeScript types and question-bank v
 ## Amendment Log
 
 - 2026-10-01: Ratified for the Professional Cloud Architect exam, adapted from the Professional Machine Learning Engineer simulator constitution.
+- 2026-10-01: Added case-study references to the data model foundation, as decided in [ADR 0002](/adr/0002-show-official-case-studies.md).
