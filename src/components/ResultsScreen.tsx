@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { CompletedAttempt, Score } from "../domain/attempt";
+import { caseStudies } from "../domain/caseStudies";
 import { examSections, type QuestionSet } from "../domain/questions";
 
 interface ResultsScreenProps {
@@ -48,11 +49,20 @@ export function ResultsScreen({ questionSet, attempt, score, onChooseExam, onRes
         {questionSet.questions.map((question, index) => {
           const selected = attempt.answers[question.id] ?? [];
           const correct = score.correctQuestionIds.has(question.id);
+          const caseStudy = question.caseStudyId === undefined ? undefined : caseStudies[question.caseStudyId];
           return (
             <article className="review-card" key={question.id}>
               <p className={correct ? "result-correct" : "result-wrong"}>
                 Question {index + 1}: {correct ? "Correct" : "Incorrect"}
               </p>
+              {caseStudy && (
+                <p className="case-study-reference">
+                  Case study:{" "}
+                  <a href={caseStudy.url} target="_blank" rel="noreferrer">
+                    {caseStudy.title} <span className="sr-only">(opens in a new tab)</span>
+                  </a>
+                </p>
+              )}
               <h3>{question.prompt}</h3>
               <div className="review-choices">
                 {question.choices.map((choice) => {

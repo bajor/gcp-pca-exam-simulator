@@ -1,6 +1,8 @@
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 import type { InProgressAttempt } from "../domain/attempt";
+import { caseStudies } from "../domain/caseStudies";
 import type { ChoiceId, QuestionSet } from "../domain/questions";
+import { CaseStudyPane } from "./CaseStudyPane";
 import { ConfirmDialog } from "./ConfirmDialog";
 
 interface ExamScreenProps {
@@ -27,6 +29,7 @@ export function ExamScreen({
   const headingRef = useRef<HTMLHeadingElement>(null);
   const expire = useEffectEvent(onExpire);
   const question = questionSet.questions[attempt.currentQuestionIndex];
+  const caseStudy = question.caseStudyId === undefined ? undefined : caseStudies[question.caseStudyId];
   const selected = attempt.answers[question.id] ?? [];
   const marked = attempt.markedQuestionIds.includes(question.id);
   const unanswered = questionSet.questions.filter((item) => !(attempt.answers[item.id]?.length)).length;
@@ -61,11 +64,12 @@ export function ExamScreen({
         </div>
       </header>
 
-      <div className="exam-layout">
+      <div className="exam-layout" data-case-study={caseStudy !== undefined}>
         <section className="question-card" aria-labelledby="question-heading">
           <div className="question-meta">
             <span>{question.kind === "single" ? "Select one" : `Choose ${question.requiredSelections}`}</span>
           </div>
+          {caseStudy && <p className="case-study-reference">For this question, refer to the {caseStudy.title} case study.</p>}
           <h1 ref={headingRef} id="question-heading" tabIndex={-1}>{question.prompt}</h1>
           <button className="mark-button" aria-pressed={marked} onClick={onToggleMark}>
             {marked ? "Marked for review" : "Mark for review"}
@@ -103,6 +107,8 @@ export function ExamScreen({
             </button>
           </nav>
         </section>
+
+        {caseStudy && <CaseStudyPane caseStudy={caseStudy} />}
 
         <aside className="navigator" aria-label="Question navigator">
           <p><strong>{questionSet.questions.length - unanswered}</strong> answered</p>

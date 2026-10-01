@@ -4,6 +4,7 @@ import {
   type QuestionSet,
   type SingleChoiceQuestion,
 } from "../domain/questions";
+import { caseStudies } from "../domain/caseStudies";
 import type { ExamCatalogEntry } from "../domain/catalog";
 
 const evidence: Evidence = {
@@ -11,6 +12,13 @@ const evidence: Evidence = {
   title: "Google Cloud documentation",
   url: "https://docs.cloud.google.com/docs",
   claim: "Fixture evidence.",
+};
+
+const caseStudyEvidence: Evidence = {
+  id: "case-study",
+  title: "EHR Healthcare case study",
+  url: caseStudies["ehr-healthcare"].url,
+  claim: "Fixture case-study fact.",
 };
 
 function choice(id: Choice["id"], text: string): Choice {
@@ -36,8 +44,9 @@ export const multipleQuestion = {
   section: "provision",
   objective: "Fixture multiple objective",
   prompt: "Which two fixture answers are correct?",
+  caseStudyId: "ehr-healthcare",
   verifiedOn: "2026-08-31",
-  evidence: [evidence],
+  evidence: [evidence, caseStudyEvidence],
   choices: [
     choice("a", "Correct A"),
     choice("b", "Wrong B"),

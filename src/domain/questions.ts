@@ -1,5 +1,6 @@
 import { sha256 } from "@noble/hashes/sha2.js";
 import { bytesToHex } from "@noble/hashes/utils.js";
+import { caseStudies, isCaseStudyId, referencedCaseStudyIds, type CaseStudyId } from "./caseStudies";
 
 export const examSections = {
   design: "Designing and planning a cloud solution architecture",
@@ -47,6 +48,7 @@ interface BaseQuestion {
   readonly section: ExamSection;
   readonly objective: string;
   readonly prompt: string;
+  readonly caseStudyId?: CaseStudyId;
   readonly verifiedOn: `${number}-${number}-${number}`;
   readonly evidence: readonly Evidence[];
 }
@@ -143,6 +145,12 @@ export const expectedSectionCounts: Readonly<Record<ExamSection, number>> = {
 
 export const questionSetSize = examSectionIds.reduce((total, section) => total + expectedSectionCounts[section], 0);
 
+// The certification page: each exam includes 2 case studies, and their questions make up 20 to 30% of the exam.
+export const caseStudiesPerSet = 2;
+const caseStudyQuestionPercent = { minimum: 20, maximum: 30 } as const;
+export const minimumCaseStudyQuestions = Math.ceil((questionSetSize * caseStudyQuestionPercent.minimum) / 100);
+export const maximumCaseStudyQuestions = Math.floor((questionSetSize * caseStudyQuestionPercent.maximum) / 100);
+
 const googleHosts = new Set([
   "cloud.google.com",
   "docs.cloud.google.com",
@@ -170,6 +178,7 @@ export function validateQuestionSet(set: QuestionSet): string[] {
     errors.push(`Question set must contain exactly ${questionSetSize} questions.`);
   }
   errors.push(...validateQuestions(set.questions));
+  errors.push(...validateSetCaseStudies(set.questions));
   for (const question of set.questions) {
     if (isExamSection(question.section)) sectionCounts[question.section] += 1;
     else errors.push(`${question.id}: unknown exam section.`);
@@ -214,6 +223,7 @@ export function validateDraftQuestionSet(draft: DraftQuestionSet): string[] {
       questionSections.set(question.id, section.section);
     }
   }
+  errors.push(...validateDraftCaseStudies(draft.sections.flatMap((section): readonly Question[] => section.questions)));
 
   return errors;
 }
@@ -354,6 +364,7 @@ function validateQuestions(questions: readonly Question[]): string[] {
       errors.push(`${question.id}: prompt and choices must contain at least ${minimumQuestionWords} words.`);
     }
     if (!isIsoDate(question.verifiedOn)) errors.push(`${question.id}: invalid verification date.`);
+    errors.push(...validateCaseStudyReference(question));
     for (const source of question.evidence) {
       if (!source.id.trim()) errors.push(`${question.id}: evidence ID cannot be empty.`);
       if (!source.title.trim() || !source.claim.trim()) errors.push(`${question.id}/${source.id}: incomplete evidence.`);
@@ -378,6 +389,41 @@ function validateQuestions(questions: readonly Question[]): string[] {
     }
   }
   return errors;
+}
+
+function validateCaseStudyReference(question: Question): string[] {
+  const caseStudyId = question.caseStudyId;
+  if (caseStudyId === undefined) return [];
+  if (!isCaseStudyId(caseStudyId)) return [`${question.id}: unknown case study.`];
+  const citesCaseStudy = question.evidence.some((source) => source.url === caseStudies[caseStudyId].url);
+  return citesCaseStudy ? [] : [`${question.id}: case-study question must cite its case study.`];
+}
+
+function validateDraftCaseStudies(questions: readonly Question[]): string[] {
+  const errors: string[] = [];
+  if (referencedCaseStudyIds(questions).length > caseStudiesPerSet) {
+    errors.push(`Draft must refer to at most ${caseStudiesPerSet} case studies.`);
+  }
+  if (countCaseStudyQuestions(questions) > maximumCaseStudyQuestions) {
+    errors.push(`Draft must contain at most ${maximumCaseStudyQuestions} case-study questions.`);
+  }
+  return errors;
+}
+
+function validateSetCaseStudies(questions: readonly Question[]): string[] {
+  const errors: string[] = [];
+  if (referencedCaseStudyIds(questions).length !== caseStudiesPerSet) {
+    errors.push(`Question set must refer to exactly ${caseStudiesPerSet} case studies.`);
+  }
+  const caseStudyQuestions = countCaseStudyQuestions(questions);
+  if (caseStudyQuestions < minimumCaseStudyQuestions || caseStudyQuestions > maximumCaseStudyQuestions) {
+    errors.push(`Question set must contain ${minimumCaseStudyQuestions} to ${maximumCaseStudyQuestions} case-study questions.`);
+  }
+  return errors;
+}
+
+function countCaseStudyQuestions(questions: readonly Question[]): number {
+  return questions.filter((question) => question.caseStudyId !== undefined).length;
 }
 
 export function countWords(text: string): number {
@@ -550,7 +596,8 @@ function canonicalJson(value: unknown): string {
   if (value === null || typeof value !== "object") return JSON.stringify(value);
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
   const record = value as Record<string, unknown>;
-  return `{${Object.keys(record).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(record[key])}`).join(",")}}`;
+  const keys = Object.keys(record).filter((key) => record[key] !== undefined).sort();
+  return `{${keys.map((key) => `${JSON.stringify(key)}:${canonicalJson(record[key])}`).join(",")}}`;
 }
 
 function isIsoDate(value: string): boolean {

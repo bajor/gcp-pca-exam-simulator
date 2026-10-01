@@ -76,8 +76,7 @@ The static application collects no analytics. The candidate assesses success: a 
 - [Exam attempt and scoring](/bdr/0001-exam-attempt-and-scoring.md)
 - [Question validation and publication](/bdr/0002-question-validation-and-publication.md)
 - [Exam presentation](/bdr/0003-exam-presentation.md)
-
-Requirement 15 is specified by a separate behavior record when case-study support is implemented.
+- [Case studies](/bdr/0004-case-studies.md)
 
 ## Open Questions
 
@@ -86,6 +85,7 @@ Requirement 15 is specified by a separate behavior record when case-study suppor
 ## Decision Log
 
 - [Port the PMLE simulator](/adr/0001-port-pmle-simulator.md)
+- [Show the official case-study documents](/adr/0002-show-official-case-studies.md)
 
 ## Related
 

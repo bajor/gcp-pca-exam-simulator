@@ -92,7 +92,7 @@ These recommendations rely on owner-controlled facts that were authoritative on 
 - Identify the guide as version 6.1, the title of its launch edition and the label of the case studies it links, because the current guide prints no date or version.
 - Use the official samples only to understand style; never copy or paraphrase them. Never copy case-study text into the repository.
 
-Accepted recommendations are specified by [PRD 0001](/prd/0001-cloud-architect-exam-simulator.md), [ADR 0001](/adr/0001-port-pmle-simulator.md), [BDR 0002](/bdr/0002-question-validation-and-publication.md), and [BDR 0003](/bdr/0003-exam-presentation.md), and tracked by [issue 0001](/issues/0001-port-simulator-for-pca.md).
+Accepted recommendations are specified by [PRD 0001](/prd/0001-cloud-architect-exam-simulator.md), [ADR 0001](/adr/0001-port-pmle-simulator.md), [ADR 0002](/adr/0002-show-official-case-studies.md), [BDR 0002](/bdr/0002-question-validation-and-publication.md), [BDR 0003](/bdr/0003-exam-presentation.md), and [BDR 0004](/bdr/0004-case-studies.md), and tracked by [issue 0001](/issues/0001-port-simulator-for-pca.md).
 
 # References
 
