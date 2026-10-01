@@ -19,14 +19,15 @@ On 2026-10-01 the catalog lists Practice Exams 1, 2, and 3 as coming soon. No qu
 
 | Module | Ownership |
 |---|---|
-| `src/domain/questions.ts` | Exam sections, section counts, reading-length floors, question and review types, structural validation, and SHA-256 content binding. |
+| `src/domain/questions.ts` | Exam sections, section counts, reading-length floors, case-study rules, question and review types, structural validation, and SHA-256 content binding. |
+| `src/domain/caseStudies.ts` | The four case studies the guide links, with the URLs of Google's documents, and the case studies a set of questions refers to. |
 | `src/domain/attempt.ts` | Attempt state, exact scoring, section percentages, and browser persistence. |
 | `src/domain/catalog.ts` | Available and coming-soon catalog entry types. |
 | `src/data/questionSets/practice<number>/` | One practice exam's section modules, draft manifests, and candidate list. The directory is created when the first section of that exam is authored. |
 | `src/data/questionSets/registry.ts` | Aggregates every exam's drafts and candidates for structural, source, and audit verification. |
 | `src/data/questionSets/index.ts` | Runtime catalog of available and coming-soon entries. |
 | `docs/reviews/` | Independent acceptance and rejection records checked by CI. |
-| `src/components/` | Catalog, start, exam, navigation, submission, and result-review screens. |
+| `src/components/` | Catalog, start, exam, case-study pane, navigation, submission, and result-review screens. |
 | `src/styles.css` | Dense exam presentation, including `--exam-text-size`, the single font size shared by question and answer text. |
 | `src/App.tsx` | Catalog selection, screen transitions, and restoration of the selected set's attempt. |
 | `scripts/` | Documentation lint, live source verification, review-record generation, and question-set reports. |
@@ -35,9 +36,9 @@ On 2026-10-01 the catalog lists Practice Exams 1, 2, and 3 as coming soon. No qu
 ## Question Lifecycle
 
 1. An author plans a section in the exam's issue record and writes it as a typed module under `src/data/questionSets/practice<number>/sections/`.
-2. The author registers the section in that exam's draft manifest and registers the manifest in `src/data/questionSets/registry.ts`. Structural validation then requires the final section count, the reading-length floors, valid answer keys, and Google-owned evidence for every choice.
+2. The author registers the section in that exam's draft manifest and registers the manifest in `src/data/questionSets/registry.ts`. Structural validation then requires the final section count, the reading-length floors, valid answer keys, Google-owned evidence for every choice, a citation of the case study for every case-study question, and at most 2 case studies.
 3. `make verify-sources` validates every registered draft and fetches every unique evidence URL.
-4. After all six sections exist, the exam's candidate list assembles a 60-question candidate from the draft identifier.
+4. After all six sections exist, the exam's candidate list assembles a 60-question candidate from the draft identifier. Assembly requires exactly 2 case studies and 12 to 18 case-study questions.
 5. An independent reviewer re-fetches the evidence, checks the set against the question-set requirements, and writes either an indexed rejection report or an acceptance record bound to the candidate's SHA-256 content digest.
 6. Only a candidate with an exact acceptance record and no matching rejection record can become an `available` catalog entry. Corrections use a new candidate identifier. Rejected candidates stay registered and unchanged so that their rejection records remain verifiable.
 
@@ -47,7 +48,7 @@ On 2026-10-01 the catalog lists Practice Exams 1, 2, and 3 as coming soon. No qu
 
 1. The candidate selects an available question set from the catalog.
 2. The application restores that set's compatible attempt, or creates one with an absolute two-hour deadline when the candidate starts.
-3. Answer, navigation, and review-flag changes replace the immutable attempt state and persist it locally.
+3. Answer, navigation, and review-flag changes replace the immutable attempt state and persist it locally. When the current question refers to a case study, the exam screen shows Google's document next to it.
 4. Manual submission or deadline expiration creates a completed result.
 5. Scoring compares answer identifier sets exactly and calculates total and section percentages.
 6. Result review joins each response with choice feedback and source evidence from the immutable question set.
@@ -81,3 +82,5 @@ Vite builds the static site with `/gcp-pca-exam-simulator/` as its base path. Af
 - [Exam attempt and scoring](/bdr/0001-exam-attempt-and-scoring.md)
 - [Question validation and publication](/bdr/0002-question-validation-and-publication.md)
 - [Exam presentation](/bdr/0003-exam-presentation.md)
+- [Show the official case-study documents](/adr/0002-show-official-case-studies.md)
+- [Case studies](/bdr/0004-case-studies.md)
