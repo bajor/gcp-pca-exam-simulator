@@ -11,7 +11,7 @@ timestamp: 2026-10-01T00:00:00Z
 
 ## Method
 
-On 2026-10-01 the research fetched Google's certification page, the standard exam guide PDF and the four case-study PDFs it links (converted to text with `pdftotext`), the renewal exam guide PDF, the official sample-question form, and the certification misconduct policy. The sample form was analyzed for structure and length only; its questions are not stored in this repository. A word is a whitespace-separated token. "Reading load" means the words in a prompt plus all of its choices. Every option in the form begins with a letter label such as "A.", which the counts exclude, because the application renders the letter itself and structural validation counts only the choice text. Case-study counts exclude bullet symbols.
+On 2026-10-01 the research fetched Google's certification page, the standard exam guide PDF and the four case-study PDFs it links (converted to text with `pdftotext`), the launch edition of the guide version 6.1, the renewal exam guide PDF, the official sample-question form, and the certification misconduct policy. The sample form was analyzed for structure and length only; its questions are not stored in this repository. A word is a whitespace-separated token. "Reading load" means the words in a prompt plus all of its choices. Every option in the form begins with a letter label such as "A.", which the counts exclude, because the application renders the letter itself and structural validation counts only the choice text. Case-study counts exclude bullet symbols.
 
 ## Findings
 
@@ -23,7 +23,7 @@ Documented owner fact: The standard exam guide prints no date or version number.
 
 Documented owner fact: The guide defines six sections with approximate weights: Designing and planning a cloud solution architecture (25%), Managing and provisioning a cloud solution infrastructure (17.5%), Designing for security and compliance (17.5%), Analyzing and optimizing technical and business processes (15%), Managing implementation (12.5%), and Ensuring solution and operations excellence (12.5%). The weights sum to 100%. The six sections contain 22 objectives. The guide names familiarity with the Google Cloud Well-Architected Framework as a key requirement whose pillars are "woven throughout the exam objectives". [COI: Google] [2]
 
-Documented owner fact: Google also publishes the launch edition of the guide, titled "v6.1 Professional Cloud Architect Exam Guide", which tells candidates to use it for the English exam "on or after October 30". It names Vertex AI where the current guide names Agent Platform, weights the sections about 25%, 18%, 19%, 15%, 11%, and 12%, and has 23 objectives: it lists reliability procedures such as chaos engineering and penetration testing as objective 4.3, which the current guide moves into objective 6.6. [COI: Google] [11]
+Documented owner fact: Google also publishes the launch edition of the guide, titled "v6.1 Professional Cloud Architect Exam Guide", which tells candidates to use it for the English exam "on or after October 30". It names Vertex AI where the current guide names Agent Platform, weights the sections about 25%, 18%, 19%, 15%, 11%, and 12%, and has 23 objectives: an extra objective 4.3 on reliability procedures, such as chaos engineering and penetration testing, overlaps objective 6.6, and the current guide drops it. [COI: Google] [11]
 
 Documented owner fact: The renewal exam is a different product: one hour, 25 multiple choice and multiple select questions, and one generative AI case study whose questions make up 90-100% of the exam. [COI: Google] [1] [7]
 
@@ -49,6 +49,8 @@ Nineteen of the 75 PCA sample options (25%) have fewer than 9 words. Nine of the
 ## Contradictions
 
 The sample form refers to Mountkirk Games, Helicopter Racing League, and TerramEarth, which the current guide no longer lists, and it links an older copy of the EHR Healthcare case study whose text matches the current one apart from heading capitalization. The form therefore predates the current guide, and its length distribution only approximates the current exam.
+
+The only document titled "v6.1" is the launch edition, which the current guide revises with new product names and weights and one objective fewer. The simulator follows the current guide and uses 6.1 only as its identifier.
 
 The PCA samples are much shorter than the PMLE samples, while the candidate found real Google professional exams longer than practice. The sample form itself disclaims that it represents the exam's difficulty.
 

@@ -26,3 +26,5 @@ GOOGLE CLOUD. **Professional Cloud Architect Certification Exam Guide**. Availab
 GOOGLE CLOUD. **Professional Cloud Architect Renewal Certification Exam Guide**. Available at: <https://services.google.com/fh/files/misc/professional_cloud_architect_renewal_exam_guide_eng.pdf>. Accessed on: 2026-10-01. Cited by [research 0001](/research/0001-exam-format-and-blueprint.md).
 
 GOOGLE CLOUD. **Professional Cloud Architect Sample Questions**. Available at: <https://docs.google.com/forms/d/e/1FAIpQLSf54f7FbtSJcXUY6-DUHfBG31jZ3pujgb8-a5io_9biJsNpqg/viewform>. Accessed on: 2026-10-01. Cited by [research 0001](/research/0001-exam-format-and-blueprint.md).
+
+GOOGLE CLOUD. **v6.1 Professional Cloud Architect Exam Guide**. Available at: <https://services.google.com/fh/files/misc/v6.1_pca_professional_cloud_architect_exam_guide_english.pdf>. Accessed on: 2026-10-01. Cited by [research 0001](/research/0001-exam-format-and-blueprint.md).

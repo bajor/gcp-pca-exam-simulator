@@ -12,6 +12,10 @@ timestamp: 2026-10-01T00:00:00Z
 
 Architecture Decision Record. An append-only record of a structural or implementation decision and its rejected alternatives.
 
+## Agent Platform
+
+Short name for Gemini Enterprise Agent Platform, the Google Cloud AI platform formerly named Vertex AI. The current exam guide uses the new names, and Google lists the renamed products on its name-change page, https://docs.cloud.google.com/gemini-enterprise-agent-platform/vertex-ai-name-changes.
+
 ## API
 
 Application Programming Interface. A defined interface through which software components communicate.
@@ -58,11 +62,11 @@ The compiled list of practice-exam entries shown to the candidate. An available 
 
 ## Exam guide
 
-Google's official Professional Cloud Architect certification exam guide for the standard exam. The current guide prints no date or version; the case studies it links are labeled `v6.1`, so the code identifies it as guide version `6.1`.
+Google's official Professional Cloud Architect certification exam guide for the standard exam, at https://services.google.com/fh/files/misc/professional_cloud_architect_exam_guide_english.pdf. It prints no date or version. It revises the launch edition titled "v6.1 Professional Cloud Architect Exam Guide" with Agent Platform product names, new weights, and one objective fewer, and the case studies it links are labeled `v6.1`, so the code identifies the current guide as version `6.1`. Questions follow the current guide, not the launch edition.
 
 ## Exam-guide objective
 
-A numbered item under an exam-guide section, such as "2.3 Configuring compute systems". The guide version 6.1 has 22 objectives.
+A numbered item under an exam-guide section, such as "2.3 Configuring compute systems". The current guide has 22 objectives.
 
 ## Exam-guide section
 
@@ -70,7 +74,7 @@ One of the six weighted parts of the exam guide. The code identifies them as `de
 
 ## Guide consideration
 
-One bullet point under an exam-guide objective, such as "Compute volatility configuration" under objective 2.3. The guide version 6.1 has 96 considerations across 22 objectives.
+One bullet point under an exam-guide objective, such as "Compute volatility configuration" under objective 2.3. The current guide has 96 considerations across 22 objectives.
 
 ## HTTP
 

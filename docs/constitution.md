@@ -36,7 +36,7 @@ Explicitly out of scope:
 
 ## Data Model Foundation
 
-A question set contains exactly 60 questions: 15 `design`, 11 `provision`, 11 `secure`, 9 `analyze`, 7 `implement`, and 7 `operate` questions, one group for each section of the exam guide version 6.1. Each question has single-choice or multiple-select answer semantics, cites one or more Google-owned sources, and meets the reading-length floors in `src/domain/questions.ts`: at least 59 prompt words, at least 9 words in every choice, and at least 117 words across the prompt and all choices, the length of the median official sample question. An attempt records answers, review flags, position, start time, and deadline for one question set. A completed attempt produces a result without changing the question set.
+A question set contains exactly 60 questions: 15 `design`, 11 `provision`, 11 `secure`, 9 `analyze`, 7 `implement`, and 7 `operate` questions, one group for each section of the current exam guide, which the code identifies as version 6.1. Each question has single-choice or multiple-select answer semantics, cites one or more Google-owned sources, and meets the reading-length floors in `src/domain/questions.ts`: at least 59 prompt words, at least 9 words in every choice, and at least 117 words across the prompt and all choices, the length of the median official sample question. An attempt records answers, review flags, position, start time, and deadline for one question set. A completed attempt produces a result without changing the question set.
 
 Invalid question states must be rejected by TypeScript types and question-bank validation. Answer identifiers must exist among the choices, multiple-select questions must declare the required selection count, and every choice must have feedback supported by cited evidence.
 
@@ -46,7 +46,7 @@ Invalid question states must be rejected by TypeScript types and question-bank v
 - Every correct answer and distractor explanation is supported by current Google-owned documentation.
 - Every question records the date on which its sources were verified.
 - Ambiguous, deprecated, preview-dependent, or unsupported questions are rejected.
-- Questions use the product names of the current exam guide, Google's Agent Platform name-change page, and Google's current product documentation.
+- Questions use the product names of the current exam guide, Google's [Agent Platform name-change page](https://docs.cloud.google.com/gemini-enterprise-agent-platform/vertex-ai-name-changes), and Google's current product documentation.
 - A separate reviewer re-fetches the evidence before a question set enters the runtime catalog.
 - The application never presents a practice percentage as Google's unpublished passing score.
 - The deployed application remains usable on current desktop and mobile browsers.
