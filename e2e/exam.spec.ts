@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
 
+const harnessUrl = "http://127.0.0.1:4174/gcp-pca-exam-simulator/e2e/harness.html";
+const fixtureAttemptKey = "pca-practice-attempt:fixture-set:v1";
+
 test("renders the production catalog at the project path", async ({ page }) => {
   await page.goto("./");
   await expect(page.getByRole("heading", { name: "Choose your practice exam." })).toBeVisible();
@@ -12,7 +15,7 @@ test("does not overflow the configured viewport", async ({ page }) => {
 });
 
 test("completes and reviews a marked practice attempt", async ({ page }) => {
-  await page.goto("http://127.0.0.1:4174/gcp-ml-exam-simulator/e2e/harness.html");
+  await page.goto(harnessUrl);
   await openFixtureExam(page);
   await page.getByRole("button", { name: "Start practice exam" }).click();
   await page.getByRole("radio", { name: /Correct$/ }).check();
@@ -30,22 +33,22 @@ test("completes and reviews a marked practice attempt", async ({ page }) => {
 });
 
 test("restores the current question after reload", async ({ page }) => {
-  await page.goto("http://127.0.0.1:4174/gcp-ml-exam-simulator/e2e/harness.html");
+  await page.goto(harnessUrl);
   await openFixtureExam(page);
   await page.getByRole("button", { name: "Start practice exam" }).click();
   await page.getByRole("radio", { name: /Correct$/ }).check();
   await page.getByRole("button", { name: "Next" }).click();
-  const originalDeadline = await page.evaluate(() => JSON.parse(localStorage.getItem("pmle-practice-attempt:fixture-set:v1")!).deadline);
+  const originalDeadline = await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!).deadline, fixtureAttemptKey);
   await page.reload();
   await expect(page.getByRole("heading", { name: "Which two fixture answers are correct?" })).toBeVisible();
-  const restoredDeadline = await page.evaluate(() => JSON.parse(localStorage.getItem("pmle-practice-attempt:fixture-set:v1")!).deadline);
+  const restoredDeadline = await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!).deadline, fixtureAttemptKey);
   expect(restoredDeadline).toBe(originalDeadline);
   await page.getByRole("button", { name: "Question 1, answered" }).click();
   await expect(page.getByRole("radio", { name: /Correct$/ })).toBeChecked();
 });
 
 test("places current-question controls before the question navigator in keyboard order", async ({ page }) => {
-  await page.goto("http://127.0.0.1:4174/gcp-ml-exam-simulator/e2e/harness.html");
+  await page.goto(harnessUrl);
   await openFixtureExam(page);
   await page.getByRole("button", { name: "Start practice exam" }).click();
   await page.keyboard.press("Tab");
@@ -53,7 +56,7 @@ test("places current-question controls before the question navigator in keyboard
 });
 
 test("keeps attempt controls within the configured viewport", async ({ page }) => {
-  await page.goto("http://127.0.0.1:4174/gcp-ml-exam-simulator/e2e/harness.html");
+  await page.goto(harnessUrl);
   await openFixtureExam(page);
   await page.getByRole("button", { name: "Start practice exam" }).click();
   const fitsViewport = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
@@ -61,7 +64,7 @@ test("keeps attempt controls within the configured viewport", async ({ page }) =
 });
 
 test("renders question and answer text at the same font size", async ({ page }) => {
-  await page.goto("http://127.0.0.1:4174/gcp-ml-exam-simulator/e2e/harness.html");
+  await page.goto(harnessUrl);
   await openFixtureExam(page);
   await page.getByRole("button", { name: "Start practice exam" }).click();
   const question = page.getByRole("heading", { name: "Which fixture answer is correct?" });
@@ -73,7 +76,7 @@ test("renders question and answer text at the same font size", async ({ page }) 
 });
 
 test("renders reviewed question and answer text at the same font size", async ({ page }) => {
-  await page.goto("http://127.0.0.1:4174/gcp-ml-exam-simulator/e2e/harness.html");
+  await page.goto(harnessUrl);
   await openFixtureExam(page);
   await page.getByRole("button", { name: "Start practice exam" }).click();
   await page.getByRole("button", { name: "Finish exam" }).click();
@@ -87,7 +90,7 @@ test("renders reviewed question and answer text at the same font size", async ({
 });
 
 test("supports keyboard cancellation of submission", async ({ page }) => {
-  await page.goto("http://127.0.0.1:4174/gcp-ml-exam-simulator/e2e/harness.html");
+  await page.goto(harnessUrl);
   await openFixtureExam(page);
   await page.getByRole("button", { name: "Start practice exam" }).click();
   await page.getByRole("button", { name: "Finish exam" }).click();

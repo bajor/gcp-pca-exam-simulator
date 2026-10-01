@@ -22,7 +22,7 @@ it("runs the documented rejection-record command outside Vite", async () => {
       "missing-set",
       "reviewer",
       "2026-08-31",
-      '[{"id":"architect-q1","reason":"Ambiguous."}]',
+      '[{"id":"design-q1","reason":"Ambiguous."}]',
     ],
   );
   await expect(execution).rejects.toMatchObject({

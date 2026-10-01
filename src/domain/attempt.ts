@@ -28,7 +28,7 @@ export interface CompletedAttempt extends AttemptBase {
 export type Attempt = InProgressAttempt | CompletedAttempt;
 
 export function attemptStorageKey(set: Pick<QuestionSet, "id" | "version">): string {
-  return `pmle-practice-attempt:${set.id}:v${set.version}`;
+  return `pca-practice-attempt:${set.id}:v${set.version}`;
 }
 
 export interface Score {

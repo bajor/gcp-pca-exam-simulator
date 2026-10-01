@@ -2,26 +2,27 @@ import { sha256 } from "@noble/hashes/sha2.js";
 import { bytesToHex } from "@noble/hashes/utils.js";
 
 export const examSections = {
-  architect: "Architecting low-code AI solutions",
-  collaborate: "Collaborating within and across teams to manage data and models",
-  scale: "Scaling prototypes into ML models",
-  serve: "Serving and scaling models",
-  automate: "Automating and orchestrating ML pipelines",
-  monitor: "Monitoring AI solutions",
+  design: "Designing and planning a cloud solution architecture",
+  provision: "Managing and provisioning a cloud solution infrastructure",
+  secure: "Designing for security and compliance",
+  analyze: "Analyzing and optimizing technical and business processes",
+  implement: "Managing implementation",
+  operate: "Ensuring solution and operations excellence",
 } as const;
 
 export type ExamSection = keyof typeof examSections;
 export type ChoiceId = "a" | "b" | "c" | "d" | "e";
 export const examSectionIds = Object.keys(examSections) as readonly ExamSection[];
 
-// The current guide is identified by its effective date rather than a version number.
-type ExamGuideVersion = "2026-06-01";
+// The guide prints no date or version; the case studies it links carry the "v6.1" label.
+type ExamGuideVersion = "6.1";
 
-// Real exam stems and options are long; these floors keep practice reading load realistic.
-export const minimumPromptWords = 60;
-export const minimumChoiceWords = 12;
-// Counts the prompt plus every choice; equals the shortest official sample question.
-export const minimumQuestionWords = 166;
+// Floors derived from the official sample questions in docs/research/0001-exam-format-and-blueprint.md.
+export const minimumPromptWords = 50;
+// Excludes the shortest quarter of official options.
+export const minimumChoiceWords = 10;
+// Counts the prompt plus every choice; the median official sample question, rounded up.
+export const minimumQuestionWords = 121;
 
 export interface Evidence {
   readonly id: string;
@@ -128,14 +129,15 @@ export interface QuestionSet {
 }
 
 // Largest-remainder allocation of the guide's approximate section weights
-// (13, 16, 21, 20, 18, and 13 percent) across the published 60-question maximum.
+// (25, 17.5, 17.5, 15, 12.5, and 12.5 percent) across the published 60-question maximum.
+// Four sections tie at a remainder of 0.5 for the last two questions; the larger weight wins.
 export const expectedSectionCounts: Readonly<Record<ExamSection, number>> = {
-  architect: 8,
-  collaborate: 9,
-  scale: 12,
-  serve: 12,
-  automate: 11,
-  monitor: 8,
+  design: 15,
+  provision: 11,
+  secure: 11,
+  analyze: 9,
+  implement: 7,
+  operate: 7,
 };
 
 export const questionSetSize = examSectionIds.reduce((total, section) => total + expectedSectionCounts[section], 0);

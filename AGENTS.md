@@ -3,18 +3,18 @@
 ## Living Docs
 
 enforcement: strict
-onboarded: 2026-09-25
+onboarded: 2026-10-01
 
 ## Content Policy
 
 - Write original practice questions. Never use exam dumps, reconstructed live exam content, or unauthorized question collections.
 - Never copy or paraphrase Google's official sample questions. Use them only to understand format and style.
-- Map every question to the current Professional Machine Learning Engineer exam guide, dated June 1, 2026.
-- Use the product names of the current exam guide and Google's Agent Platform name-change page.
+- Never copy the text of Google's case-study documents into the repository. Refer to the official documents instead.
+- Map every question to the current Professional Cloud Architect exam guide, version 6.1.
+- Use the product names of the current exam guide and of Google's current product documentation.
 - Support every correct answer and distractor explanation with current Google-owned documentation.
 - Reject questions that are ambiguous, deprecated, preview-dependent, or unsupported by the cited documentation.
 - Record the date on which each question's sources were verified.
-- Author questions with `.claude/skills/pmle-question-authoring/SKILL.md` and review complete sets with `.claude/skills/pmle-question-review/SKILL.md`.
 
 ## Quality Gate
 

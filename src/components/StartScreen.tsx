@@ -17,11 +17,11 @@ export function StartScreen({ questionSet, onBack, onStart }: StartScreenProps) 
   return (
     <main className="start-shell">
       <section className="hero-card" aria-labelledby="page-title">
-        <p className="eyebrow">Professional Machine Learning Engineer</p>
+        <p className="eyebrow">Professional Cloud Architect</p>
         <h1 id="page-title" ref={headingRef} tabIndex={-1}>Documentation-backed practice exam</h1>
         <p className="lede">
-          Original scenarios mapped to the June 1, 2026 exam guide, with every answer checked against current
-          Google Cloud documentation.
+          Original scenarios mapped to the current exam guide, with every answer checked against current Google
+          Cloud documentation.
         </p>
         <h2 className="selected-exam-title">{questionSet.title}</h2>
         <dl className="exam-facts">

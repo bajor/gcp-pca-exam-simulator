@@ -11,13 +11,13 @@ const draft: DraftQuestionSet = {
   id: "draft",
   version: 1,
   title: "Draft",
-  guideVersion: "2026-06-01",
+  guideVersion: "6.1",
   durationMinutes: 120,
   sections: [{
-    section: "architect",
+    section: "design",
     author: "author",
     questions: [singleQuestion],
-  } satisfies QuestionSection<"architect">],
+  } satisfies QuestionSection<"design">],
 };
 
 it("collects evidence from a draft-only question", () => {

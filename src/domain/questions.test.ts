@@ -224,23 +224,23 @@ it("accepts one structurally complete draft section", () => {
 
 it("rejects an incomplete draft section", () => {
   const draft = validDraft();
-  const architect = draft.sections[0];
-  const incomplete = { ...architect, questions: architect.questions.slice(0, -1) } as AnyQuestionSection;
+  const design = draft.sections[0];
+  const incomplete = { ...design, questions: design.questions.slice(0, -1) } as AnyQuestionSection;
   const invalid = { ...draft, sections: [incomplete] };
-  expect(validateDraftQuestionSet(invalid)).toContain("architect: expected 8 questions.");
+  expect(validateDraftQuestionSet(invalid)).toContain("design: expected 15 questions.");
 });
 
 it("rejects a question assigned to the wrong draft section", () => {
   const draft = validDraft();
-  const architect = draft.sections[0];
-  const collaborateQuestion = draft.sections[1].questions[0];
+  const design = draft.sections[0];
+  const provisionQuestion = draft.sections[1].questions[0];
   const mismatched = {
-    ...architect,
-    questions: [collaborateQuestion, ...architect.questions.slice(1)],
+    ...design,
+    questions: [provisionQuestion, ...design.questions.slice(1)],
   } as AnyQuestionSection;
   const invalid = { ...draft, sections: [mismatched] };
   expect(validateDraftQuestionSet(invalid)).toContain(
-    `${collaborateQuestion.id}: question section does not match architect.`,
+    `${provisionQuestion.id}: question section does not match design.`,
   );
 });
 
@@ -252,7 +252,7 @@ it("rejects duplicate draft question-set identifiers", () => {
 it("refuses to assemble a question set with missing sections", () => {
   const draft = validDraft();
   const partialDraft = { ...draft, sections: draft.sections.slice(0, 1) };
-  expect(() => assembleQuestionSet(partialDraft)).toThrow("collaborate: draft section is missing.");
+  expect(() => assembleQuestionSet(partialDraft)).toThrow("provision: draft section is missing.");
 });
 
 it("assembles all complete draft sections into 60 questions", () => {

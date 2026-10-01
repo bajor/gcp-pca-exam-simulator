@@ -25,7 +25,7 @@ export function buildValidQuestionSet(): QuestionSet {
     id: "valid-set",
     version: 1,
     title: "Valid set",
-    guideVersion: "2026-06-01",
+    guideVersion: "6.1",
     durationMinutes: 120,
     authors: ["author"],
     questions,

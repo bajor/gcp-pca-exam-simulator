@@ -23,7 +23,7 @@ interface AppProps {
   readonly catalog?: readonly ExamCatalogEntry[];
 }
 
-const selectedSetStorageKey = "pmle-practice-selected-set-v1";
+const selectedSetStorageKey = "pca-practice-selected-set-v1";
 
 export function App({ catalog = examCatalog }: AppProps) {
   const [initialSelection] = useState(() => restoreSelection(catalog));

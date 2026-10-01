@@ -6,7 +6,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: "list",
   use: {
-    baseURL: "http://127.0.0.1:4173/gcp-ml-exam-simulator/",
+    baseURL: "http://127.0.0.1:4173/gcp-pca-exam-simulator/",
     trace: "on-first-retry",
   },
   projects: [

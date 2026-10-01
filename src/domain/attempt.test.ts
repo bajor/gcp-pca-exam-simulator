@@ -38,12 +38,12 @@ describe("attempt scoring", () => {
 
   it("counts correct answers within their exam section", () => {
     const score = scoreAttempt(fixtureQuestionSet, { [singleQuestion.id]: ["a"] });
-    expect(score.sections.architect.correct).toBe(1);
+    expect(score.sections.design.correct).toBe(1);
   });
 
   it("counts total questions within their exam section", () => {
     const score = scoreAttempt(fixtureQuestionSet, {});
-    expect(score.sections.architect.total).toBe(1);
+    expect(score.sections.design.total).toBe(1);
   });
 
   it("rounds fractional section percentages to one decimal place", () => {
@@ -54,7 +54,7 @@ describe("attempt scoring", () => {
       questions: [singleQuestion, secondQuestion, thirdQuestion],
     };
     const score = scoreAttempt(threeQuestionSet, { [singleQuestion.id]: ["a"] });
-    expect(score.sections.architect.percentage).toBe(33.3);
+    expect(score.sections.design.percentage).toBe(33.3);
   });
 
   it("rounds fractional percentages to one decimal place", () => {

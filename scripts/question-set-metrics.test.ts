@@ -56,10 +56,10 @@ it("reports zero spreads for an empty set", () => {
 });
 
 it("counts objectives and considerations from the objective field", () => {
-  const mapped = { ...baseQuestion, objective: "3.2 Training models: 3.2.e hyperparameter tuning" };
+  const mapped = { ...baseQuestion, objective: "2.3 Configuring compute systems: 2.3.b compute volatility configuration" };
   const metrics = measureQuestions([mapped, baseQuestion]);
   expect({ objectives: metrics.objectiveCounts, considerations: metrics.considerationCounts }).toEqual({
-    objectives: { "3.2": 1, none: 1 },
-    considerations: { "3.2.e": 1, none: 1 },
+    objectives: { "2.3": 1, none: 1 },
+    considerations: { "2.3.b": 1, none: 1 },
   });
 });

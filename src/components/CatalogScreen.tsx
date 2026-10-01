@@ -17,11 +17,11 @@ export function CatalogScreen({ entries, onSelect }: CatalogScreenProps) {
   return (
     <main className="catalog-shell">
       <section className="catalog-hero" aria-labelledby="page-title">
-        <p className="eyebrow">Professional Machine Learning Engineer</p>
+        <p className="eyebrow">Professional Cloud Architect</p>
         <h1 id="page-title" ref={headingRef} tabIndex={-1}>Choose your practice exam.</h1>
         <p className="lede">
-          Full-length original scenarios mapped to the June 1, 2026 exam guide, with answers checked against
-          current Google Cloud documentation.
+          Full-length original scenarios mapped to the current exam guide, with answers checked against current
+          Google Cloud documentation.
         </p>
 
         <div className="catalog-grid">
