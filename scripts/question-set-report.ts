@@ -1,6 +1,6 @@
 import { candidateQuestionSets, draftQuestionSets } from "../src/data/questionSets/registry";
 import { examSectionIds, type Question } from "../src/domain/questions";
-import { measureQuestions, unmappedLabel, type QuestionSetMetrics, type Spread } from "./question-set-metrics";
+import { measureQuestions, nearMissRunWords, unmappedLabel, type QuestionSetMetrics, type Spread } from "./question-set-metrics";
 
 const [questionSetId] = process.argv.slice(2);
 if (!questionSetId) throw new Error("Usage: npm run question-set-report -- <question-set-id>");
@@ -23,6 +23,7 @@ function formatReport(title: string, metrics: QuestionSetMetrics): string {
     String(question.stemWords),
     `${question.shortestChoiceWords}-${question.longestChoiceWords}`,
     String(question.readingLoad),
+    String(question.sharedOptionRun),
     question.correctChoiceIds.join("+"),
     question.correctIsLongest ? "yes" : "no",
   ]);
@@ -36,12 +37,13 @@ function formatReport(title: string, metrics: QuestionSetMetrics): string {
     `Question set: ${title}`,
     `Questions: ${metrics.questions.length}, multiple-select: ${metrics.multipleSelectCount}`,
     "",
-    table(["ID", "Consideration", "Kind", "Case study", "Stem", "Options", "Reading", "Correct", "Correct longest"], rows),
+    table(["ID", "Consideration", "Kind", "Case study", "Stem", "Options", "Reading", "Shared run", "Correct", "Correct longest"], rows),
     "",
     `Stem words: ${formatSpread(metrics.stemWords)}`,
     `Option words: ${formatSpread(metrics.choiceWords)}`,
     `Reading load: ${formatSpread(metrics.readingLoad)}`,
     `Correct option strictly longest: ${metrics.correctIsLongestCount} of ${singleCount} single-choice questions`,
+    `Near-miss pairs (options sharing a run of at least ${nearMissRunWords} words): ${metrics.nearMissCount} questions`,
     `Correct letters (single-choice): ${formatCounts(metrics.correctLetterCounts)}`,
     `Case-study questions: ${formatCounts(metrics.caseStudyQuestionCounts) || "none"}`,
     `Sections per case study: ${formatCounts(metrics.caseStudySectionCounts) || "none"}`,

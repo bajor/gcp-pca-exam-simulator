@@ -4,6 +4,8 @@ import { countWords, type ChoiceId, type Question } from "../src/domain/question
 const singleChoiceIds: readonly ChoiceId[] = ["a", "b", "c", "d"];
 // Label for a question whose objective lacks an objective or consideration identifier.
 export const unmappedLabel = "none";
+// Style guide option rule 4: two options that share a run of this many words form a near-miss pair.
+export const nearMissRunWords = 7;
 
 export interface Spread {
   readonly min: number;
@@ -20,6 +22,7 @@ export interface QuestionMetrics {
   readonly shortestChoiceWords: number;
   readonly longestChoiceWords: number;
   readonly readingLoad: number;
+  readonly sharedOptionRun: number;
   readonly correctChoiceIds: readonly ChoiceId[];
   readonly correctIsLongest: boolean;
 }
@@ -31,6 +34,7 @@ export interface QuestionSetMetrics {
   readonly choiceWords: Spread;
   readonly readingLoad: Spread;
   readonly correctIsLongestCount: number;
+  readonly nearMissCount: number;
   readonly correctLetterCounts: Readonly<Record<string, number>>;
   readonly objectiveCounts: Readonly<Record<string, number>>;
   readonly considerationCounts: Readonly<Record<string, number>>;
@@ -49,6 +53,7 @@ export function measureQuestions(questions: readonly Question[]): QuestionSetMet
     choiceWords: spread(questions.flatMap((question) => question.choices.map((choice) => countWords(choice.text)))),
     readingLoad: spread(measured.map((question) => question.readingLoad)),
     correctIsLongestCount: singles.filter((question) => question.correctIsLongest).length,
+    nearMissCount: measured.filter((question) => question.sharedOptionRun >= nearMissRunWords).length,
     correctLetterCounts: countBy(singleChoiceIds, singles.map((question) => question.correctChoiceIds[0])),
     objectiveCounts: countBy([], questions.map((question) => question.objective.match(/^(\d\.\d)\b/)?.[1] ?? unmappedLabel)),
     considerationCounts: countBy([], measured.map((question) => question.consideration)),
@@ -76,9 +81,31 @@ function measureQuestion(question: Question): QuestionMetrics {
     shortestChoiceWords: Math.min(...lengths),
     longestChoiceWords: Math.max(...lengths),
     readingLoad: stemWords + lengths.reduce((total, words) => total + words, 0),
+    sharedOptionRun: longestSharedRun(question.choices.map((choice) => choice.text)),
     correctChoiceIds,
     correctIsLongest: question.kind === "single" && otherWords.every((words) => correctWords > words),
   };
+}
+
+// The longest run of consecutive words, ignoring case and edge punctuation, that any two options share.
+function longestSharedRun(texts: readonly string[]): number {
+  const options = texts.map((text) => text.toLowerCase().split(/\s+/).map((word) => word.replace(/^\W+|\W+$/g, "")).filter(Boolean));
+  return Math.max(0, ...options.flatMap((first, index) =>
+    options.slice(index + 1).map((second) => longestCommonRun(first, second))));
+}
+
+function longestCommonRun(first: readonly string[], second: readonly string[]): number {
+  let longest = 0;
+  let previous = new Array<number>(second.length + 1).fill(0);
+  for (const word of first) {
+    const current = new Array<number>(second.length + 1).fill(0);
+    second.forEach((other, index) => {
+      if (word === other) current[index + 1] = previous[index] + 1;
+    });
+    longest = Math.max(longest, ...current);
+    previous = current;
+  }
+  return longest;
 }
 
 function spread(values: readonly number[]): Spread {

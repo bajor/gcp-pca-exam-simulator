@@ -1,8 +1,9 @@
 import { expect, it } from "vitest";
-import { maximumCaseStudyQuestions, minimumQuestionWords, type ChoiceId, type SingleChoiceQuestion } from "../src/domain/questions";
+import type { CaseStudyId } from "../src/domain/caseStudies";
+import { minimumQuestionWords, type ChoiceId, type ExamSection, type SingleChoiceQuestion } from "../src/domain/questions";
 import { multipleQuestion } from "../src/test/fixtures";
 import { buildValidQuestionSet, words } from "../src/test/questionSetFactory";
-import { measureQuestions } from "./question-set-metrics";
+import { measureQuestions, nearMissRunWords } from "./question-set-metrics";
 
 const baseQuestion = buildValidQuestionSet().questions[0] as SingleChoiceQuestion;
 const baseChoiceWords = 4 * 12;
@@ -64,10 +65,35 @@ it("counts objectives and considerations from the objective field", () => {
   });
 });
 
-it("counts case-study questions and the sections they span", () => {
-  const metrics = measureQuestions(buildValidQuestionSet(maximumCaseStudyQuestions).questions);
+it("counts the questions of each case study and the sections they span", () => {
+  const caseStudyQuestion = (caseStudyId: CaseStudyId | undefined, section: ExamSection) => ({ ...baseQuestion, caseStudyId, section });
+  const metrics = measureQuestions([
+    caseStudyQuestion("ehr-healthcare", "design"),
+    caseStudyQuestion("ehr-healthcare", "secure"),
+    caseStudyQuestion("ehr-healthcare", "analyze"),
+    caseStudyQuestion("ehr-healthcare", "operate"),
+    caseStudyQuestion("cymbal-retail", "design"),
+    caseStudyQuestion("cymbal-retail", "design"),
+    caseStudyQuestion(undefined, "provision"),
+  ]);
   expect({ questions: metrics.caseStudyQuestionCounts, sections: metrics.caseStudySectionCounts }).toEqual({
-    questions: { "cymbal-retail": 9, "ehr-healthcare": 9 },
-    sections: { "cymbal-retail": 2, "ehr-healthcare": 2 },
+    questions: { "cymbal-retail": 2, "ehr-healthcare": 4 },
+    sections: { "cymbal-retail": 1, "ehr-healthcare": 4 },
+  });
+});
+
+it("counts a near-miss pair when any two options share a run of at least seven words", () => {
+  const shared = words("s", nearMissRunWords);
+  const shorter = words("s", nearMissRunWords - 1);
+  const withChoices = (texts: readonly [string, string, string, string]) =>
+    ({ ...baseQuestion, choices: baseQuestion.choices.map((choice, index) => ({ ...choice, text: texts[index] })) }) as unknown as SingleChoiceQuestion;
+  const metrics = measureQuestions([
+    withChoices([`grant ${shared} now`, words("b", 12), `revoke ${shared} later`, words("d", 12)]),
+    withChoices([`grant ${shorter} now`, `revoke ${shorter} later`, words("c", 12), words("d", 12)]),
+    withChoices([words("a", 12), `Grant ${shared.toUpperCase()}.`, words("c", 12), `grant ${shared},`]),
+  ]);
+  expect({ runs: metrics.questions.map((item) => item.sharedOptionRun), nearMiss: metrics.nearMissCount }).toEqual({
+    runs: [nearMissRunWords, nearMissRunWords - 1, nearMissRunWords + 1],
+    nearMiss: 2,
   });
 });
