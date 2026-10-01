@@ -11,7 +11,7 @@ onboarded: 2026-10-01
 - Never copy or paraphrase Google's official sample questions. Use them only to understand format and style.
 - Never copy the text of Google's case-study documents into the repository. Refer to the official documents instead.
 - Map every question to the current Professional Cloud Architect exam guide, version 6.1.
-- Use the product names of the current exam guide and of Google's current product documentation.
+- Use the product names of the current exam guide, Google's Agent Platform name-change page, and Google's current product documentation.
 - Support every correct answer and distractor explanation with current Google-owned documentation.
 - Reject questions that are ambiguous, deprecated, preview-dependent, or unsupported by the cited documentation.
 - Record the date on which each question's sources were verified.

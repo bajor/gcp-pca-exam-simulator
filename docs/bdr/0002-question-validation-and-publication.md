@@ -36,11 +36,11 @@ Structural validation also enforces three reading-length floors, where a word is
 
 | Floor | Minimum | Error |
 |---|---|---|
-| Prompt | 50 words | `<question-id>: prompt must contain at least 50 words.` |
-| Each choice | 10 words | `<question-id>/<choice-id>: choice text must contain at least 10 words.` |
-| Prompt plus all choices | 121 words | `<question-id>: prompt and choices must contain at least 121 words.` |
+| Prompt | 59 words | `<question-id>: prompt must contain at least 59 words.` |
+| Each choice | 9 words | `<question-id>/<choice-id>: choice text must contain at least 9 words.` |
+| Prompt plus all choices | 117 words | `<question-id>: prompt and choices must contain at least 117 words.` |
 
-For example, a 55-word prompt with four 15-word choices has 115 words and fails the combined floor, although it passes the prompt and choice floors. Each floor is an inclusive minimum: a question exactly at every floor is valid. The constants live only in `src/domain/questions.ts`.
+For example, a 60-word prompt with four 12-word choices has 108 words and fails the combined floor, although it passes the prompt and choice floors. Each floor is an inclusive minimum: a question whose prompt, one choice, and total length are each exactly at their floor is valid. The constants live only in `src/domain/questions.ts`.
 
 Live verification fetches every unique draft and candidate URL, follows redirects, retries HTTP 408, 429, and 5xx responses up to three attempts, and requires a successful response whose final URL is on an accepted Google-owned host. The final reviewer must be absent from the candidate's authors and independently checks every source, prompt, answer, distractor, objective, product name, deprecation state, and originality constraint.
 
@@ -52,7 +52,7 @@ Any failure produces an indexed, dated rejection report. Its generated machine r
 
 - Given a registered question whose prompt and choices total 115 words
 - When structural validation runs
-- Then validation names the question and the 121-word floor
+- Then validation names the question and the 117-word floor
 
 **Scenario 2: Reject a wrong blueprint**
 
@@ -84,7 +84,7 @@ Any failure produces an indexed, dated rejection report. Its generated machine r
 |---|---|---|---|---|
 | Prompt floor | Unit | Prompt one word below the floor | Validation names the question and floor | Short scenarios cannot publish. |
 | Choice floor | Unit | One choice one word below the floor | Validation names the question, choice, and floor | Terse options cannot publish. |
-| Combined floor | Unit | Valid prompt and choices totaling below 121 words | Validation names the question and floor | Overall reading load meets the median official sample. |
+| Combined floor | Unit | Valid prompt and choices totaling below 117 words | Validation names the question and floor | Overall reading load meets the median official sample. |
 | Exact floors | Unit | Prompt, one choice, and total exactly at their floors | Validation accepts the question | The floors are inclusive minimums without off-by-one errors. |
 | Section count | Unit | Registered section below its final count | Validation names the section and expected count | Partial content cannot pass as a complete section. |
 | Section mapping | Unit | Question section differs from its module | Validation names the question and expected section | Section ownership remains deterministic. |

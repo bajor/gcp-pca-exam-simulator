@@ -65,7 +65,7 @@ On 2026-10-01 the catalog lists Practice Exams 1, 2, and 3 as coming soon. No qu
 
 ## Persistence
 
-`src/domain/attempt.ts` stores each attempt under `pca-practice-attempt:<set-id>:v<version>`, and `src/App.tsx` stores the last selected set under `pca-practice-selected-set-v1`. The `pca-` prefix is required because the Professional Data Engineer and PMLE simulators are served from the same `https://bajor.github.io` origin and therefore share the same `localStorage`. Reload restores only state that runtime validation accepts for the selected set and version; malformed or mismatched data is removed. Completed attempts remain read-only until the candidate confirms a replacement, and returning to the catalog does not clear them.
+`src/domain/attempt.ts` stores each attempt under `pca-practice-attempt:<set-id>:v<version>`, and `src/App.tsx` stores the last selected set under `pca-practice-selected-set-v1`. The `pca-` prefix is required because the PMLE simulator is served from the same `https://bajor.github.io` origin and therefore shares the same `localStorage`. Reload restores only state that runtime validation accepts for the selected set and version; malformed or mismatched data is removed. Completed attempts remain read-only until the candidate confirms a replacement, and returning to the catalog does not clear them.
 
 ## Deployment
 

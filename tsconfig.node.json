@@ -9,5 +9,5 @@
     "noEmit": true,
     "types": ["node", "vite/client"]
   },
-  "include": ["vite.config.ts", "vitest.config.ts", "vitest.sources.config.ts", "playwright.config.ts", "eslint.config.js", "scripts/**/*.ts", "e2e/**/*.ts", "src/domain/catalog.ts", "src/domain/questions.ts", "src/data/questionSets/**/*.ts", "src/test/fixtures.ts", "src/test/questionSetFactory.ts"]
+  "include": ["vite.config.ts", "vitest.config.ts", "vitest.sources.config.ts", "playwright.config.ts", "eslint.config.js", "scripts/**/*.ts", "e2e/**/*.ts", "src/domain/attempt.ts", "src/domain/catalog.ts", "src/domain/questions.ts", "src/data/questionSets/**/*.ts", "src/test/fixtures.ts", "src/test/questionSetFactory.ts"]
 }

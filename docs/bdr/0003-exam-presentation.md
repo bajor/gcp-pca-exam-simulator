@@ -13,7 +13,7 @@ timestamp: 2026-10-01T00:00:00Z
 
 ## Context
 
-[PRD 0001](/prd/0001-cloud-architect-exam-simulator.md) requires question and answer text in the same font size and a dense presentation like the Pearson VUE delivery screen. The candidate asked for this presentation after the real Professional Data Engineer exam, and the PMLE simulator adopted it: question text at the same, smaller size as the answers and a less comfortable, older Pearson-style look, so that practice reading effort matches the real exam. The port in [ADR 0001](/adr/0001-port-pmle-simulator.md) keeps it unchanged.
+[PRD 0001](/prd/0001-cloud-architect-exam-simulator.md) requires question and answer text in the same font size and a dense presentation like the Pearson VUE delivery screen. The candidate asked for this presentation after the real Professional Data Engineer exam, and the PMLE simulator adopted it in its behavior record `docs/bdr/0003-exam-presentation.md` (repository `bajor/gcp-ml-exam-simulator`, commit `d1dce6d`): question text at the same, smaller size as the answers and a less comfortable, older Pearson-style look, so that practice reading effort matches the real exam. The port in [ADR 0001](/adr/0001-port-pmle-simulator.md) keeps it unchanged.
 
 ## Behavior
 

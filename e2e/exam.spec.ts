@@ -1,7 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { attemptStorageKey } from "../src/domain/attempt";
+import { fixtureQuestionSet } from "../src/test/fixtures";
 
 const harnessUrl = "http://127.0.0.1:4174/gcp-pca-exam-simulator/e2e/harness.html";
-const fixtureAttemptKey = "pca-practice-attempt:fixture-set:v1";
+const fixtureAttemptKey = attemptStorageKey(fixtureQuestionSet);
 
 test("renders the production catalog at the project path", async ({ page }) => {
   await page.goto("./");

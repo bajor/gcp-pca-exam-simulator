@@ -44,6 +44,10 @@ The explanation attached to one answer choice. It states why that choice does or
 
 Conflict of Interest. A source relationship that could influence a claim; project research flags vendor-owned statements with this marker.
 
+## Distractor
+
+An incorrect answer option. In this project every distractor must be technically possible on Google Cloud and must fail at least one stated requirement for a documented reason.
+
 ## Draft question set
 
 The partial manifest used while independently mergeable question sections are being authored. A draft may omit sections, but every registered section must already contain its final required question count and pass structural and live-source checks.
@@ -63,6 +67,10 @@ A numbered item under an exam-guide section, such as "2.3 Configuring compute sy
 ## Exam-guide section
 
 One of the six weighted parts of the exam guide. The code identifies them as `design` (Designing and planning a cloud solution architecture), `provision` (Managing and provisioning a cloud solution infrastructure), `secure` (Designing for security and compliance), `analyze` (Analyzing and optimizing technical and business processes), `implement` (Managing implementation), and `operate` (Ensuring solution and operations excellence).
+
+## Guide consideration
+
+One bullet point under an exam-guide objective, such as "Compute volatility configuration" under objective 2.3. The guide version 6.1 has 96 considerations across 22 objectives.
 
 ## HTTP
 
@@ -112,13 +120,17 @@ All questions assigned to one exam-guide section within a draft question set. A 
 
 An immutable, versioned collection of exactly 60 original practice questions with a declared exam-guide version. The exam catalog can offer multiple available question sets.
 
+## Question-set report
+
+The output of `npm run question-set-report -- <question-set-id>`: per-question word counts and set-level measurements that authors and reviewers compare with the authoring targets.
+
 ## Reading load
 
 The number of words in a question's prompt plus all of its choices. A word is a whitespace-separated token.
 
 ## Reading-length floor
 
-A minimum word count enforced by structural validation: 50 words for a prompt, 10 words for each choice, and 121 words of reading load per question.
+A minimum word count enforced by structural validation: 59 words for a prompt, 9 words for each choice, and 117 words of reading load per question.
 
 ## Rejection record
 

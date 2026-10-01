@@ -21,7 +21,7 @@ Copy the PMLE application, tooling, tests, CI, and deployment workflows from com
 
 - Replace the six PMLE sections with the six sections of the PCA exam guide version 6.1, `design`, `provision`, `secure`, `analyze`, `implement`, and `operate`, with 15, 11, 11, 9, 7, and 7 questions. The set size of 60 is still derived from the section counts.
 - Identify the guide as version `6.1`, the label of the case studies it links, because the guide prints no date or version.
-- Replace the reading-length floors with floors derived from the PCA sample questions: 50 prompt words, 10 words per choice, and 121 words per question.
+- Replace the reading-length floors with floors derived from the PCA sample questions: 59 prompt words, 9 words per choice, and 117 words per question.
 - Store attempts under `pca-practice-attempt:<set-id>:v<version>` and the selected set under `pca-practice-selected-set-v1`.
 - Start with empty draft and candidate registries and a catalog of three coming-soon entries.
 - Serve the build from `/gcp-pca-exam-simulator/`.
@@ -30,7 +30,7 @@ Case-study support, which the PCA exam requires and the PMLE simulator lacks, is
 
 ## Alternatives Considered
 
-Building a new simulator was rejected because the PMLE code already implements and tests every required attempt behavior. Extracting a package shared by the three simulators was rejected because the exams change for different reasons, and a shared release process adds coordination cost for one candidate. A GitHub fork was rejected because it would carry PMLE question content and review history. Keeping the PMLE storage keys was rejected because all three GitHub Pages sites share the `https://bajor.github.io` origin, so equal keys would let one simulator read another simulator's attempts. Keeping the PMLE floors was rejected because they were derived from the PMLE samples, whose median reading load of 207 words is far above the PCA samples' 120.5 words, as [research 0001](/research/0001-exam-format-and-blueprint.md) records.
+Building a new simulator was rejected because the PMLE code already implements and tests every required attempt behavior. Extracting a package shared by the three simulators was rejected because the exams change for different reasons, and a shared release process adds coordination cost for one candidate. A GitHub fork was rejected because it would carry PMLE question content and review history. Keeping the PMLE storage keys was rejected because the PMLE and PCA GitHub Pages sites share the `https://bajor.github.io` origin, so equal keys would let one simulator read the other simulator's attempts. Keeping the PMLE floors was rejected because they were derived from the PMLE samples, whose median reading load of 207 words is far above the PCA samples' 116.5 words, as [research 0001](/research/0001-exam-format-and-blueprint.md) records.
 
 ## Consequences
 

@@ -18,11 +18,12 @@ export const examSectionIds = Object.keys(examSections) as readonly ExamSection[
 type ExamGuideVersion = "6.1";
 
 // Floors derived from the official sample questions in docs/research/0001-exam-format-and-blueprint.md.
-export const minimumPromptWords = 50;
+// The median official prompt.
+export const minimumPromptWords = 59;
 // Excludes the shortest quarter of official options.
-export const minimumChoiceWords = 10;
+export const minimumChoiceWords = 9;
 // Counts the prompt plus every choice; the median official sample question, rounded up.
-export const minimumQuestionWords = 121;
+export const minimumQuestionWords = 117;
 
 export interface Evidence {
   readonly id: string;
