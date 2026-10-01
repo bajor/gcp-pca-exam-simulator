@@ -72,9 +72,21 @@ Conflict of Interest. A source relationship that could influence a claim; projec
 
 A stated requirement or restriction in a question stem, such as minimal operational overhead, high availability, or data residency. Constraints decide which option is correct.
 
+## Coverage matrix
+
+The document `docs/authoring/coverage-matrix.md`, which assigns every guide consideration an identifier such as `2.3.b`, fixes the questions per objective in each set, and assigns case studies to practice exams.
+
+## Difficulty lever
+
+A deliberate technique that makes a question as hard as the real exam, such as constraint tension or a near-miss pair. The style guide defines levers L1 to L7.
+
 ## Distractor
 
 An incorrect answer option. In this project every distractor must be technically possible on Google Cloud and must fail at least one stated requirement for a documented reason.
+
+## Distractor mechanism
+
+The way a distractor fails, such as self-managed infrastructure where a managed capability exists, the wrong scope or placement, or a broad role where least privilege is required. The style guide defines mechanisms D1 to D8.
 
 ## DR
 
@@ -164,6 +176,10 @@ Portable Document Format. The file format of the official exam guide and case st
 
 The testing provider that delivers the real exam at test centers; the exam can also be taken online-proctored.
 
+## Plan table
+
+The table in a practice exam's issue record that lists, for each planned question, its consideration, question type, whether AI is decisive, case study, decisive feature, correct letter, distractor mechanisms, and difficulty levers.
+
 ## PMLE
 
 Professional Machine Learning Engineer. The Google Cloud certification covered by the simulator from which this application was ported.
@@ -235,6 +251,10 @@ The real exam's presentation of a case study next to the question that refers to
 ## Stem
 
 The question text before the answer options, called `prompt` in the code.
+
+## Testable consideration
+
+A guide consideration that a question can make decisive. Considerations that name only a Preview product, such as Gemini Cloud Assist, are not testable.
 
 ## UI
 
