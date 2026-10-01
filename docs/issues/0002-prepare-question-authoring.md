@@ -16,7 +16,7 @@ The candidate asked for the PCA simulator to work toward its own question base. 
 ### Scope
 
 1. PR [3/5]: [Official sample question patterns](/research/0002-official-sample-question-patterns.md), [question types candidates encounter](/research/0003-candidate-reported-question-types.md), the [current product names](/context/product-names.md), and new glossary terms.
-2. PR [4/5]: The question style guide, the objective coverage matrix, and the question-set requirements.
+2. PR [4/5]: The [question style guide](/authoring/question-style-guide.md), the [objective coverage matrix](/authoring/coverage-matrix.md), and the [question-set requirements](/prd/0002-practice-exam-question-sets.md).
 3. PR [5/5]: The repository skills `.claude/skills/pca-question-authoring/SKILL.md` and `.claude/skills/pca-question-review/SKILL.md`, and the case-study measurements of the question-set report.
 
 ### Acceptance
@@ -28,3 +28,4 @@ The candidate asked for the PCA simulator to work toward its own question base. 
 ### Progress
 
 - 2026-10-01: PR [3/5] adds the research records, the product-name reference, and glossary terms.
+- 2026-10-01: PR [4/5] adds the style guide, the coverage matrix, and PRD 0002.
