@@ -31,25 +31,25 @@ Observation: Sixteen of the 18 measurable stems state one to three explicit cons
 |---|---|---|
 | Security, access, or data protection | 8 of 18 | prevent an attack, keep data in a region, store secrets securely, restrict access |
 | Compliance or privacy | 3 of 18 | keep data in a region, anonymize, delete personal data after a period |
-| Cost | 3 of 18 | minimal cost, cost-effective, cost visibility |
+| Cost | 3 of 18 | minimal cost, cost-effective, showing costs to another team |
 | Reliability, recovery, or resilience | 3 of 18 | disaster recovery copy, inconsistent connectivity, service level objectives |
 | Effort, speed, or simplicity | 3 of 18 | minimal steps, low risk, as soon as possible |
 | Performance or latency | 2 of 18 | improve latency, better performance |
 | Google-recommended practice | 2 of 18 | follow Google best practices or recommended practices |
 | Compatibility | 1 of 18 | compatible with the on-premises network |
-| Operations metrics | 1 of 18 | give operations teams the metrics they need |
+| Operations metrics | 1 of 18 | provide operational metrics |
 
 Observation: Options are mixed. In six of the 19 items, at least half of the options have fewer than 9 words and name a product, a connection type, a storage location, or a pair of roles. In the other thirteen, most options are complete imperative actions, such as deploying a load balancer with a named protection feature. Four items contain a near-miss pair that shares a run of 9 or more identical words, and seven contain one that shares 7 or more. The pairs differ in one decisive component, such as the protection feature, the IP plan, or the control that permits traffic.
 
 Observation: Within an item, the options contrast a few recurring alternatives: a feature that meets the stated threat against a weaker control of the same family, a managed service against custom infrastructure, a recommended practice against an insecure shortcut, a least-privilege grant against a broad role, and a durable design against a manual workaround. This record deliberately does not tie these contrasts to individual items or options, because doing so would reveal answer keys.
 
-Observation: The samples use several product names that Google has since replaced, such as Cloud Data Loss Prevention, Google Data Studio, Cloud Bigtable, Apigee Edge, and BeyondCorp, and they name older machine families. The form therefore predates the branding update of the current exam. [1] [3]
+Observation: The samples use several product names that Google has since replaced, such as Cloud Data Loss Prevention, Google Data Studio, Cloud Bigtable, Apigee Edge, and BeyondCorp, and they name an older machine family, N1. The form therefore predates the branding update of the current exam. [1] [3]
 
-Observation, project classification: By primary topic, the items cover security controls (six items: edge protection, data perimeters, identity-aware access, secrets, and roles), network design and hybrid connectivity (three), compliance and personal data (two), and one item each on reliability targets, container platform practices, content delivery, device data ingestion, archival with analytics, load-balancer health checks, development-environment cost, and database performance. No item tests generative AI, although the current guide adds AI considerations to sections 1, 2, and 3 and all four current case studies include AI requirements. [2]
+Observation, project classification: By primary topic, the items cover security controls (six items: edge protection, data perimeters, identity-aware access, secrets, and roles), network design and hybrid connectivity (three), compliance and personal data (two), and one item each on reliability targets, container platform practices, content delivery, device data ingestion, archival with analytics, load-balancer health checks, development-environment cost, and database performance. No item tests generative AI, although the current guide adds AI considerations to sections 1, 2, and 3 and three of the four current case studies, Altostrat Media, Cymbal Retail, and KnightMotives Automotive, state AI requirements. [2]
 
 ## Analysis
 
-The samples show a consistent construction: a concrete current state, usually one to three constraints, and four options of which at least one pair often differs in a single decisive component. Case-study items mostly restate the decisive fact and use the case study for context, which matches a candidate report that many case-study questions can be answered from the stem [4]. The samples are shorter and less often built from near-miss pairs than the Professional Machine Learning Engineer samples, and their topic mix predates the generative AI content of the current guide, so original sets must follow the guide's weights and current products rather than the samples' mix.
+The samples show a consistent construction: a concrete current state, usually one to three constraints, and four options of which at least one pair often differs in a single decisive component. Case-study items mostly restate the decisive fact and use the case study for context, which matches a training provider's statement that "almost all case study questions can be answered without reading the case studies at all" [4]. The samples are shorter and less often built from near-miss pairs than the Professional Machine Learning Engineer samples, and their topic mix predates the generative AI content of the current guide, so original sets must follow the guide's weights and current products rather than the samples' mix.
 
 ## Recommendations
 

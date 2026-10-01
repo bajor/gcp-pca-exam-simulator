@@ -29,11 +29,11 @@ Documented owner fact: The current guide adds AI considerations to sections 1, 2
 
 Documented owner fact: The sample form contains 19 items: 16 single-choice items with four options and 3 choose-two items with five options; ten items refer to a case study. [research 0002](/research/0002-official-sample-question-patterns.md) describes their structure. [COI: Google] [4]
 
-Candidate report, February 28, 2026: A candidate who passed the current exam reports receiving 60 questions and finishing all of them in 1 hour and 40 minutes, with 20 minutes left for review. They describe AI as "woven into the core scenarios", and name GKE, networking, databases, the AI platform, Cloud Run compared with GKE, IAM and organization policies, cost optimization, and data pipelines as heavily tested. They call studying the four case studies beforehand the highest-leverage preparation. [single source] [5]
+Candidate report, February 28, 2026: A candidate who first passed the exam in 2023 took the current exam in February 2026 to renew the certification; the report does not state the result. They received 60 questions and finished answering all of them in 1 hour and 40 minutes. They describe AI as "woven into the core scenarios". They list fundamentals that the exam assumes: VPC design with Shared VPC, peering, Cloud Interconnect, and firewall rules; GKE cluster design with node pools, Workload Identity, autoscaling, and Standard compared with Autopilot; instance groups and Spot VMs; and choosing among Cloud SQL, Spanner, Bigtable, and Firestore. They add that Cloud Run compared with GKE "comes up more than you'd expect", and name the AI platform, hybrid connectivity, IAM and organization policies, cost optimization, and data pipelines as focus areas. They call studying the four case studies beforehand the highest-leverage preparation. [single source] [5]
 
-Training-provider analysis, November 6, 2025: GCP Study Hub estimates a 70% overlap with the previous exam. It reports less emphasis on App Engine, command syntax and flags, subnet sizing and CIDR arithmetic, and quotas and billing, and more emphasis on Cloud Run, Cloud Deploy, Direct VPC egress, Cloud KMS with HSM keys, VPC Service Controls, conditional IAM policies, AI services, AlloyDB and Filestore tiers, cost estimation in Migration Center, and GKE monitoring and autoscaling. It states that multiple-select questions appear and that many case-study questions can be answered without reading the case study. [single source, not a candidate report] [6]
+Training-provider analysis, November 6, 2025: GCP Study Hub estimates a 70% overlap with the previous exam. It reports less emphasis on App Engine, command syntax and flags, subnet sizing and CIDR arithmetic, and quotas and billing, and more emphasis on Cloud Run, Cloud Deploy, Direct VPC egress, Cloud KMS with HSM keys, VPC Service Controls, conditional IAM policies, AI services, AlloyDB and Filestore tiers, cost estimation in Migration Center, and GKE monitoring and autoscaling. It states that "almost all case study questions can be answered without reading the case studies at all", and its own practice questions use "Select all that apply" wording. [single source, not a candidate report] [6]
 
-Third-party analysis, October 28, 2025: Shing Lyu reports that the exam version 6.1 launched on October 30, 2025, with the new objectives 2.4 and 2.5, securing AI, the Well-Architected Framework, and Terraform. The author had not taken the exam. [single source, not a candidate report] [7]
+Third-party analysis, October 28, 2025: Shing Lyu reports that the exam version 6.1 was scheduled to launch on October 30, 2025, with the new objectives 2.4 and 2.5, securing AI, the Well-Architected Framework, and Terraform. The author had not taken the exam. [single source, not a candidate report] [7]
 
 Candidate report, project owner: On the real PDE exam, questions were much longer and harder than the PDE simulator's, and time ran out. [candidate-reported] See [research 0001](/research/0001-exam-format-and-blueprint.md).
 
@@ -41,7 +41,7 @@ Candidate report, project owner: On the real PDE exam, questions were much longe
 
 The February 2026 candidate finished the PCA exam with 20 minutes left, while the project owner ran out of time on the PDE exam. The PCA official samples are also much shorter than the Professional Machine Learning Engineer samples. Both points suggest that PCA questions are shorter than those of the data and ML exams, but they rest on one candidate report and on a sample form that predates the current guide.
 
-Google lists multiple-select questions without stating their share, and the samples contain 3 of 19. One training provider mentions "select all that apply" wording, which neither Google's page nor the samples use; the samples state the number to choose.
+Google lists multiple-select questions without stating their share, and the samples contain 3 of 19. One training provider uses "select all that apply" wording in its own practice questions, which neither Google's page nor the samples use; the samples state the number to choose.
 
 ## Analysis
 
@@ -73,15 +73,15 @@ Task taxonomy (question types). A question has one primary type; types overlap w
 | T11 AI solution design | Place Agent Platform, Model Garden, Gemini, prebuilt AI APIs, or Gemini Enterprise in an architecture and secure it | 1.3, 2.4, 2.5, 3.1 |
 | T12 Business and process decisions | Choose disposition, success measures, change management, team readiness, and decision processes | 1.1, 1.5, 4.2 |
 
-The candidate report and the sample measurements show that difficulty comes mainly from constraints that eliminate the obvious option, from near-identical options, and from the case studies' requirements. The report of finishing with 20 minutes left suggests that sets at the reading-length floors would be easier to finish than the real exam, so the style guide's length targets sit above the floors.
+The sample measurements show that difficulty comes mainly from constraints that eliminate the obvious option, from near-identical options, and from the case studies' requirements. The February 2026 report alone does not show whether real PCA questions are longer or shorter than the samples. The style guide's length targets sit above the floors for a different reason: the constitution gives realism priority over reading comfort, and the project owner ran out of time on the real PDE exam after practicing with questions that were shorter than the real ones.
 
 ## Recommendations
 
 - Write every question as a scenario that requires a decision; never test isolated facts, command flags, or quota numbers.
 - Use single-answer questions for most of each set, and use a minority of choose-two questions.
-- In every set, include questions of every type T1 to T12, with minimums for the types that the evidence names most often: troubleshooting (T4), reliability and recovery (T6), security and identity (T7), cost optimization (T9), migration (T3), and AI solution design (T11).
-- Make AI the decisive topic in a visible minority of questions, because AI appears in four objectives and in all four case studies.
-- Give GKE and Cloud Run trade-offs, networking, databases, IAM and organization policies, and cost optimization visible weight, as the candidate report recommends.
+- In every set, include minimums for six types that whole guide objectives or several considerations ask for: troubleshooting (T4: consideration 4.1.c and objectives 6.2 and 6.4), reliability and recovery (T6: 1.2.b, 1.2.g, 4.1.f, and objective 6.6), security and identity (T7: the nine considerations of objective 3.1), cost optimization (T9: 1.1.d and 4.2.f), migration planning (T3: objective 1.4), and AI solution design (T11: 1.3.b and objectives 2.4 and 2.5). The other types follow from the coverage matrix allocation.
+- Make AI the decisive topic in a visible minority of questions, because AI appears in four objectives and three of the four case studies state AI requirements.
+- Give networking, GKE and Cloud Run trade-offs, compute and database selection, IAM and organization policies, and cost optimization visible weight, because the candidate report lists them as assumed fundamentals or focus areas.
 - Keep multi-line command or configuration snippets out of practice sets.
 - Re-run this research before authoring each new set, because the guide changed in October 2025 and again for the 2026 product renames, and reports under the current guide are scarce.
 

@@ -42,7 +42,7 @@ Address the candidate as "you", the cloud architect responsible for the outcome.
 | Median reading load of a set | None | At least 150 words |
 | Longest option compared with shortest | None | At most twice as long |
 
-The official samples have a median reading load of 116.5 words, and a candidate who took the current exam finished with 20 minutes left. The set median target of 150 words therefore sits above the samples, in line with the candidate's report that practice questions were shorter than the real exam. A set at the targets gives 60 questions of about 9,000 words plus two case studies of 447 to 769 words each for 120 minutes.
+The official samples have a median reading load of 116.5 words, and they predate the current guide. The set median target of 150 words sits above them because the constitution gives realism priority over reading comfort, and the project owner ran out of time on the real Professional Data Engineer exam after practicing with questions that were shorter than the real ones. A set at the targets gives 60 questions of about 9,000 words plus two case studies of 447 to 769 words each for 120 minutes.
 
 ## Constraint Vocabulary
 
@@ -68,10 +68,10 @@ Use these phrases, or close variants, so the decisive property is unambiguous.
 1. Write each option as a complete imperative action, not a product name. Multi-step options are allowed and may be numbered.
 2. Every option must be technically possible on Google Cloud. A distractor is wrong because it fails a stated constraint, never because the feature does not exist.
 3. Keep options parallel in grammar, detail, and length. Among single-choice questions, the correct option may be strictly longer than every other option in at most 18 questions of a set.
-4. In at least 24 of 60 questions, give two options the same skeleton that differ in one decisive component. This is a near-miss pair. Research 0002 found such pairs in 7 of 19 official samples.
+4. In at least 24 of 60 questions, give two options the same skeleton that differ in one decisive component. This is a near-miss pair; measure it as two options that share a run of at least 7 identical words, ignoring case and punctuation. The question-set report counts these pairs. Research 0002 found such pairs in 7 of 19 official samples.
 5. Do not use "all of the above", "none of the above", negative stems such as "Which is NOT", joke options, or absolute words such as "always" and "never" as clues.
 6. Balance the answer key. Among single-choice questions, each letter from `a` to `d` is correct in 11 to 17 questions of a set.
-7. Use 4 to 8 choose-two questions per set. Both correct options must be independently required by the stem, and each of the three distractors must fail a stated constraint.
+7. Use 4 to 8 choose-two questions per set. Both correct options must be independently required by the stem, and each of the three distractors must fail a stated constraint. The samples contain 3 choose-two items in 19, about 9 in 60; the range keeps the format a practiced minority without exceeding that share.
 
 ## Case-Study Questions
 
@@ -92,7 +92,7 @@ Build each distractor from one main mechanism and make it fail at least one name
 | D1 | Self-managed: runs on Compute Engine, GKE, or custom code what a managed capability provides | Operational overhead |
 | D2 | Over-engineering or over-provisioning: adds unrequested components, capacity, regions, or data copies | Cost, effort, or scope |
 | D3 | Unsuitable tool: a service that cannot meet a stated requirement because it is too limited or does not support the workload | Capability, scale, consistency, or availability |
-| D4 | Wrong scope or placement: zonal where regional is needed, a project where the organization is needed, or the wrong location | Availability, governance, or residency |
+| D4 | Wrong scope or placement: zonal where regional is needed, a project where the organization is needed, access granted to a broader set of identities than required, or the wrong location | Availability, governance, access scope, or residency |
 | D5 | Restriction violation: broad roles, long-lived keys, public exposure, or data moved outside an allowed boundary | Security or compliance |
 | D6 | Symptom or wrong signal: acts on a symptom or measures something that does not answer the question | Diagnosis or measurement |
 | D7 | Right product, wrong feature: the correct service with a feature or setting that does not do the job | Specific documented behavior |
@@ -118,7 +118,7 @@ Avoid artificial difficulty. Do not use trick wording, undocumented defaults, Pr
 
 - Use the names in [current product names](/context/product-names.md). Never use a former name such as Vertex AI, Anthos, Cloud Functions, or BeyondCorp Enterprise in a stem, option, or feedback.
 - Use only generally available (GA) features. A Preview or deprecation notice disqualifies the feature it names, not other features on the same page. The product-name reference lists products that must not be decisive, such as Gemini Cloud Assist, the Video Intelligence API, and Deployment Manager.
-- Make AI the decisive topic in 6 to 12 questions of each set.
+- Make AI the decisive topic in 6 to 12 questions of each set. AI is decisive when the correct option depends on an AI product, model, or AI-specific control, such as Model Armor.
 - In each set, include at least 5 troubleshooting (T4), 5 reliability and recovery (T6), 6 security and identity (T7), 4 cost optimization (T9), 3 migration planning (T3), and 4 AI solution design (T11) questions, as defined in research 0003.
 - Do not include multi-line code or configuration. Inline names such as `gcloud storage` or `roles/run.developer` in running text are allowed.
 - Never copy, paraphrase, or re-skin an official sample question, and never reuse a scenario from another practice set. A scenario is reused when the organization type, the problem, and the decisive feature all match.
@@ -131,21 +131,22 @@ Each choice's feedback starts with the verdict "Correct." or "Incorrect." follow
 
 This original question shows the targets in practice. It is not part of any practice set.
 
-**Stem (99 words):** A logistics company deploys its order-tracking service to Cloud Run from GitHub Actions workflows in its GitHub organization, which hosts more than 200 repositories. Each deployment workflow authenticates with a service account key that is stored as a repository secret and has not been rotated in two years. A security review now prohibits long-lived credentials for deployments and requires that only workflows running on the main branch of the deployment repository can deploy to production. The team runs about 40 deployments per day and wants to keep its GitHub Actions workflows without operating new infrastructure. What should you do?
+**Stem (105 words):** A logistics company deploys its order-tracking service to Cloud Run from GitHub Actions workflows in its GitHub organization, which hosts more than 200 repositories; one of them, the deployment repository, holds the deployment workflows. Each workflow authenticates with a service account key stored as a repository secret that has not been rotated in two years. A security review now prohibits long-lived credentials for deployments and requires that only workflows on the main branch of the deployment repository can deploy to production. The team runs about 40 deployments per day and wants to keep its GitHub Actions workflows without operating new infrastructure. What should you do?
 
 | Choice | Text | Words | Role |
 |---|---|---|---|
-| a | Configure Workload Identity Federation with a GitHub provider whose attribute condition accepts only tokens from the main branch of the deployment repository, and let identities from the pool impersonate the deployment service account. | 33 | Correct |
-| b | Keep the service account key in the repository secret, and run a scheduled Cloud Run job every 30 days that creates a new key and updates the secret through the GitHub API. | 32 | D5: the key remains a long-lived credential, and the job adds infrastructure to operate |
-| c | Configure Workload Identity Federation with a GitHub provider whose attribute condition accepts only tokens from the company's GitHub organization, and let identities from the pool impersonate the deployment service account. | 30 | D7: removes the key, but the pool then accepts every workflow on every branch of every repository in the organization, so any of them can deploy |
+| a | Configure Workload Identity Federation with a GitHub provider whose attribute condition accepts only tokens from the deployment repository's main branch, grant the deployment role directly to the federated principals, and delete the key. | 33 | Correct |
+| b | Keep the service account key in the repository secret, and run a scheduled Cloud Run job every 30 days that creates a new key and updates the secret through the GitHub API. | 32 | D5: the key remains a long-lived credential, nothing in the option limits deployment to the main branch, and the job adds infrastructure to operate |
+| c | Configure Workload Identity Federation with a GitHub provider whose attribute condition accepts only tokens from the company's GitHub organization, grant the deployment role directly to the federated principals, and delete the key. | 32 | D4: removes the key, but the provider then accepts every workflow on every branch of every repository in the organization, so any of them can deploy |
 | d | Move the deployments to Cloud Build triggers that run on the main branch of the deployment repository, grant the deployment role to the Cloud Build service account, and remove the GitHub Actions workflows. | 33 | D2: replaces the workflows that the team wants to keep |
 
-The reading load is 227 words. The stem states three constraints: no long-lived credentials, deployment only from the main branch of one repository, and keeping the existing workflows without new infrastructure. Choices a and c form a near-miss pair (L2): they are identical except for the scope of the attribute condition. The number of repositories and deployments per day are non-decisive details (L3). The correct answer depends on the documented behavior of attribute conditions (L4), and the correct option is not strictly longer than every other option, because choice d has the same length.
+The reading load is 235 words. The stem states three constraints: no long-lived credentials, deployment only from the main branch of one repository, and keeping the existing workflows without new infrastructure. Choices a and c form a near-miss pair (L2): they are identical except for the scope of the attribute condition. The number of repositories and deployments per day are non-decisive details (L3). The correct answer depends on the documented behavior of attribute conditions (L4), and the correct option is not strictly longer than every other option, because choice d has the same length.
 
 Evidence for the feedback:
 
-- [Configure Workload Identity Federation with deployment pipelines](https://docs.cloud.google.com/iam/docs/workload-identity-federation-with-deployment-pipelines), cited by a and c: GitHub Actions workflows obtain an OIDC token that identifies the workflow and its repository and exchange it for short-lived Google Cloud credentials, which "eliminates the maintenance and security burden associated with service account keys". An attribute condition must restrict tokens to the GitHub organization and can be extended to restrict them to a subset of workflows or branches.
+- [Configure Workload Identity Federation with deployment pipelines](https://docs.cloud.google.com/iam/docs/workload-identity-federation-with-deployment-pipelines), cited by a and c: GitHub Actions workflows obtain an OIDC token that identifies the workflow and its repository and exchange it for short-lived Google Cloud credentials, which "eliminates the maintenance and security burden associated with service account keys". An attribute condition must restrict tokens to the GitHub organization and can be extended to restrict them to a subset of workflows or branches, and Google recommends granting direct resource access to the federated principal.
 - [Best practices for managing service account keys](https://docs.cloud.google.com/iam/docs/best-practices-for-managing-service-account-keys), cited by b: the best way to mitigate the threats of service account keys is to avoid user-managed keys whenever possible; rotation only reduces the risk of a leaked key.
+- [Service account credentials](https://docs.cloud.google.com/iam/docs/service-account-creds), cited by b: service account keys are long-lived credentials, which create more risk than short-lived credentials.
 - [Execute jobs on a schedule](https://docs.cloud.google.com/run/docs/execute/jobs-on-schedule), cited by b: Cloud Run jobs can run on a Cloud Scheduler schedule, so choice b is technically possible.
 - [Building repositories from GitHub](https://docs.cloud.google.com/build/docs/automating-builds/github/build-repos-from-github), cited by d: Cloud Build triggers can build from GitHub repositories, so choice d is technically possible.
 

@@ -12,7 +12,7 @@ The certification page states that the exam "was updated to reflect recent brand
 
 ## Naming Rules
 
-1. Use the name the exam guide uses when the guide names the product.
+1. Use the name the exam guide uses when the guide names the product, because the certification page says the exam uses the guide's names. A name that the current guide uses is not a former name, even where the documentation has moved on; the tables show both names, and feedback may add the documentation name.
 2. Otherwise, use the name of the product's current documentation title or Google's name-change page.
 3. Use the names exactly as the tables list them. Agent Platform products read either "Agent Platform <product>" or "<product> on Agent Platform"; the long form with "Gemini Enterprise Agent Platform" is also correct.
 4. Never use a former name in a prompt, choice, or feedback. Former names may appear only in evidence titles when Google has not yet renamed that documentation page, and in API, role, or command names that Google kept.
@@ -25,14 +25,14 @@ Sources: the Agent Platform name-change page [4], the exam guide [2], and the do
 | Former name | Name to use in questions | Note |
 |---|---|---|
 | Vertex AI | Agent Platform (Gemini Enterprise Agent Platform) | The guide writes "Gemini Enterprise Agent Platform" in objective 2.4. |
-| Vertex AI Agent Builder | Agent Platform | The guide still writes "Agent Builder" in objective 1.3; its former documentation URL redirects to the Agent Platform overview [5]. |
+| Vertex AI Agent Builder | Agent Builder, the guide's name in objective 1.3 | Its former documentation URL redirects to the Agent Platform overview [5], and the Agent Search documentation lists Agent Builder among its former names [6]; cite those pages. |
 | Vertex AI Pipelines | Agent Platform Pipelines | Named in the guide. |
 | Vertex AI Model Garden | Model Garden | Named in the guide. |
 | Vertex AI Search | Agent Search | The documentation states that the product is being renamed [6]. |
 | Vertex AI Search for commerce, Retail API | AI Commerce Search in Gemini Enterprise for Customer Experience | Documentation title [7]. The Cymbal Retail case study calls the capability "Discovery AI". |
 | Vertex AI Agent Engine | Agent Runtime | |
 | Vertex AI Workbench, Colab Enterprise | Agent Platform Workbench, Colab Enterprise | |
-| NotebookLM Enterprise | Gemini Notebook Enterprise | Documentation title; IAM roles keep the NotebookLM name. The guide writes "NotebookLM" in objective 2.5 [8]. |
+| NotebookLM Enterprise | NotebookLM, the guide's name in objective 2.5 | The documentation title is Gemini Notebook Enterprise, and IAM roles keep the NotebookLM name [8]. |
 
 Gemini, Gemini Enterprise, AI Hypercomputer, Model Armor, Document AI, the Cloud Vision API, Cloud Translation, Speech-to-Text, Text-to-Speech, and Dialogflow CX keep their names.
 
@@ -85,7 +85,7 @@ A product on this list may appear as context or as a distractor whose feedback s
 | Video Intelligence API | Deprecated on September 14, 2026, with shutdown on September 14, 2027 | [26] |
 | Deployment Manager | End of support on March 31, 2026; use Infrastructure Manager or Terraform | [27] |
 | Cloud Source Repositories | Unavailable to new customers since June 17, 2024 | [28] |
-| gsutil | A legacy tool that will no longer be available after March 2027; use `gcloud storage` | [29] |
+| gsutil | A legacy, minimally maintained tool that leaves the Google Cloud CLI installation package after March 2027; use `gcloud storage` | [29] |
 | Backup and DR legacy management console | Deprecated on September 30, 2026 | [30] |
 | Security Command Center Enterprise tier | Deprecated, with shutdown on May 21, 2027 | [31] |
 
