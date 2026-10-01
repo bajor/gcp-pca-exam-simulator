@@ -20,7 +20,8 @@ Each standard PCA exam includes two of the four case studies that the exam guide
 - Store the four case studies in `src/domain/caseStudies.ts` as a closed record of identifier, title, and the URL of Google's document. `CaseStudyId` is the union of the four identifiers, so a question cannot name an unknown case study.
 - Let a question declare an optional `caseStudyId`. Structural validation requires such a question to cite its case study's URL as evidence, so source verification fetches the document and the content digest of a reviewed set covers the URL.
 - Enforce Google's rules in structural validation: a complete set refers to exactly 2 case studies and contains 12 to 18 case-study questions (20% and 30% of 60); a draft refers to at most 2 case studies and contains at most 18 case-study questions.
-- Show the case study of the current question in an embedded view of Google's document between the question and the navigator on wide screens, with a link that opens the document in a new tab. The embedded view's URL adds the fragment `#navpanes=0&view=FitH`, which Chromium and Firefox PDF viewers read to hide page thumbnails and fit the page width; browsers do not send a fragment to the server. Hide the embedded view on narrow screens and keep the link.
+- Show the case study of the current question between the question and the navigator, with a link that opens Google's document in a new tab. Mount an embedded view of the document only when the browser reports an inline PDF viewer (`navigator.pdfViewerEnabled`) and the layout is wide, because a browser without a PDF viewer downloads an embedded PDF instead of showing it. The embedded view's URL adds the fragment `#navpanes=0&view=FitH`, which Chromium's PDF viewer reads to hide page thumbnails and fit the page width; browsers do not send a fragment to the server. Every other screen and browser gets only the link.
+- Fetch the four documents in `make verify-sources`, so that a moved document fails the gate even before any question cites it.
 
 ## Alternatives Considered
 
@@ -36,16 +37,17 @@ Easier or gained:
 Harder or accepted trade-offs:
 
 - The split screen depends on Google keeping the document URLs and allowing embedding. `make verify-sources` detects a moved document; if Google forbids embedding, the embedded view shows a browser error while the link still works.
+- The narrow-layout width is defined twice, in `src/styles.css` for the layout and in `src/components/CaseStudyPane.tsx` for mounting the document, because a stylesheet cannot share a constant with the code; both name each other.
 - The embedded view uses the browser's PDF viewer, so its text size does not follow `--exam-text-size`.
-- The headless browser shell that runs the end-to-end tests has no PDF viewer, so the tests check the embedded element, its accessible name, and the layout, not the rendered document.
-- Most phone browsers cannot display the embedded document, so narrow screens show only the link.
+- The browser tests check the embedded element, its placement, and the absence of downloads, not the rendered document. The desktop project runs the full Chromium build, which has a PDF viewer; the mobile project runs Playwright's headless shell, which has none, like most phone browsers.
+- Browsers without an inline PDF viewer, which include most phone browsers, show only the link.
 - A revision of a case study at the same URL does not change the content digest; the reviewer's source check covers that risk, as it does for every other evidence page.
 
 ## Verification
 
-- Unit tests reject a set with one case study, a set with 11 case-study questions, and a case-study question that does not cite its case study, and accept sets with 12 and 18 case-study questions.
-- Component tests show the embedded case study and its link next to a case-study question, and no case-study elements next to other questions.
-- Browser tests keep a case-study question within the desktop and mobile viewports.
+- Unit tests reject sets with one or three case studies, sets with 11 or 19 case-study questions, a draft with 19 case-study questions, an unknown case study, and a case-study question that does not cite its own case study, and accept sets with 12 and 18 and a draft with 18 case-study questions. A content-digest test proves that an omitted and an undefined case study bind the same digest.
+- Component tests show the embedded document and its link next to a case-study question in a browser with a PDF viewer, only the link in a browser without one, and no case-study elements next to other questions.
+- Browser tests embed the document beside the question on the desktop viewport and show only the link below the question on the mobile viewport, both without a download and without horizontal scrolling.
 
 ## Related
 

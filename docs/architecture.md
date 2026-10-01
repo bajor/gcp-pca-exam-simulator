@@ -36,7 +36,7 @@ On 2026-10-01 the catalog lists Practice Exams 1, 2, and 3 as coming soon. No qu
 ## Question Lifecycle
 
 1. An author plans a section in the exam's issue record and writes it as a typed module under `src/data/questionSets/practice<number>/sections/`.
-2. The author registers the section in that exam's draft manifest and registers the manifest in `src/data/questionSets/registry.ts`. Structural validation then requires the final section count, the reading-length floors, valid answer keys, Google-owned evidence for every choice, a citation of the case study for every case-study question, and at most 2 case studies.
+2. The author registers the section in that exam's draft manifest and registers the manifest in `src/data/questionSets/registry.ts`. Structural validation then requires the final section count, the reading-length floors, valid answer keys, Google-owned evidence for every choice, a citation of the case study for every case-study question, at most 2 case studies, and at most 18 case-study questions.
 3. `make verify-sources` validates every registered draft and fetches every unique evidence URL.
 4. After all six sections exist, the exam's candidate list assembles a 60-question candidate from the draft identifier. Assembly requires exactly 2 case studies and 12 to 18 case-study questions.
 5. An independent reviewer re-fetches the evidence, checks the set against the question-set requirements, and writes either an indexed rejection report or an acceptance record bound to the candidate's SHA-256 content digest.
@@ -48,7 +48,7 @@ On 2026-10-01 the catalog lists Practice Exams 1, 2, and 3 as coming soon. No qu
 
 1. The candidate selects an available question set from the catalog.
 2. The application restores that set's compatible attempt, or creates one with an absolute two-hour deadline when the candidate starts.
-3. Answer, navigation, and review-flag changes replace the immutable attempt state and persist it locally. When the current question refers to a case study, the exam screen shows Google's document next to it.
+3. Answer, navigation, and review-flag changes replace the immutable attempt state and persist it locally. When the current question refers to a case study, the exam screen shows a link to Google's document next to it, and embeds the document on wide screens in browsers with an inline PDF viewer.
 4. Manual submission or deadline expiration creates a completed result.
 5. Scoring compares answer identifier sets exactly and calculates total and section percentages.
 6. Result review joins each response with choice feedback and source evidence from the immutable question set.

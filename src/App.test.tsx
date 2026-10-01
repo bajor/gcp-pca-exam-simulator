@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, expect, it } from "vitest";
+import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { App } from "./App";
 import {
   answerQuestion,
@@ -13,6 +13,10 @@ import { caseStudies } from "./domain/caseStudies";
 import { fixtureCatalog, fixtureQuestionSet } from "./test/fixtures";
 
 beforeEach(() => localStorage.clear());
+afterEach(() => {
+  vi.restoreAllMocks();
+  Reflect.deleteProperty(navigator, "pdfViewerEnabled");
+});
 
 it("lists an unpublished practice exam without a start action", () => {
   render(<App catalog={[{ availability: "coming-soon", id: "future-set", title: "Future practice exam" }]} />);
@@ -170,26 +174,42 @@ it("confirms before replacing a completed result", async () => {
 
 it("shows the referenced case study next to a case-study question", async () => {
   const user = userEvent.setup();
+  allowInlineCaseStudyDocuments();
   renderFixtureApp();
   await user.click(screen.getByRole("button", { name: "Start practice exam" }));
   await user.click(screen.getByRole("button", { name: "Next" }));
   expect(screen.getByText("For this question, refer to the EHR Healthcare case study.")).toBeVisible();
+  expect(screen.getByRole("link", { name: "Open the EHR Healthcare case study in a new tab" })).toHaveAttribute(
+    "href",
+    caseStudies["ehr-healthcare"].url,
+  );
   expect(screen.getByTitle("EHR Healthcare case study document")).toHaveAttribute(
     "src",
     expect.stringContaining(caseStudies["ehr-healthcare"].url),
   );
 });
 
-it("shows no case study next to a question without one", async () => {
+it("embeds no case-study document in a browser that cannot display PDF documents", async () => {
   const user = userEvent.setup();
   renderFixtureApp();
   await user.click(screen.getByRole("button", { name: "Start practice exam" }));
-  expect(screen.queryByRole("complementary", { name: /case study/ })).not.toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: "Next" }));
+  expect(screen.getByRole("link", { name: "Open the EHR Healthcare case study in a new tab" })).toBeVisible();
+  expect(screen.queryByTitle("EHR Healthcare case study document")).not.toBeInTheDocument();
+});
+
+it("shows no case study next to a question without one", async () => {
+  const user = userEvent.setup();
+  allowInlineCaseStudyDocuments();
+  renderFixtureApp();
+  await user.click(screen.getByRole("button", { name: "Start practice exam" }));
+  expect(screen.queryByText(/refer to the EHR Healthcare case study/)).not.toBeInTheDocument();
+  expect(screen.queryByTitle("EHR Healthcare case study document")).not.toBeInTheDocument();
 });
 
 it("links the set's case studies before the attempt starts", () => {
   renderFixtureApp();
-  expect(screen.getByRole("link", { name: "EHR Healthcare case study" })).toHaveAttribute(
+  expect(screen.getByRole("link", { name: "EHR Healthcare case study (opens in a new tab)" })).toHaveAttribute(
     "href",
     caseStudies["ehr-healthcare"].url,
   );
@@ -198,8 +218,18 @@ it("links the set's case studies before the attempt starts", () => {
 it("names the case study of a question in the result review", () => {
   saveAttempt(completeAttempt(createAttempt(fixtureQuestionSet)));
   renderFixtureApp();
-  expect(screen.getByRole("link", { name: "EHR Healthcare" })).toHaveAttribute("href", caseStudies["ehr-healthcare"].url);
+  expect(screen.getByRole("link", { name: "EHR Healthcare (opens in a new tab)" })).toHaveAttribute(
+    "href",
+    caseStudies["ehr-healthcare"].url,
+  );
 });
+
+// Simulates a wide layout in a browser with an inline PDF viewer; jsdom has neither.
+function allowInlineCaseStudyDocuments() {
+  const matchMedia = window.matchMedia;
+  vi.spyOn(window, "matchMedia").mockImplementation((media) => ({ ...matchMedia(media), matches: true }));
+  Object.defineProperty(navigator, "pdfViewerEnabled", { configurable: true, value: true });
+}
 
 function renderFixtureApp() {
   render(<App catalog={fixtureCatalog} />);

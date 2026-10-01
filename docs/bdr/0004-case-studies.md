@@ -36,19 +36,22 @@ A question may refer to one of the four case studies, Altostrat Media, Cymbal Re
 | A set refers to exactly 2 case studies | `Question set must refer to exactly 2 case studies.` |
 | A set contains 12 to 18 case-study questions | `Question set must contain 12 to 18 case-study questions.` |
 
-The bounds come from the certification page: each exam includes 2 case studies, and case-study questions make up 20 to 30% of the exam, which is 12 to 18 of 60 questions. Both bounds are inclusive.
+The bounds come from the certification page: each exam includes 2 case studies, and case-study questions make up 20 to 30% of the exam, which is 12 to 18 of 60 questions. Both bounds are inclusive. `make verify-sources` also fetches the four case-study documents, so a moved document fails the gate before any question cites it.
 
 ## Presentation
 
 | Element | Presentation |
 |---|---|
 | Instruction | Above the question text, a case-study question shows "For this question, refer to the <name> case study." in the exam text size. |
-| Split screen | On screens wider than 800 pixels, the case study appears between the question and the navigator, and the question and the case study share the width left of the navigator equally. The case study shows a title bar, a link that opens Google's document in a new tab, and an embedded view of the document, fitted to the column width, with the accessible name "<name> case study document". |
-| Narrow screens | On screens up to 800 pixels wide, the question, the case study, and the navigator stack from the top of the page. The embedded view is hidden, because most phone browsers cannot display PDF documents inline, and the link remains below the question. |
+| Split screen | On screens wider than 800 pixels, the case study appears between the question and the navigator. The case study takes three fifths of the width left of the navigator and the question two fifths, because the embedded document scales to its column. The case study shows a title bar, a link that opens Google's document in a new tab, and, in a browser with an inline PDF viewer, an embedded view of the document fitted to the column width, with the accessible name "<name> case study document". |
+| Narrow screens | On screens up to 800 pixels wide, the question, the case study, and the navigator stack from the top of the page, and the case study shows only its title bar and link. |
+| Browsers without a PDF viewer | On any screen, a browser that reports no inline PDF viewer, such as most phone browsers, gets only the title bar and the link, because it would download an embedded PDF instead of showing it. |
 | Start screen | The start screen names the set's case studies with links to their documents, so the candidate can read them before starting. |
 | Result review | Each case-study question names its case study with a link to the document. |
 
-Questions without a case study show none of these elements. The case study follows the question in the reading and keyboard order, so focus still moves from the question to mark for review, as [BDR 0003](/bdr/0003-exam-presentation.md) requires.
+Questions without a case study show none of these elements. The case study follows the question in the reading and keyboard order, so focus still moves from the question to mark for review, as [BDR 0003](/bdr/0003-exam-presentation.md) requires. Where the document is embedded, Tab moves from Previous and Next to the case-study link and through the PDF viewer's controls before the navigator; focus is not trapped.
+
+For case-study questions, this record replaces two rows of the BDR 0003 presentation table: question and answer text span only the question column, not the full width left of the navigator, and on narrow screens the case study sits between the question and the navigator.
 
 ## Scenarios
 
@@ -80,20 +83,30 @@ Questions without a case study show none of these elements. The case study follo
 
 - Given an attempt on a 390-pixel-wide screen
 - When the current question refers to a case study
-- Then the instruction and the link appear, the embedded document is hidden, and the page does not scroll horizontally
+- Then the instruction and the link appear below the question, no document is embedded or downloaded, and the page does not scroll horizontally
+
+**Scenario 6: Avoid a download without a PDF viewer**
+
+- Given a browser that reports no inline PDF viewer
+- When the current question refers to a case study
+- Then only the link appears, and the browser does not download the document
 
 ## Test Design
 
 | Case | Level | Input or scenario | Observable assertion | Proves |
 |---|---|---|---|---|
-| Case-study count | Unit | Complete set whose case-study questions refer to one case study | Validation reports the exactly-2 rule | Sets use two case studies. |
-| Case-study share | Unit | Complete set with 11 case-study questions | Validation reports the 12-to-18 rule | Sets meet the 20% minimum. |
+| Case-study count | Unit | Complete sets whose case-study questions refer to one or to three case studies | Validation reports the exactly-2 rule | Sets use two case studies. |
+| Case-study share | Unit | Complete sets with 11 and with 19 case-study questions | Validation reports the 12-to-18 rule | Sets meet the 20% minimum and the 30% maximum. |
 | Share bounds | Unit | Complete sets with 12 and with 18 case-study questions | Validation accepts both | The bounds are inclusive and correct. |
-| Citation | Unit | Case-study question without its document in the evidence | Validation names the question | Every case-study question cites its case study. |
-| Draft limit | Unit | Draft that refers to 3 case studies | Validation reports the at-most-2 rule | Authors learn of a third case study before assembly. |
-| Split screen | Component | Case-study question and a question without a case study | The embedded document and link appear only for the case-study question | The pane follows the current question. |
+| Citation | Unit | Case-study question without its document, or with another case study's document, in the evidence | Validation names the question | Every case-study question cites its own case study. |
+| Unknown case study | Unit | Question whose case study is not one of the four | Validation names the question | Untyped content cannot name an unknown case study. |
+| Draft limits | Unit | Drafts that refer to 3 case studies, or contain 18 or 19 case-study questions | Validation reports the at-most-2 rule and the at-most-18 rule, and accepts 18 | Authors learn of a set-level breach before assembly. |
+| Content digest | Unit | The same set with an absent case study omitted or written as undefined | Both bind the same SHA-256 digest | Equivalent content cannot invalidate a review record. |
+| Split screen | Component | Case-study question in a browser with a PDF viewer and a wide layout, and a question without a case study | The document and link appear only for the case-study question | The pane follows the current question. |
+| No PDF viewer | Component | Case-study question in a browser that reports no PDF viewer | Only the link appears | Such browsers do not download the document. |
 | Start and results | Component | Set with a case-study question | The start screen and the result review name the case study with a link | The candidate can reach the case study outside the attempt. |
-| Viewport fit | End-to-end | Case-study question on desktop and mobile viewports | The document width does not exceed the viewport; the embedded document is visible only on the desktop viewport | The split screen stays usable on phones. |
+| Desktop split screen | End-to-end | Case-study question at 1280 by 720 pixels in a browser with a PDF viewer | The document is embedded to the right of the question, nothing downloads, and the page does not scroll horizontally | The split screen works in a real browser. |
+| Phone layout | End-to-end | Case-study question at 390 by 844 pixels in a browser without a PDF viewer | The link sits below the question, no document is embedded, nothing downloads, and the page does not scroll horizontally | Phones get a usable, compact layout. |
 
 ## Related
 

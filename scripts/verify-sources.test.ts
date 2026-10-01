@@ -1,5 +1,6 @@
 import { expect, it } from "vitest";
 import { examCatalog } from "../src/data/questionSets";
+import { caseStudies } from "../src/domain/caseStudies";
 import { candidateQuestionSets, draftQuestionSets } from "../src/data/questionSets/registry";
 import {
   parseRejectionRecord,
@@ -29,9 +30,10 @@ it("structurally validates draft and candidate question sets", () => {
   expect(validateQuestionSets(candidateQuestionSets)).toEqual([]);
 });
 
-it("fetches every draft and candidate evidence URL", async () => {
+it("fetches every draft and candidate evidence URL and every case-study document", async () => {
+  const caseStudyUrls = Object.values(caseStudies).map((caseStudy) => caseStudy.url);
   const failures = await findSourceFailures(
-    collectEvidenceUrls(draftQuestionSets, candidateQuestionSets),
+    [...new Set([...collectEvidenceUrls(draftQuestionSets, candidateQuestionSets), ...caseStudyUrls])],
     (url) => fetch(url, { redirect: "follow" }),
   );
   expect(failures).toEqual([]);

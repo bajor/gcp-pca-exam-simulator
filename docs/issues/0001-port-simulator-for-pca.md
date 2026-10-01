@@ -2,7 +2,7 @@
 type: Issue
 title: Port the simulator for the Professional Cloud Architect exam
 description: Port the PMLE simulator without its content, adopt the PCA blueprint and reading-length floors, and add case studies on a split screen.
-status: complete
+status: in-progress
 labels: [feature, frontend]
 blocked_by: []
 tracker: "PR [1/5] and PR [2/5]"
@@ -27,4 +27,4 @@ Implement [PRD 0001](/prd/0001-cloud-architect-exam-simulator.md), [ADR 0001](/a
 ### Progress
 
 - 2026-10-01: PR [1/5] ports the application and documentation.
-- 2026-10-01: PR [2/5] adds case-study references, the case-study rules, and the split-screen presentation of Google's case-study documents, completing this issue.
+- 2026-10-01: PR [2/5] adds case-study references, the case-study rules, and the split-screen presentation of Google's case-study documents. The issue is complete when both are on `main` and GitHub Pages renders the catalog.

@@ -14,4 +14,18 @@ if (!HTMLDialogElement.prototype.close) {
   };
 }
 
+// jsdom has no matchMedia; every query reports no match unless a test overrides it.
+if (!window.matchMedia) {
+  window.matchMedia = (media: string) => ({
+    matches: false,
+    media,
+    onchange: null,
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined,
+    addListener: () => undefined,
+    removeListener: () => undefined,
+    dispatchEvent: () => false,
+  });
+}
+
 afterEach(cleanup);

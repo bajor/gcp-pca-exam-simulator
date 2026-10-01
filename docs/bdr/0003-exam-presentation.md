@@ -63,3 +63,4 @@ The tests do not assert pixel values or colors, because those are design choices
 
 - PRD: [/prd/0001-cloud-architect-exam-simulator.md](/prd/0001-cloud-architect-exam-simulator.md)
 - Issue: [/issues/0001-port-simulator-for-pca.md](/issues/0001-port-simulator-for-pca.md)
+- BDR: [/bdr/0004-case-studies.md](/bdr/0004-case-studies.md) amends the line-length and narrow-screen navigator rows for case-study questions.

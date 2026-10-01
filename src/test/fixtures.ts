@@ -4,6 +4,7 @@ import {
   type QuestionSet,
   type SingleChoiceQuestion,
 } from "../domain/questions";
+import { caseStudies } from "../domain/caseStudies";
 import type { ExamCatalogEntry } from "../domain/catalog";
 
 const evidence: Evidence = {
@@ -16,7 +17,7 @@ const evidence: Evidence = {
 const caseStudyEvidence: Evidence = {
   id: "case-study",
   title: "EHR Healthcare case study",
-  url: "https://services.google.com/fh/files/misc/v6.1_pca_ehr_healthcare_case_study_english.pdf",
+  url: caseStudies["ehr-healthcare"].url,
   claim: "Fixture case-study fact.",
 };
 

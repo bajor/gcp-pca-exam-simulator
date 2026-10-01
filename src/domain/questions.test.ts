@@ -1,4 +1,5 @@
 import { expect, it } from "vitest";
+import { caseStudies, type CaseStudyId } from "./caseStudies";
 import type { AnyQuestionSection, QuestionSet, SingleChoiceQuestion } from "./questions";
 import {
   assembleCandidateQuestionSets,
@@ -10,6 +11,7 @@ import {
   minimumQuestionWords,
   parseRejectionRecord,
   parseReviewRecord,
+  questionSetContentSha256,
   validateDraftQuestionSet,
   validateDraftQuestionSets,
   validateQuestionSet,
@@ -295,4 +297,48 @@ it("rejects a case-study question that does not cite its case study", () => {
 it("rejects a draft that refers to a third case study", () => {
   const draft = validDraft(validSet(minimumCaseStudyQuestions, ["ehr-healthcare", "cymbal-retail", "altostrat-media"]));
   expect(validateDraftQuestionSet(draft)).toContain("Draft must refer to at most 2 case studies.");
+});
+
+it("rejects a question set with too many case-study questions", () => {
+  expect(validateQuestionSet(validSet(maximumCaseStudyQuestions + 1))).toContain(
+    "Question set must contain 12 to 18 case-study questions.",
+  );
+});
+
+it("rejects a question set that refers to three case studies", () => {
+  expect(validateQuestionSet(validSet(minimumCaseStudyQuestions, ["ehr-healthcare", "cymbal-retail", "altostrat-media"]))).toContain(
+    "Question set must refer to exactly 2 case studies.",
+  );
+});
+
+it("accepts a draft with the maximum number of case-study questions", () => {
+  expect(validateDraftQuestionSet(validDraft(validSet(maximumCaseStudyQuestions)))).toEqual([]);
+});
+
+it("rejects a draft with more than the maximum number of case-study questions", () => {
+  expect(validateDraftQuestionSet(validDraft(validSet(maximumCaseStudyQuestions + 1)))).toContain(
+    "Draft must contain at most 18 case-study questions.",
+  );
+});
+
+it("rejects a case-study question that cites another case study", () => {
+  const set = validSet();
+  const question = set.questions[0] as SingleChoiceQuestion;
+  const otherUrl = caseStudies["knightmotives-automotive"].url;
+  const evidence = question.evidence.map((source) => source.id === "case-study" ? { ...source, url: otherUrl } : source);
+  const invalid = { ...set, questions: [{ ...question, evidence }, ...set.questions.slice(1)] } as QuestionSet;
+  expect(validateQuestionSet(invalid)).toContain(`${question.id}: case-study question must cite its case study.`);
+});
+
+it("rejects an unknown case study", () => {
+  const set = validSet();
+  const question = { ...set.questions[0], caseStudyId: "toString" as CaseStudyId };
+  const invalid = { ...set, questions: [question, ...set.questions.slice(1)] } as QuestionSet;
+  expect(validateQuestionSet(invalid)).toContain(`${question.id}: unknown case study.`);
+});
+
+it("binds the same content digest whether a missing case study is omitted or undefined", () => {
+  const set = validSet();
+  const explicit = { ...set, questions: set.questions.map((question) => ({ caseStudyId: undefined, ...question })) };
+  expect(questionSetContentSha256(explicit)).toBe(questionSetContentSha256(set));
 });

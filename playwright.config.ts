@@ -10,7 +10,8 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   projects: [
-    { name: "desktop", use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 720 } } },
+    // The full Chromium build has an inline PDF viewer, which the case-study pane needs; the headless shell has none.
+    { name: "desktop", use: { ...devices["Desktop Chrome"], channel: "chromium", viewport: { width: 1280, height: 720 } } },
     { name: "mobile", use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } } },
   ],
   webServer: [

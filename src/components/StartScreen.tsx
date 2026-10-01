@@ -33,11 +33,13 @@ export function StartScreen({ questionSet, onBack, onStart }: StartScreenProps) 
         </dl>
         {caseStudyIds.length > 0 && (
           <>
-            <p>This exam refers to these case studies, which appear next to the questions that use them:</p>
+            <p>This exam refers to these case studies, which you can also open from the questions that use them:</p>
             <ul className="case-study-list">
               {caseStudyIds.map((id) => (
                 <li key={id}>
-                  <a href={caseStudies[id].url} target="_blank" rel="noreferrer">{caseStudies[id].title} case study</a>
+                  <a href={caseStudies[id].url} target="_blank" rel="noreferrer">
+                    {caseStudies[id].title} case study <span className="sr-only">(opens in a new tab)</span>
+                  </a>
                 </li>
               ))}
             </ul>

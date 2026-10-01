@@ -57,7 +57,10 @@ export function ResultsScreen({ questionSet, attempt, score, onChooseExam, onRes
               </p>
               {caseStudy && (
                 <p className="case-study-reference">
-                  Case study: <a href={caseStudy.url} target="_blank" rel="noreferrer">{caseStudy.title}</a>
+                  Case study:{" "}
+                  <a href={caseStudy.url} target="_blank" rel="noreferrer">
+                    {caseStudy.title} <span className="sr-only">(opens in a new tab)</span>
+                  </a>
                 </p>
               )}
               <h3>{question.prompt}</h3>

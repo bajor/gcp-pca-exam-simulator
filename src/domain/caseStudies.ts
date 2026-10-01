@@ -1,5 +1,3 @@
-import type { Question } from "./questions";
-
 export interface CaseStudy {
   readonly title: string;
   readonly url: `https://${string}`;
@@ -32,6 +30,6 @@ export function isCaseStudyId(value: string): value is CaseStudyId {
 }
 
 // Distinct case studies in the order the questions first refer to them.
-export function referencedCaseStudyIds(questions: readonly Pick<Question, "caseStudyId">[]): CaseStudyId[] {
+export function referencedCaseStudyIds(questions: readonly { readonly caseStudyId?: CaseStudyId }[]): CaseStudyId[] {
   return [...new Set(questions.flatMap((question) => question.caseStudyId ?? []))];
 }
