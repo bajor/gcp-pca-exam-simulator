@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { minimumQuestionWords, type ChoiceId, type SingleChoiceQuestion } from "../src/domain/questions";
+import { maximumCaseStudyQuestions, minimumQuestionWords, type ChoiceId, type SingleChoiceQuestion } from "../src/domain/questions";
 import { multipleQuestion } from "../src/test/fixtures";
 import { buildValidQuestionSet, words } from "../src/test/questionSetFactory";
 import { measureQuestions } from "./question-set-metrics";
@@ -61,5 +61,13 @@ it("counts objectives and considerations from the objective field", () => {
   expect({ objectives: metrics.objectiveCounts, considerations: metrics.considerationCounts }).toEqual({
     objectives: { "2.3": 1, none: 1 },
     considerations: { "2.3.b": 1, none: 1 },
+  });
+});
+
+it("counts case-study questions and the sections they span", () => {
+  const metrics = measureQuestions(buildValidQuestionSet(maximumCaseStudyQuestions).questions);
+  expect({ questions: metrics.caseStudyQuestionCounts, sections: metrics.caseStudySectionCounts }).toEqual({
+    questions: { "cymbal-retail": 9, "ehr-healthcare": 9 },
+    sections: { "cymbal-retail": 2, "ehr-healthcare": 2 },
   });
 });

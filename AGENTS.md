@@ -15,6 +15,7 @@ onboarded: 2026-10-01
 - Support every correct answer and distractor explanation with current Google-owned documentation.
 - Reject questions that are ambiguous, deprecated, preview-dependent, or unsupported by the cited documentation.
 - Record the date on which each question's sources were verified.
+- Author questions with `.claude/skills/pca-question-authoring/SKILL.md` and review complete sets with `.claude/skills/pca-question-review/SKILL.md`.
 
 ## Quality Gate
 

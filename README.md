@@ -23,9 +23,9 @@ Question-bank changes must also run `make verify-sources`. The command structura
 
 ## Question Authoring
 
-Each practice exam lives in its own `src/data/questionSets/practice<number>/` module tree, and partial sections cannot enter the candidate registry or the runtime catalog. An independent reviewer creates a content-bound review record before a set is published.
+Authors follow the repository skill [`pca-question-authoring`](.claude/skills/pca-question-authoring/SKILL.md). It applies the [question style guide](docs/authoring/question-style-guide.md), the [objective coverage matrix](docs/authoring/coverage-matrix.md), and the [current product names](docs/context/product-names.md). Each practice exam lives in its own `src/data/questionSets/practice<number>/` module tree, and partial sections cannot enter the candidate registry or the runtime catalog. A separate session uses [`pca-question-review`](.claude/skills/pca-question-review/SKILL.md) for the final independent review and creates a content-bound review record. Claude Code discovers both skills from `.claude/skills/`.
 
-`npm run question-set-report -- <question-set-id>` prints each question's word counts, the set's answer-letter balance, and its objective coverage.
+`npm run question-set-report -- <question-set-id>` prints each question's word counts and case study, the set's answer-letter balance, its case-study counts and their section spread, and its objective coverage, which authors and reviewers compare with the targets.
 
 ## Deployment
 

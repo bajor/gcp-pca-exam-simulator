@@ -1,3 +1,4 @@
+import { referencedCaseStudyIds, type CaseStudyId } from "../src/domain/caseStudies";
 import { countWords, type ChoiceId, type Question } from "../src/domain/questions";
 
 const singleChoiceIds: readonly ChoiceId[] = ["a", "b", "c", "d"];
@@ -14,6 +15,7 @@ export interface QuestionMetrics {
   readonly id: string;
   readonly consideration: string;
   readonly kind: Question["kind"];
+  readonly caseStudyId: CaseStudyId | undefined;
   readonly stemWords: number;
   readonly shortestChoiceWords: number;
   readonly longestChoiceWords: number;
@@ -32,6 +34,8 @@ export interface QuestionSetMetrics {
   readonly correctLetterCounts: Readonly<Record<string, number>>;
   readonly objectiveCounts: Readonly<Record<string, number>>;
   readonly considerationCounts: Readonly<Record<string, number>>;
+  readonly caseStudyQuestionCounts: Readonly<Record<string, number>>;
+  readonly caseStudySectionCounts: Readonly<Record<string, number>>;
 }
 
 // Measures the style-guide quantities of a set; targets stay in docs/authoring/question-style-guide.md.
@@ -48,6 +52,11 @@ export function measureQuestions(questions: readonly Question[]): QuestionSetMet
     correctLetterCounts: countBy(singleChoiceIds, singles.map((question) => question.correctChoiceIds[0])),
     objectiveCounts: countBy([], questions.map((question) => question.objective.match(/^(\d\.\d)\b/)?.[1] ?? unmappedLabel)),
     considerationCounts: countBy([], measured.map((question) => question.consideration)),
+    caseStudyQuestionCounts: countBy([], questions.flatMap((question) => question.caseStudyId ?? [])),
+    caseStudySectionCounts: Object.fromEntries(referencedCaseStudyIds(questions).map((caseStudyId) => [
+      caseStudyId,
+      new Set(questions.filter((question) => question.caseStudyId === caseStudyId).map((question) => question.section)).size,
+    ])),
   };
 }
 
@@ -62,6 +71,7 @@ function measureQuestion(question: Question): QuestionMetrics {
     id: question.id,
     consideration: question.objective.match(/\b(\d\.\d\.[a-z])\b/)?.[1] ?? unmappedLabel,
     kind: question.kind,
+    caseStudyId: question.caseStudyId,
     stemWords,
     shortestChoiceWords: Math.min(...lengths),
     longestChoiceWords: Math.max(...lengths),
