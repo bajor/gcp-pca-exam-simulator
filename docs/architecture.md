@@ -84,3 +84,5 @@ Vite builds the static site with `/gcp-pca-exam-simulator/` as its base path. Af
 - [Exam presentation](/bdr/0003-exam-presentation.md)
 - [Show the official case-study documents](/adr/0002-show-official-case-studies.md)
 - [Case studies](/bdr/0004-case-studies.md)
+- [Decide the case-study layout in the exam screen](/adr/0003-decide-case-study-layout-in-exam-screen.md)
+- [Case-study layout modes](/bdr/0005-case-study-layout-modes.md)

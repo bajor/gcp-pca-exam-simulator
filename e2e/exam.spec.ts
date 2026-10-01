@@ -144,6 +144,7 @@ test("links the case study below its question on a wide screen without a PDF vie
   const questionNavigator = (await page.getByRole("complementary", { name: "Question navigator" }).boundingBox())!;
   expect(link.y).toBeGreaterThan(next.y + next.height);
   expect(link.x + link.width).toBeLessThanOrEqual(questionNavigator.x);
+  expect(await fitsViewport(page)).toBe(true);
   expect(downloads()).toBe(0);
 });
 
