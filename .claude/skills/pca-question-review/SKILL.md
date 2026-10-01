@@ -31,8 +31,9 @@ Review a complete 60-question candidate without editing its questions, choices, 
    - A case-study question names its company, restates every decisive fact in its stem, does not contradict its case study or copy its sentences, and cites the case-study document for the restated facts.
    - The question is original. It does not copy, paraphrase, or re-skin an official sample, and it does not reuse a scenario from another practice set.
    - At least two difficulty levers from `docs/authoring/question-style-guide.md` are present.
-7. For the whole set, compare the report and your notes with requirements 2 to 7 of `docs/prd/0002-practice-exam-question-sets.md`: objective allocation, consideration caps, length targets and median reading load, near-miss pairs, the longest-option limit, answer-letter balance, the choose-two count, question-type minimums, the AI range, and the case-study assignment and spread. The report does not measure near-miss pairs, question types, or AI questions; tally them from the questions yourself. When reviewing Practice Exam 3, also confirm across Practice Exams 1 to 3 that every testable consideration is the primary topic of at least one question and that every case study is used.
-8. Reject every question that is ambiguous, unsupported, deprecated, preview-dependent, or unoriginal. For a set-level target miss, either reject the questions whose revision fixes it, or accept the set and explain the exception in the review summary.
+7. For the whole set, compare the report and your notes with requirements 2 to 7 of `docs/prd/0002-practice-exam-question-sets.md`: objective allocation, consideration caps, length targets and median reading load, near-miss pairs, the longest-option limit, answer-letter balance, the choose-two count, question-type minimums, the AI range, and the case-study assignment and spread. The report does not measure question types or AI questions; tally them from the questions yourself.
+8. Apply the feasibility check, rule 4 of `docs/authoring/coverage-matrix.md`, to every practice exam from 1 to 3 that has a registered candidate, using the latest candidate of each. Record each objective's unused testable considerations and remaining questions. For Practice Exam 3 no questions remain, so the check confirms that every testable consideration is the primary topic of at least one question; also confirm that every case study is used.
+9. Reject every question that is ambiguous, unsupported, deprecated, preview-dependent, or unoriginal. For a set-level target miss, either reject the questions whose revision fixes it, or accept the set and explain the exception in the review summary. A failed feasibility check is never an accepted exception: reject the questions whose primary topics repeat a consideration that the remaining sets would need.
 
 Do not create an acceptance record while any question is rejected.
 
@@ -71,7 +72,7 @@ timestamp: YYYY-MM-DDT00:00:00Z
 
 ## Review Summary
 
-State the reviewer identifier, the independence check, the guide and case-study check, the commands run, the unique source count, the set-level metrics from the report, your tallies of near-miss pairs, question types, and AI questions, the check of earlier rejections, any accepted exception, and that all 60 questions passed the required checks.
+State the reviewer identifier, the independence check, the guide and case-study check, the commands run, the unique source count, the set-level metrics from the report, your tallies of question types and AI questions, the feasibility check, the check of earlier rejections, any accepted exception, and that all 60 questions passed the required checks.
 
 ## Review Record
 

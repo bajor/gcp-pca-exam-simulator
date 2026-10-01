@@ -18,10 +18,12 @@ Objective titles below match the guide, without its parenthetical examples. Writ
 Coverage rules:
 
 1. Every set allocates questions to objectives exactly as the table below shows. The section totals are enforced in code; the objective split is checked in review.
-2. Within one set, no consideration is the primary topic of more than two questions.
+2. A question's primary topic is the consideration that its `objective` field names, and its correct answer must depend on a decision from that consideration. Within one set, no consideration is the primary topic of more than two questions.
 3. Across Practice Exams 1, 2, and 3, every testable consideration is the primary topic of at least one question. A consideration is testable unless the notes below exclude it. The 180 questions of three sets cannot cover 101 considerations twice, so this rule asks for one use, not two.
-4. Every documentation link below returned HTTP 200 at its final URL on 2026-10-01. Re-fetch each link and read the current page before citing it, because the matrix lists starting points, not evidence.
-5. Test only generally available (GA) features. A Preview or deprecation notice disqualifies the feature it names, not other features on the same page. [Current product names](/context/product-names.md) lists products that must not be decisive.
+4. Every set must keep rule 3 achievable, and its review checks this. Count the practice exams from 1 to 3 that have a registered candidate, including the set under review; subtract that number from 3 to get the sets still to be written. For each objective, count its testable considerations that are not the primary topic of any question in the latest candidate of those practice exams. That count must not exceed the objective's questions per set multiplied by the sets still to be written. For example, objective 2.2 has 7 testable considerations and 3 questions per set. If Practice Exam 1 uses 2.2.a, 2.2.c, and 2.2.e, 4 unused considerations remain for 6 questions, which passes. If Practice Exam 2 then uses the same three, 4 unused considerations remain for 3 questions, which fails.
+5. Objectives 1.1, 1.5, 2.4, and 2.5 have exactly as many questions across three sets as testable considerations (12, 3, 3, and 3), so rule 4 allows no repeat: each of their considerations is the primary topic of exactly one question across Practice Exams 1, 2, and 3.
+6. Every documentation link below returned HTTP 200 at its final URL on 2026-10-01. Re-fetch each link and read the current page before citing it, because the matrix lists starting points, not evidence.
+7. Test only generally available (GA) features. A Preview or deprecation notice disqualifies the feature it names, not other features on the same page. [Current product names](/context/product-names.md) lists products that must not be decisive.
 
 ## Allocation
 
@@ -43,14 +45,12 @@ Coverage rules:
 | | 4.2 Analyzing and defining business processes | 4 |
 | `implement` (7) | 5.1 Advising development and operation teams to ensure the successful deployment of the solution | 4 |
 | | 5.2 Interacting with Google Cloud programmatically | 3 |
-| `operate` (7) | 6.1 Understanding the operational excellence pillar of the Well-Architected Framework | 1 |
+| `operate` (7) | 6.1 Understanding the principles and recommendations of the operational excellence pillar of the Google Cloud Well-Architected Framework | 1 |
 | | 6.2 Familiarity with Google Cloud Observability solutions | 2 |
 | | 6.3 Deployment and release management | 1 |
 | | 6.4 Assisting with the support of deployed solutions | 1 |
 | | 6.5 Evaluating quality control measures | 1 |
 | | 6.6 Ensuring the reliability of solutions in production | 1 |
-
-Objectives 1.1, 1.5, 2.4, and 2.5 receive exactly as many questions across three sets as they have testable considerations, so each of their considerations is used once.
 
 ## Case Studies
 
@@ -106,7 +106,7 @@ Documentation: [Well-Architected Framework reliability pillar](https://docs.clou
 | ID | Consideration | Decisions to test |
 |---|---|---|
 | 1.3.a | Integration with on-premises and multicloud environments | Choose a hybrid or multicloud architecture for workloads that stay in another environment. |
-| 1.3.b | Google Cloud AI and machine learning solutions | Place Gemini models, Model Garden models, Agent Platform, or AI Hypercomputer in an architecture. |
+| 1.3.b | Google Cloud AI and machine learning solutions | Place Gemini models, Model Garden models, Agent Builder, or AI Hypercomputer in an architecture. |
 | 1.3.c | Cloud-native networking | Choose VPC structure, Shared VPC, peering, Private Service Connect, load balancers, and firewall design. |
 | 1.3.d | Choosing data processing solutions | Choose BigQuery, Dataflow, Managed Service for Apache Spark, or Pub/Sub by processing model and skills. |
 | 1.3.e | Choosing appropriate storage types | Choose object, file, block, relational, NoSQL, or analytical storage by access pattern and consistency. |
@@ -122,7 +122,7 @@ Documentation: [VPC overview](https://docs.cloud.google.com/vpc/docs/vpc), [Shar
 | ID | Consideration | Decisions to test |
 |---|---|---|
 | 1.4.a | Integrating solutions with existing systems | Keep migrated workloads connected to systems that stay on-premises. |
-| 1.4.b | Assessing and migrating systems and data | Use Migration Center for discovery and cost estimation, and choose migration tools for VMs, databases, and data. |
+| 1.4.b | Assessing and migrating systems and data | Use Migration Center for asset discovery, assessment, and total cost of ownership reports, and choose migration tools for VMs, databases, and data. The Migration Center rapid cost estimate is Preview and must not be decisive. |
 | 1.4.c | Migration methodologies, workload testing, network planning, and dependency planning | Sequence migration waves by dependencies, test before cutover, and plan IP ranges and connectivity. |
 | 1.4.d | Software license implications and financial impact | Choose license-included images, bring-your-own-license on sole-tenant nodes, or managed replacements by cost and license terms. |
 
@@ -203,7 +203,7 @@ Documentation: [Agent Platform overview](https://docs.cloud.google.com/gemini-en
 | ID | Consideration | Decisions to test |
 |---|---|---|
 | 2.5.a | Differentiating between the Google AI APIs | Choose the Cloud Vision API, Speech-to-Text, Text-to-Speech, Cloud Translation, Document AI, Agent Search, or a Gemini model for a task. The Video Intelligence API is deprecated and must not be decisive. |
-| 2.5.b | Integrating Gemini Enterprise features | Choose Gemini Enterprise agents or Gemini Notebook Enterprise to support employee workflows. Preview capabilities, such as its search-source integration, must not be decisive. |
+| 2.5.b | Integrating Gemini Enterprise features | Choose Gemini Enterprise agents or NotebookLM to support employee workflows. Preview capabilities, such as NotebookLM's search-source integration, must not be decisive. |
 | 2.5.c | Integrating AI models from Model Garden into the solution | Choose a model from Model Garden and a deployment option for a solution. |
 
 Common traps: a custom model where a prebuilt API covers the task (D2).
@@ -292,20 +292,20 @@ Documentation: [Apigee](https://docs.cloud.google.com/apigee/docs/api-platform/g
 |---|---|---|
 | 5.2.a | Cloud Shell Editor, Cloud Code, and Cloud Shell Terminal | Choose a development environment for a team's tools and access. |
 | 5.2.b | Google Cloud SDKs | Choose `gcloud`, `gcloud storage`, or `bq` for a scripted task. The gsutil tool is legacy and must not be decisive. |
-| 5.2.c | Cloud Emulators | Use local emulators for Bigtable, Spanner, Pub/Sub, or Firestore to test without cloud resources. |
+| 5.2.c | Cloud Emulators | Use local emulators for Bigtable, Spanner, Pub/Sub, or Firestore to test without cloud resources. Test the emulator's purpose and documented limits, not command syntax; several emulator commands are in the `gcloud beta` command group. |
 | 5.2.d | Infrastructure as code | Use Terraform or Infrastructure Manager for repeatable environments. Deployment Manager reached its end of support and must not be decisive. |
 | 5.2.e | Accessing Google API best practices | Authenticate with Application Default Credentials and attached service accounts, and handle quotas with retries and backoff. |
 | 5.2.f | Google API client libraries | Prefer client libraries over raw REST calls. |
 
 Common traps: service account key files in code (D5); manual console changes that cannot be reproduced (D3).
 
-Documentation: [Cloud Shell Editor](https://docs.cloud.google.com/shell/docs/editor-overview), [Cloud Code](https://docs.cloud.google.com/code/docs), [emulators](https://docs.cloud.google.com/sdk/gcloud/reference/beta/emulators), [Terraform on Google Cloud](https://docs.cloud.google.com/docs/terraform/terraform-overview), [Infrastructure Manager](https://docs.cloud.google.com/infrastructure-manager/docs/overview), [client libraries](https://docs.cloud.google.com/apis/docs/client-libraries-explained).
+Documentation: [Cloud Shell Editor](https://docs.cloud.google.com/shell/docs/editor-overview), [Cloud Code](https://docs.cloud.google.com/code/docs), [Bigtable emulator](https://docs.cloud.google.com/bigtable/docs/emulator), [Pub/Sub emulator](https://docs.cloud.google.com/pubsub/docs/emulator), [Spanner emulator](https://docs.cloud.google.com/spanner/docs/emulator), [Firestore emulator](https://docs.cloud.google.com/firestore/native/docs/emulator), [Terraform on Google Cloud](https://docs.cloud.google.com/docs/terraform/terraform-overview), [Infrastructure Manager](https://docs.cloud.google.com/infrastructure-manager/docs/overview), [client libraries](https://docs.cloud.google.com/apis/docs/client-libraries-explained).
 
 ## 6.1 to 6.6 Ensuring Solution and Operations Excellence
 
 | ID | Consideration | Decisions to test |
 |---|---|---|
-| 6.1.a | The operational excellence pillar | Apply the pillar's recommendations, such as automation, incident management, and continuous improvement. |
+| 6.1.a | Understanding the principles and recommendations of the operational excellence pillar of the Google Cloud Well-Architected Framework | Apply the pillar's recommendations, such as automation, incident management, and continuous improvement. |
 | 6.2.a | Monitoring and logging | Choose Cloud Monitoring, Cloud Logging, log sinks, and Google Cloud Managed Service for Prometheus. |
 | 6.2.b | Profiling and benchmarking | Use Cloud Profiler and benchmarks to find performance bottlenecks. |
 | 6.2.c | Alerting strategies | Alert on symptoms tied to service level objectives and route alerts to responders. |

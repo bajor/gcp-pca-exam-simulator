@@ -33,12 +33,14 @@ The official sources are the [certification page](https://cloud.google.com/learn
 2. Open or create the practice exam's issue record, `docs/issues/<NNNN>-author-practice-exam-<n>.md`, and index it in `docs/issues/index.md`.
 3. Before writing any question, add a plan table for the section to that issue record:
 
-   | Question ID | Consideration | Type | AI | Case study | Decisive feature | Correct letter | Distractor mechanisms | Levers |
-   |---|---|---|---|---|---|---|---|---|
+   | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
+   |---|---|---|---|---|---|---|---|---|---|
+
+   Kind is `single` or `multiple` (choose-two), matching the question's `kind` field.
 
 4. Tally the plan tables of this set's other sections and of every earlier practice exam before choosing topics.
    - Within the set, follow the matrix allocation, use no consideration as the primary topic more than twice, and keep the set on track for PRD 0002 requirements 5 to 7: 11 to 17 correct answers per letter, near-miss pairs (lever L2) in at least 24 questions, 4 to 8 choose-two questions, AI decisive in 6 to 12 questions, at least 5 T4, 5 T6, 6 T7, 4 T9, 3 T3, and 4 T11 questions, and 12 to 18 case-study questions about the two case studies the coverage matrix assigns, each case study spread over at least three sections.
-   - Across sets, prefer testable considerations that earlier sets have not used, so that every testable consideration is used by Practice Exam 3. Objectives 1.1, 1.5, 2.4, and 2.5 have exactly as many slots across three sets as testable considerations, so each of their considerations must be used exactly once.
+   - Across sets, the plan must pass the feasibility check in rule 4 of the coverage matrix, counting this set as written. Objectives 1.1, 1.5, 2.4, and 2.5 must use only considerations that no other practice exam uses. Elsewhere, prefer testable considerations that other practice exams have not used.
 5. Check every other practice exam's plan tables and modules for scenario reuse, for example with `grep -rn "<decisive feature>" src/data/questionSets docs/issues`. A scenario is reused when the organization type, the problem, and the decisive feature all match.
 
 ## Source Rules
@@ -156,11 +158,11 @@ make verify-sources
 npm run question-set-report -- <question-set-id>
 ```
 
-The first two commands must pass. The report measures the draft; compare it with the targets in the style guide and PRD 0002, and revise before handoff. It lists per-question stem, option, and reading-load word counts, case studies, the set median reading load, correct-letter counts, how often the correct option is the longest, case-study counts, objective counts, and repeated considerations.
+The first two commands must pass. The report measures the draft; compare it with the targets in the style guide and PRD 0002, and revise before handoff. It lists per-question stem, option, and reading-load word counts, case studies, the longest word run that two options share, the set median reading load, near-miss pairs, correct-letter counts, how often the correct option is the longest, case-study counts, objective counts, and repeated considerations.
 
 ## Reviewer Handoff
 
-Give the reviewer the section, author identifier, question identifiers, a link to the plan table, the unique source URLs, the report output, and the verification results. After all six sections are assembled into a candidate, a separate session uses the `pca-question-review` skill to review all 60 questions. An author never reviews their own questions.
+Open a pull request for each finished section, and have a fresh session that did not author it review the pull request with `/review`. Give that reviewer the section, author identifier, question identifiers, a link to the plan table, the unique source URLs, the report output, and the verification results. Fix its findings in that pull request. After all six sections are assembled into a candidate, a separate session uses the `pca-question-review` skill to review all 60 questions for acceptance. An author never reviews their own questions.
 
 If the review rejects the candidate, keep the rejected draft and candidate registered and unchanged, because the rejection record is bound to them. Make corrections under a new draft and candidate identifier and version, reusing unchanged section modules. Put every changed section in a new module file, such as `sections/secureV2.ts`, and list it in a new sections array, such as `practiceExamOneV2Sections`. Never edit a module that a rejected candidate uses: the rejection record is bound to that content, and `make verify-sources` fails if it changes. Revise or replace every rejected question before handoff.
 

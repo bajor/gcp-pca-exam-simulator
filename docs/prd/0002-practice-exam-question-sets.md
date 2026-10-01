@@ -31,7 +31,7 @@ The simulator specified by [PRD 0001](/prd/0001-cloud-architect-exam-simulator.m
 
 1. **Structure.** Each set passes structural validation (60 questions in the 15, 11, 11, 9, 7, and 7 section distribution, the reading-length floors, two case studies with 12 to 18 case-study questions, answer keys, and evidence) and `make verify-sources`.
 2. **Objective allocation.** Each set allocates questions to the 22 objectives as the [coverage matrix](/authoring/coverage-matrix.md) specifies.
-3. **Consideration coverage.** Within a set, no consideration is the primary topic of more than two questions. Across the three sets, every testable consideration is the primary topic of at least one question.
+3. **Consideration coverage.** Within a set, no consideration is the primary topic of more than two questions. Across the three sets, every testable consideration is the primary topic of at least one question. Every set passes the coverage matrix's feasibility check (rule 4), so this stays achievable; as a result, objectives 1.1, 1.5, 2.4, and 2.5 never repeat a consideration.
 4. **Length targets.** Stems have 65 to 120 words, options 10 to 35 words, and questions 130 to 240 words of reading load. Each set has a median reading load of at least 150 words. Within a question, the longest option is at most twice as long as the shortest.
 5. **Answer design.** At least 24 questions per set contain a near-miss pair. Among single-choice questions, the correct option is strictly longer than every other option in at most 18, and each letter is correct 11 to 17 times. A set has 4 to 8 choose-two questions.
 6. **Question-type mix.** Each set has at least 5 troubleshooting (T4), 5 reliability and recovery (T6), 6 security and identity (T7), 4 cost optimization (T9), 3 migration planning (T3), and 4 AI solution design (T11) questions, using the types defined in research 0003. AI is the decisive topic in 6 to 12 questions.
@@ -55,7 +55,7 @@ The [question style guide](/authoring/question-style-guide.md) defines stems, co
 ## Acceptance Criteria
 
 - Each set has an indexed acceptance record, and its catalog entry is available.
-- Each review record documents the set-level metrics from requirements 3 to 7 and any accepted exception.
+- Each review record documents the set-level metrics from requirements 2 to 7, including the feasibility check, and any accepted exception.
 - `make test` and `make verify-sources` pass after each publication.
 
 ## Success Metrics

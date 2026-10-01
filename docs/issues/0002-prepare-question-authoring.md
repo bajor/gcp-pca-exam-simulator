@@ -5,7 +5,7 @@ description: Research question patterns, question types, and current product nam
 status: complete
 labels: [content, docs]
 blocked_by: []
-tracker: "PR [3/5], PR [4/5], and PR [5/5]"
+tracker: "PRs #4 to #6, landed on main by PR #7"
 timestamp: 2026-10-01T00:00:00Z
 ---
 
@@ -29,4 +29,5 @@ The candidate asked for the PCA simulator to work toward its own question base. 
 
 - 2026-10-01: PR [3/5] adds the research records, the product-name reference, and glossary terms.
 - 2026-10-01: PR [4/5] adds the style guide, the coverage matrix, and PRD 0002.
-- 2026-10-01: PR [5/5] adds the authoring and review skills and the case-study measurements of `npm run question-set-report`, completing this issue.
+- 2026-10-01: PR [5/5] adds the authoring and review skills and the case-study measurements of `npm run question-set-report`.
+- 2026-10-01: PRs #4 to #6 were merged into their stacked base branches instead of `main`, so PR #7 lands them on `main`. PR #7 also applies the independent review: corrected research claims, a coverage feasibility check for every set, a measurable near-miss rule that the report counts, and a calibration example whose evidence supports every rejection. Merging PR #7 completes this issue.
