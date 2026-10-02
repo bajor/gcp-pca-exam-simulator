@@ -83,12 +83,12 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
 | pca-p1-secure-02 | single | 3.1.b | T7 | no | none | Folder for the business unit with roles granted and the location constraint set on the folder | b | D4, D4, D2 | L2, L4 |
 | pca-p1-secure-03 | multiple | 3.1.d | T7 | no | none | Dedicated key project, with key administration and key use granted to different principals (choose two) | a, d | D5, D5, D5 | L2, L4 |
 | pca-p1-secure-04 | single | 3.1.e | T7 | no | none | VPC Service Controls perimeter with an access level for the corporate network | d | D7, D7, D3 | L2, L4 |
-| pca-p1-secure-05 | single | 3.1.f | T7 | no | none | Customer-managed keys with the HSM protection level for FIPS 140-2 Level 3 | c | D7, D7, D2 | L2, L4, L6 |
+| pca-p1-secure-05 | single | 3.1.f | T7 | no | none | Customer-managed keys with the HSM protection level for FIPS 140-2 Level 3 | c | D7, D7, D2 | L2, L4 |
 | pca-p1-secure-06 | single | 3.1.g | T7 | no | none | IAP TCP forwarding for administrator SSH without external IP addresses | a | D1, D5, D2 | L2, L4 |
 | pca-p1-secure-07 | single | 3.1.h | T7 | no | none | Binary Authorization in enforced mode requiring the pipeline's attestation | d | D7, D3, D7 | L2, L4 |
 | pca-p1-secure-08 | single | 3.1.i | T7 | yes | Cymbal Retail | Model Armor screening of both prompts and responses | b | D4, D3, D8 | L2, L4 |
 | pca-p1-secure-09 | single | 3.2.a | T8 | no | EHR Healthcare | Google Cloud BAA with only generally available covered services for PHI | c | D6, D7, D3 | L1, L2, L4 |
-| pca-p1-secure-10 | single | 3.2.b | T8 | no | Cymbal Retail | Sensitive Data Protection de-identification before transcripts reach BigQuery | d | D5, D7, D8 | L2, L4 |
+| pca-p1-secure-10 | single | 3.2.b | T8 | no | Cymbal Retail | Sensitive Data Protection de-identification before transcripts reach BigQuery | d | D7, D7, D8 | L2, L4 |
 | pca-p1-secure-11 | multiple | 3.2.d | T8 | no | none | Organization-level aggregated sink and a locked bucket retention policy (choose two) | b, e | D4, D7, D7 | L3, L4 |
 
 ### Plan: analyze
