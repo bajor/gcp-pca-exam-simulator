@@ -114,5 +114,6 @@ For case-study questions, this record replaces two rows of the BDR 0003 presenta
 
 - PRD: [/prd/0001-cloud-architect-exam-simulator.md](/prd/0001-cloud-architect-exam-simulator.md)
 - ADR: [/adr/0002-show-official-case-studies.md](/adr/0002-show-official-case-studies.md)
+- BDR: [/bdr/0005-case-study-layout-modes.md](/bdr/0005-case-study-layout-modes.md) amends the split-screen, medium-screen, and no-PDF-viewer rows of the presentation table.
 - Research: [/research/0001-exam-format-and-blueprint.md](/research/0001-exam-format-and-blueprint.md)
 - Issue: [/issues/0001-port-simulator-for-pca.md](/issues/0001-port-simulator-for-pca.md)

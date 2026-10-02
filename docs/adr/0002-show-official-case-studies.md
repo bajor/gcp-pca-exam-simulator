@@ -53,4 +53,5 @@ Harder or accepted trade-offs:
 
 - PRD: [/prd/0001-cloud-architect-exam-simulator.md](/prd/0001-cloud-architect-exam-simulator.md)
 - BDR: [/bdr/0004-case-studies.md](/bdr/0004-case-studies.md)
+- ADR: [/adr/0003-decide-case-study-layout-in-exam-screen.md](/adr/0003-decide-case-study-layout-in-exam-screen.md) moves the embedding decision into the exam screen and removes the trade-off of a split-screen width defined twice.
 - Issue: [/issues/0001-port-simulator-for-pca.md](/issues/0001-port-simulator-for-pca.md)
