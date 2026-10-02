@@ -14,7 +14,7 @@ timestamp: 2026-10-01T00:00:00Z
 Implement [PRD 0002](/prd/0002-practice-exam-question-sets.md) for Practice Exam 1 by following the authoring skill `.claude/skills/pca-question-authoring/SKILL.md`, the [question style guide](/authoring/question-style-guide.md), and the [objective coverage matrix](/authoring/coverage-matrix.md).
 
 - Set identifier: `professional-cloud-architect-v6-1-practice-1`, version 1.
-- Authors: `claude-opus-5.5-p1-<section>-20261001`, one identifier per section.
+- Authors: `claude-opus-5.5-p1-<section>-<YYYYMMDD>`, one identifier per section, dated on the day its section was written.
 - Case studies: EHR Healthcare and Cymbal Retail, as the coverage matrix assigns.
 - Guide check: on 2026-10-01 the certification page linked the current guide with the same six sections, weights, 22 objectives, and four case studies that research 0001 records.
 
@@ -63,17 +63,17 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p1-provision-01 | single | 2.1.a | T5 | no | EHR Healthcare | Redundant Dedicated Interconnect connections for the required availability | b | D3, D2, D3 | L1, L2, L4 |
-| pca-p1-provision-02 | single | 2.1.c | T7 | no | none | Cloud NGFW intrusion prevention, which blocks threats inline instead of only detecting them | c | D7, D3, D2 | L2, L4 |
-| pca-p1-provision-03 | single | 2.1.d | T5 | no | none | Private Service Connect for consumers with overlapping IP ranges | a | D3, D7, D2 | L2, L4 |
-| pca-p1-provision-04 | single | 2.2.e | T9 | no | none | Lifecycle rule that moves objects to Archive storage at a known age, instead of Autoclass | d | D7, D2, D7 | L2, L4, L6 |
-| pca-p1-provision-05 | single | 2.2.d | T2 | no | none | Cross-region read replica, because the high-availability standby does not serve reads | d | D7, D4, D2 | L2, L4 |
-| pca-p1-provision-06 | single | 2.2.g | T6 | no | none | Backup vault with enforced retention against deletion by a compromised administrator | b | D5, D7, D2 | L2, L4 |
-| pca-p1-provision-07 | single | 2.3.c | T4 | no | none | Direct VPC egress so that Cloud Run reaches a private Memorystore address | c | D6, D5, D2 | L2, L4 |
-| pca-p1-provision-08 | single | 2.3.d | T10 | no | none | VM Manager patch deployments rolled out zone by zone | a | D1, D3, D8 | L2, L4 |
+| pca-p1-provision-01 | single | 2.1.a | T5 | no | EHR Healthcare | Second connection in the other edge availability domain, the cheapest topology with an uptime SLA | b | D7, D4, D2 | L2, L4, L6 |
+| pca-p1-provision-02 | single | 2.1.c | T7 | no | none | Cloud NGFW intrusion prevention, which blocks threats inline instead of only detecting them | c | D7, D3, D1 | L2, L4 |
+| pca-p1-provision-03 | single | 2.1.d | T5 | no | none | Private Service Connect with a consumer accept list for consumers with overlapping IP ranges | a | D3, D4, D5 | L2, L4 |
+| pca-p1-provision-04 | single | 2.2.e | T9 | no | none | Lifecycle rule that moves objects to Archive storage at a known age, instead of Autoclass | d | D7, D7, D7 | L2, L3, L4, L6 |
+| pca-p1-provision-05 | single | 2.2.d | T2 | no | none | Bigtable clusters in each region with an app profile that uses multi-cluster routing | d | D1, D7, D3 | L2, L4 |
+| pca-p1-provision-06 | single | 2.2.g | T6 | no | none | Backup vault with enforced retention, filled by a Backup and DR backup plan | b | D7, D1, D7 | L3, L4 |
+| pca-p1-provision-07 | single | 2.3.c | T4 | no | none | Direct VPC egress so that Cloud Run reaches a private Memorystore address | c | D6, D1, D2 | L2, L4, L6 |
+| pca-p1-provision-08 | single | 2.3.d | T10 | no | none | VM Manager patch deployment rolled out zone by zone with a 10% disruption budget | a | D7, D1, D3 | L2, L4 |
 | pca-p1-provision-09 | single | 2.3.e | T9 | no | none | GKE Autopilot, billed for Pod resource requests instead of whole nodes | d | D2, D7, D1 | L2, L4 |
-| pca-p1-provision-10 | single | 2.4.a | T11 | yes | none | Agent Platform Pipelines for scheduled, reproducible retraining | b | D1, D3, D2 | L2, L4 |
-| pca-p1-provision-11 | single | 2.5.a | T11 | yes | Cymbal Retail | AI Commerce Search for natural-language product discovery | c | D3, D2, D7 | L2, L4 |
+| pca-p1-provision-10 | single | 2.4.a | T11 | yes | none | Agent Platform Pipelines for scheduled, reproducible retraining | b | D1, D3, D8 | L2, L4 |
+| pca-p1-provision-11 | single | 2.5.a | T11 | yes | Cymbal Retail | AI Commerce Search with the product catalog and user events | c | D3, D7, D3 | L2, L4 |
 
 ### Plan: secure
 
@@ -140,3 +140,7 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
   - design-01, design-05, and five case-study evidence claims were reworded so that no run of 5 or more words matches a case study.
   - design-03 gained a near-miss distractor.
   - The plan relabels design-01 as T12, design-14 as T3, and the distractor mechanisms of design-11 and design-15. provision-09 becomes a T9 question about GKE Autopilot billing, so T9 stays at 4.
+- 2026-10-02: Authored the `provision` section (author `claude-opus-5.5-p1-provision-20261002`).
+  - Two questions keep their planned consideration but test a different decision. provision-05 tests Bigtable replication with multi-cluster routing, because design-06's stem already describes the planned Cloud SQL read replica. provision-09 tests GKE Autopilot billing, a decision that the coverage matrix lists for 2.3.e.
+  - provision-01 tests the cheapest SLA-backed Interconnect topology rather than 99.99% redundancy, because the 99.99% rules now allow a single-metro topology that changes often.
+  - The rows above record each question's final distractor mechanisms and levers.
