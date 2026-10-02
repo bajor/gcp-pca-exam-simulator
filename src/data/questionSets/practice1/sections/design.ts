@@ -160,7 +160,7 @@ export const practiceExamOneDesignSection = {
         },
         {
           id: "b",
-          text: "Report the conversion rate and the product search success rate of visits that use the assistant compared with visits that do not, and the number of conversations that the assistant completes.",
+          text: "Report the conversion rate and the product search success rate of visits that use the assistant compared with visits that do not, and the number of conversations that visitors start with the assistant.",
           feedback: "Incorrect. The first two measures fit discoverability and conversion, but completed conversations count the assistant's activity, not whether call center staffing costs fell.",
           evidenceIds: ["case-study", "waf-ai-kpis"],
         },
@@ -822,7 +822,7 @@ export const practiceExamOneDesignSection = {
       section: "design",
       objective: "1.5 Envisioning future solution improvements: 1.5.c cloud-first design approach",
       caseStudyId: "cymbal-retail",
-      prompt: "Cymbal Retail needs a new web application in which about 200 merchandising associates review the attributes, descriptions, and images that its generative AI tools produce, and approve, reject, or modify them before the catalog is updated. Associates sign in with their corporate Google accounts, and use is concentrated in business hours. Cymbal wants to reduce data-center hosting costs, and its architects follow a cloud-first approach for new applications. The application must be reachable only by authenticated associates, and Cymbal wants to minimize operational overhead and avoid paying for idle capacity outside business hours. Which solution should you design?",
+      prompt: "Cymbal Retail needs a new web application in which about 200 merchandising associates review the attributes, descriptions, and images that its generative AI tools produce, and approve, reject, or modify them before the catalog is updated. Associates sign in with their corporate Google accounts, and use is concentrated in business hours. Cymbal wants to reduce data-center hosting costs, and its architects follow a cloud-first approach for new applications. The application must be reachable only by authenticated associates, and Cymbal wants to minimize operational overhead and avoid paying for idle application servers outside business hours. Which solution should you design?",
       verifiedOn: "2026-10-01",
       evidence: [
         {
@@ -870,7 +870,7 @@ export const practiceExamOneDesignSection = {
         {
           id: "b",
           text: "Deploy the review application as a Cloud Run service with a Cloud SQL database, and enable Identity-Aware Proxy directly on the service so that only associates can reach it.",
-          feedback: "Correct. Cloud Run and Cloud SQL are managed services that fit a cloud-first design and scale down outside business hours, and IAP on the service admits only authenticated associates without a load balancer.",
+          feedback: "Correct. Cloud Run removes idle containers when demand drops and Cloud SQL is a fully managed database, which fits a cloud-first design with little overhead, and IAP on the service admits only authenticated associates without a load balancer.",
           evidenceIds: ["what-is-cloud-run", "cloud-sql", "iap-cloud-run"],
         },
         {
@@ -882,7 +882,7 @@ export const practiceExamOneDesignSection = {
         {
           id: "d",
           text: "Deploy the review application on a GKE Standard cluster with three always-on nodes, a self-managed PostgreSQL database, and an external load balancer with Identity-Aware Proxy.",
-          feedback: "Incorrect. Access control works, but in Standard mode Cymbal pays for the always-on nodes overnight and operates its own database, the overhead and idle cost it wants to avoid.",
+          feedback: "Incorrect. Access control works, but in Standard mode Cymbal pays for always-on nodes that sit idle overnight and operates its own database, which adds the overhead it wants to avoid.",
           evidenceIds: ["gke-modes", "cloud-sql"],
         },
       ],
