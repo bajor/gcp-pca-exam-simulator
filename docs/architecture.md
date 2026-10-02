@@ -27,6 +27,9 @@ On 2026-10-01 the catalog lists Practice Exams 1, 2, and 3 as coming soon. No qu
 | `src/data/questionSets/registry.ts` | Aggregates every exam's drafts and candidates for structural, source, and audit verification. |
 | `src/data/questionSets/index.ts` | Runtime catalog of available and coming-soon entries. |
 | `docs/reviews/` | Independent acceptance and rejection records checked by CI. |
+| `docs/authoring/` | The question style guide and objective coverage matrix, which define a good question and a complete set. |
+| `.claude/skills/pca-question-authoring/` | The procedure for planning, sourcing, writing, registering, and verifying question sections. |
+| `.claude/skills/pca-question-review/` | The independent review procedure and its content-bound acceptance and rejection records. |
 | `src/components/` | Catalog, start, exam, case-study pane, navigation, submission, and result-review screens. |
 | `src/styles.css` | Dense exam presentation, including `--exam-text-size`, the single font size shared by question and answer text. |
 | `src/App.tsx` | Catalog selection, screen transitions, and restoration of the selected set's attempt. |
@@ -35,11 +38,11 @@ On 2026-10-01 the catalog lists Practice Exams 1, 2, and 3 as coming soon. No qu
 
 ## Question Lifecycle
 
-1. An author plans a section in the exam's issue record and writes it as a typed module under `src/data/questionSets/practice<number>/sections/`.
+1. An author following the `pca-question-authoring` skill plans a section in the exam's issue record and writes it as a typed module under `src/data/questionSets/practice<number>/sections/`.
 2. The author registers the section in that exam's draft manifest and registers the manifest in `src/data/questionSets/registry.ts`. Structural validation then requires the final section count, the reading-length floors, valid answer keys, Google-owned evidence for every choice, a citation of the case study for every case-study question, at most 2 case studies, and at most 18 case-study questions.
 3. `make verify-sources` validates every registered draft and fetches every unique evidence URL.
 4. After all six sections exist, the exam's candidate list assembles a 60-question candidate from the draft identifier. Assembly requires exactly 2 case studies and 12 to 18 case-study questions.
-5. An independent reviewer re-fetches the evidence, checks the set against the question-set requirements, and writes either an indexed rejection report or an acceptance record bound to the candidate's SHA-256 content digest.
+5. An independent reviewer following the `pca-question-review` skill re-fetches the evidence, checks the set against the question-set requirements, and writes either an indexed rejection report or an acceptance record bound to the candidate's SHA-256 content digest.
 6. Only a candidate with an exact acceptance record and no matching rejection record can become an `available` catalog entry. Corrections use a new candidate identifier. Rejected candidates stay registered and unchanged so that their rejection records remain verifiable.
 
 [Behavior decision 0002](/bdr/0002-question-validation-and-publication.md) specifies these gates and their tests.
