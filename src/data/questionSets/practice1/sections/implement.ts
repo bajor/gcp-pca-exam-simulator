@@ -1,0 +1,381 @@
+import type { QuestionSection } from "../../../../domain/questions";
+
+const ehrCaseStudy = {
+  id: "case-study",
+  title: "EHR Healthcare Case Study",
+  url: "https://services.google.com/fh/files/misc/v6.1_pca_ehr_healthcare_case_study_english.pdf",
+} as const;
+
+export const practiceExamOneImplementSection = {
+  section: "implement",
+  author: "claude-opus-5.5-p1-implement-20261002",
+  questions: [
+    {
+      id: "pca-p1-implement-01",
+      kind: "single",
+      section: "implement",
+      objective: "5.1 Advising development and operation teams to ensure the successful deployment of the solution: 5.1.b API management best practices",
+      caseStudyId: "ehr-healthcare",
+      prompt: "EHR Healthcare needs to bring new insurance providers onto its platform faster. Each provider will call EHR's claims and eligibility APIs, which run as backend services on GKE. Each provider must get its own credentials, reach only the API operations in its contract, and stay within a request quota set for that provider, and EHR wants usage analytics for each provider without changing the backend services. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          ...ehrCaseStudy,
+          claim: "EHR wants to bring on new insurance providers faster and to build interfaces that take in data from new providers.",
+        },
+        {
+          id: "apigee",
+          title: "What is Apigee?",
+          url: "https://docs.cloud.google.com/apigee/docs/api-platform/get-started/what-apigee",
+          claim: "Apigee provides an API proxy layer between backend services and their clients that gives granular control over security, rate limiting, quotas, and analytics, so the backend services can remain unchanged.",
+        },
+        {
+          id: "api-products",
+          title: "Introduction to API products",
+          url: "https://docs.cloud.google.com/apigee/docs/api-platform/publish/what-api-product",
+          claim: "An API product bundles operations, which can be limited by quota, and is the central mechanism for access control. Each registered developer app is associated with at least one API product and receives a unique consumer key.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Expose the backend services through an external Application Load Balancer, and give every provider the same API key, which the services check on each request.",
+          feedback: "Incorrect. A shared key cannot identify or limit individual providers, so it gives no per-provider credentials, quotas, or analytics, which Apigee provides through apps and API products.",
+          evidenceIds: ["api-products"],
+        },
+        {
+          id: "b",
+          text: "Put the APIs behind Apigee proxies, bundle each contract's operations with a quota into an API product, and register an app with its own credentials for each provider.",
+          feedback: "Correct. API products bundle the allowed operations with a quota, each registered app gets a unique consumer key, and the Apigee proxy layer adds security, quotas, and analytics without changes to the backend services.",
+          evidenceIds: ["case-study", "apigee", "api-products"],
+        },
+        {
+          id: "c",
+          text: "Build a custom gateway on GKE that stores provider credentials in a database, counts the requests of each provider, and writes the usage records to BigQuery for monthly reporting.",
+          feedback: "Incorrect. A custom gateway could work, but EHR would build and operate the credentials, quotas, and analytics that the Apigee proxy layer already provides.",
+          evidenceIds: ["apigee"],
+        },
+        {
+          id: "d",
+          text: "Deploy a separate Cloud Run service for each provider that forwards its requests to the backend services and enforces the provider's quota in code.",
+          feedback: "Incorrect. A service for each provider adds code to write and run for every new provider, which slows onboarding, while one Apigee proxy layer serves all providers.",
+          evidenceIds: ["apigee", "case-study"],
+        },
+      ],
+      correctChoiceId: "b",
+    },
+    {
+      id: "pca-p1-implement-02",
+      kind: "single",
+      section: "implement",
+      objective: "5.1 Advising development and operation teams to ensure the successful deployment of the solution: 5.1.d data and system migration and management tooling",
+      prompt: "A ticketing company is moving its 3 TB MySQL 8.0 database from its data center to Cloud SQL for MySQL. The database receives writes around the clock, and the business allows at most 15 minutes of downtime for the cutover, which is planned for a Sunday morning. The data center has a 1 Gbps link to Google Cloud. The team wants a managed migration tool instead of writing replication code. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          id: "dms",
+          title: "Database Migration Service overview",
+          url: "https://docs.cloud.google.com/database-migration/docs/overview",
+          claim: "Database Migration Service manages the initial snapshot and the ongoing replication. A continuous migration replicates changes after an initial full dump and load, and switching when source and destination are in sync gives minimal downtime. A one-time migration is a single point-in-time snapshot during which applications can take no new writes.",
+        },
+        {
+          id: "large-transfers",
+          title: "Migration to Google Cloud: Transferring your large datasets",
+          url: "https://docs.cloud.google.com/architecture/migration-to-google-cloud-transferring-your-large-datasets",
+          claim: "Ideally, transferring 100 TB takes about 12 days over a 1 Gbps network.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Create a Database Migration Service continuous migration job from the MySQL database to Cloud SQL, and promote the Cloud SQL instance during the Sunday cutover.",
+          feedback: "Correct. A continuous migration loads an initial dump and then replicates changes, so promoting the destination while both are in sync keeps the cutover downtime minimal.",
+          evidenceIds: ["dms"],
+        },
+        {
+          id: "b",
+          text: "Export the database with mysqldump on Sunday morning, copy the dump file to Cloud Storage, and import the file into the Cloud SQL instance.",
+          feedback: "Incorrect. A dump and import is a one-time copy that accepts no new writes while it runs, and at about 12 days per 100 TB over 1 Gbps, moving 3 TB alone takes hours.",
+          evidenceIds: ["dms", "large-transfers"],
+        },
+        {
+          id: "c",
+          text: "Create a Database Migration Service one-time migration job from the MySQL database to Cloud SQL, and switch the applications when the job finishes on Sunday.",
+          feedback: "Incorrect. A one-time migration is a point-in-time snapshot during which applications can take no new writes, which lasts far longer than the 15-minute window for 3 TB.",
+          evidenceIds: ["dms"],
+        },
+        {
+          id: "d",
+          text: "Write a script that reads the MySQL binary logs and applies the changes to Cloud SQL after an initial import, and switch over when the script catches up.",
+          feedback: "Incorrect. Applying binary log changes with a script is the replication code that the team does not want to write, while Database Migration Service manages the ongoing replication.",
+          evidenceIds: ["dms"],
+        },
+      ],
+      correctChoiceId: "a",
+    },
+    {
+      id: "pca-p1-implement-03",
+      kind: "single",
+      section: "implement",
+      objective: "5.1 Advising development and operation teams to ensure the successful deployment of the solution: 5.1.a application and infrastructure deployment",
+      prompt: "An online travel agency runs its pricing API on Cloud Run. A new version changes how fares are calculated, and the product owner wants it to reach customers gradually: first 5% of requests for a day while the team watches error rates and bookings, then more traffic in steps. If problems appear, all traffic must return to the current version within minutes and without a redeployment. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          id: "run-traffic",
+          title: "Rollbacks, gradual rollouts, and traffic migration",
+          url: "https://docs.cloud.google.com/run/docs/rollouts-rollbacks-traffic-migration",
+          claim: "Cloud Run lets you choose which revisions receive traffic and in what percentages, so you can roll back to a previous revision, gradually deploy a revision, and split traffic; a new revision can be deployed to serve no traffic and be tested through a tag.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Deploy the new version as a second Cloud Run service, and change the API's DNS record from the current service to the new one when the team is ready.",
+          feedback: "Incorrect. Changing the DNS record moves all customers at once rather than 5% first, and a second service adds an endpoint to run, while Cloud Run splits traffic between revisions of one service.",
+          evidenceIds: ["run-traffic"],
+        },
+        {
+          id: "b",
+          text: "Deploy the new version as a revision that serves no traffic, give it a tag for the team's own tests, and send all traffic to it after the tests pass.",
+          feedback: "Incorrect. A tagged revision lets the team test before release, but sending all traffic at once skips the gradual exposure of 5% that the product owner requires.",
+          evidenceIds: ["run-traffic"],
+        },
+        {
+          id: "c",
+          text: "Deploy the new version as a revision that serves no traffic, send 5% of traffic to it, and raise the share in steps, moving all traffic back if problems appear.",
+          feedback: "Correct. Cloud Run sends chosen percentages of traffic to a revision and can send all traffic back to a previous revision, so the rollout is gradual and the rollback needs no redeployment.",
+          evidenceIds: ["run-traffic"],
+        },
+        {
+          id: "d",
+          text: "Deploy the new version as a replacement for the current revision, and redeploy the previous container image if error rates rise after the release.",
+          feedback: "Incorrect. Replacing the revision sends every request to the new version at once, and redeploying the old image is the redeployment that the rollback must avoid.",
+          evidenceIds: ["run-traffic"],
+        },
+      ],
+      correctChoiceId: "c",
+    },
+    {
+      id: "pca-p1-implement-04",
+      kind: "single",
+      section: "implement",
+      objective: "5.1 Advising development and operation teams to ensure the successful deployment of the solution: 5.1.c testing frameworks",
+      prompt: "An online retailer expects ten times its normal traffic during a three-day sale in six weeks. Its checkout service runs on GKE and calls a Cloud SQL database and a third-party payment API. Last year the service failed during the sale because of a database connection limit that nobody had found in advance. The team must find capacity limits and bottlenecks before the sale without putting current customers' orders at risk. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          id: "load-testing",
+          title: "Plan resource allocation",
+          url: "https://docs.cloud.google.com/architecture/framework/performance-optimization/plan-resource-allocation",
+          claim: "Load test your application to find potential breakpoints and to understand how you can scale the application.",
+        },
+        {
+          id: "test-environment",
+          title: "Perform testing for recovery from failures",
+          url: "https://docs.cloud.google.com/architecture/framework/reliability/perform-testing-for-recovery-from-failures",
+          claim: "Choose a test environment, preferably a staging or sandbox environment that replicates the production setup, and if you test in production, have safety measures such as automated monitoring and manual rollback procedures ready.",
+        },
+        {
+          id: "cluster-autoscaler",
+          title: "About GKE cluster autoscaling",
+          url: "https://docs.cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler",
+          claim: "The cluster autoscaler resizes a Standard cluster's node pools based on workload demand, adding nodes when demand is high.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Run a load test against the production checkout service during business hours, and raise the load until errors appear so that the results reflect the real traffic patterns of customers.",
+          feedback: "Incorrect. Raising the load on production until errors appear can fail real customers' orders, while a staging environment that replicates production keeps them safe.",
+          evidenceIds: ["test-environment"],
+        },
+        {
+          id: "b",
+          text: "Increase the unit test coverage of the checkout service to 90%, and review the code paths that the sale traffic will exercise.",
+          feedback: "Incorrect. Code coverage does not reveal capacity limits or breakpoints, which a load test is needed to find.",
+          evidenceIds: ["load-testing"],
+        },
+        {
+          id: "c",
+          text: "Rely on the GKE cluster autoscaler and Horizontal Pod Autoscaling to add capacity automatically when the sale traffic arrives.",
+          feedback: "Incorrect. Autoscaling adds nodes and Pods when demand is high, but it does not reveal limits outside the cluster, such as the database connection limit that failed last year.",
+          evidenceIds: ["cluster-autoscaler", "load-testing"],
+        },
+        {
+          id: "d",
+          text: "Run a distributed load test at sale-level traffic against a staging environment that replicates production, with a stub for the payment API, and fix the limits that it finds.",
+          feedback: "Correct. A load test finds breakpoints and shows how the application scales, and a staging environment that replicates production keeps current customers' orders safe.",
+          evidenceIds: ["load-testing", "test-environment"],
+        },
+      ],
+      correctChoiceId: "d",
+    },
+    {
+      id: "pca-p1-implement-05",
+      kind: "single",
+      section: "implement",
+      objective: "5.2 Interacting with Google Cloud programmatically: 5.2.c cloud emulators",
+      prompt: "A gaming company's CI pipeline runs integration tests for a service that stores match results in Spanner. Each run creates a new Spanner instance, which adds minutes to every build and adds cloud costs, and parallel runs sometimes interfere through shared test data. The team wants fast, isolated tests that need no cloud resources, and it accepts that permissions and performance are tested separately before release. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          id: "spanner-emulator",
+          title: "Emulate Spanner locally",
+          url: "https://docs.cloud.google.com/spanner/docs/emulator",
+          claim: "The local, in-memory Spanner emulator offers the same APIs as the production service for local development and testing, not production. It loses all state on restart, client libraries use it when the SPANNER_EMULATOR_HOST environment variable is set, and it doesn't support authentication or IAM.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Start the Spanner emulator in each CI job, and point the service's client library at it by setting the SPANNER_EMULATOR_HOST environment variable for the tests.",
+          feedback: "Correct. The emulator runs in memory with the same APIs as Spanner, client libraries reach it through SPANNER_EMULATOR_HOST, and each job's emulator starts empty, so the tests are isolated and need no cloud resources.",
+          evidenceIds: ["spanner-emulator"],
+        },
+        {
+          id: "b",
+          text: "Keep one shared Spanner instance for all CI runs, and create a separate database in it for each run so that test data does not collide.",
+          feedback: "Incorrect. A shared instance is still a cloud resource that costs money and that every build depends on, while the emulator needs no cloud resources.",
+          evidenceIds: ["spanner-emulator"],
+        },
+        {
+          id: "c",
+          text: "Run the integration tests against the production Spanner database, and write test data with a prefix that the tests delete afterward.",
+          feedback: "Incorrect. Tests against the production database put production data at risk, while the emulator serves local development and testing.",
+          evidenceIds: ["spanner-emulator"],
+        },
+        {
+          id: "d",
+          text: "Replace the Spanner client library in the tests with hand-written mock objects that return fixed results for every query.",
+          feedback: "Incorrect. Mocks return fixed results instead of exercising the Spanner API, while the emulator offers the same APIs as the production service.",
+          evidenceIds: ["spanner-emulator"],
+        },
+      ],
+      correctChoiceId: "a",
+    },
+    {
+      id: "pca-p1-implement-06",
+      kind: "single",
+      section: "implement",
+      objective: "5.2 Interacting with Google Cloud programmatically: 5.2.d infrastructure as code",
+      prompt: "A platform team manages its Google Cloud network with Terraform. Each engineer runs terraform apply from a laptop, with the state in a local terraform.tfstate file that engineers copy between machines. Last week two engineers applied changes at the same time, and Terraform then tried to recreate firewall rules that already existed. The team wants to keep running Terraform from laptops for now and prevent this from happening again. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          id: "terraform-state",
+          title: "Store Terraform state in a Cloud Storage bucket",
+          url: "https://docs.cloud.google.com/docs/terraform/resource-management/store-state",
+          claim: "By default, Terraform stores state locally in terraform.tfstate, which makes Terraform difficult to use for teams when several users run it at the same time and each machine has its own understanding of the infrastructure. A remote state in a Cloud Storage bucket avoids this, and Object Versioning on the bucket preserves earlier versions of the state.",
+        },
+        {
+          id: "terraform-security",
+          title: "Best practices for security",
+          url: "https://docs.cloud.google.com/docs/terraform/best-practices/security",
+          claim: "Google recommends the Cloud Storage state backend, which locks the state to allow collaboration as a team and separates the state from version control; use gitignore so that state files are not committed to source control.",
+        },
+        {
+          id: "terraform-operations",
+          title: "Best practices for Terraform operations",
+          url: "https://docs.cloud.google.com/docs/terraform/best-practices/operations",
+          claim: "Don't modify Terraform state manually, because the state file maps the configuration to resources and its corruption can lead to major infrastructure problems.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Commit the terraform.tfstate file to the team's Git repository, and ask the engineers to pull the latest commit before every apply.",
+          feedback: "Incorrect. Google recommends keeping state files out of source control, and pulling before each apply does not lock the state against simultaneous runs.",
+          evidenceIds: ["terraform-security"],
+        },
+        {
+          id: "b",
+          text: "Delete the duplicated firewall rules by hand in the console, and edit the state file so that it matches the resources that exist.",
+          feedback: "Incorrect. Manual fixes treat this incident's symptom, and editing the state by hand risks the corruption that Google warns can cause major infrastructure problems.",
+          evidenceIds: ["terraform-operations"],
+        },
+        {
+          id: "c",
+          text: "Configure a Cloud Storage backend for the Terraform state so that every engineer uses one remote state, which is locked while an apply runs.",
+          feedback: "Correct. The Cloud Storage backend gives the team one remote state and locks it to allow collaboration, so two simultaneous applies cannot both change it.",
+          evidenceIds: ["terraform-state", "terraform-security"],
+        },
+        {
+          id: "d",
+          text: "Enable Object Versioning on a bucket that stores copies of each engineer's state file, so that an earlier state can be restored after a conflict.",
+          feedback: "Incorrect. Versioning preserves earlier state versions, but separate copies of the state are still not locked against simultaneous applies.",
+          evidenceIds: ["terraform-state", "terraform-security"],
+        },
+      ],
+      correctChoiceId: "c",
+    },
+    {
+      id: "pca-p1-implement-07",
+      kind: "multiple",
+      requiredSelections: 2,
+      section: "implement",
+      objective: "5.2 Interacting with Google Cloud programmatically: 5.2.e accessing Google API best practices",
+      prompt: "A logistics company's Cloud Run service publishes shipment events to a Pub/Sub topic by calling the Pub/Sub REST API with hand-written HTTP code. It authenticates with a service account key file that is stored in the container image, and some events are lost when publish requests fail with transient errors during traffic spikes. The security team prohibits key files, and the developers want transient publish failures retried without writing their own retry loops. Which two actions should you take?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          id: "adc",
+          title: "How Application Default Credentials works",
+          url: "https://docs.cloud.google.com/docs/authentication/application-default-credentials",
+          claim: "Application Default Credentials (ADC) searches the GOOGLE_APPLICATION_CREDENTIALS environment variable, then local ADC credentials, and then the attached service account that the metadata server returns; many Google Cloud services let you attach a service account.",
+        },
+        {
+          id: "client-libraries",
+          title: "Client libraries and Cloud APIs explained",
+          url: "https://docs.cloud.google.com/apis/docs/client-libraries-explained",
+          claim: "Cloud Client Libraries are the recommended way to access Cloud APIs, and they handle the low-level details of communication with the server, including authentication.",
+        },
+        {
+          id: "pubsub-retry",
+          title: "Retry requests",
+          url: "https://docs.cloud.google.com/pubsub/docs/retry-requests",
+          claim: "Retry settings control how the Pub/Sub client libraries retry publish requests, for example with exponential backoff, and Pub/Sub automatically retries messages after transient errors.",
+        },
+        {
+          id: "run-jobs-schedule",
+          title: "Execute jobs on a schedule",
+          url: "https://docs.cloud.google.com/run/docs/execute/jobs-on-schedule",
+          claim: "Cloud Scheduler can execute a Cloud Run job at a specified frequency.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Store the service account key in Secret Manager, and point the GOOGLE_APPLICATION_CREDENTIALS environment variable at the key when the service starts.",
+          feedback: "Incorrect. A key in Secret Manager is still a service account key file, which the security team prohibits, while ADC can use the service's attached service account instead.",
+          evidenceIds: ["adc"],
+        },
+        {
+          id: "b",
+          text: "Wrap each publish call in a loop that retries the request immediately until it succeeds, so that no shipment event is lost.",
+          feedback: "Incorrect. A retry loop is the hand-written retrying that the developers want to avoid, and the client library's retry settings already handle transient publish errors.",
+          evidenceIds: ["pubsub-retry"],
+        },
+        {
+          id: "c",
+          text: "Attach a user-managed service account with the Pub/Sub Publisher role to the Cloud Run service, and let the client library get credentials through Application Default Credentials.",
+          feedback: "Correct. When no key file is configured, ADC uses the attached service account through the metadata server, so the service authenticates without a key.",
+          evidenceIds: ["adc", "client-libraries"],
+        },
+        {
+          id: "d",
+          text: "Write each event to a Cloud Storage bucket first, and run a scheduled Cloud Run job that publishes the stored events to the topic later.",
+          feedback: "Incorrect. A bucket and a scheduled job add components to build and run, while the Pub/Sub client library retries transient publish failures itself.",
+          evidenceIds: ["run-jobs-schedule", "pubsub-retry"],
+        },
+        {
+          id: "e",
+          text: "Replace the hand-written HTTP code with the Pub/Sub client library, whose retry settings retry publish requests that fail with transient errors.",
+          feedback: "Correct. The Pub/Sub client library retries publish requests according to its retry settings, so transient failures are retried without custom loops.",
+          evidenceIds: ["pubsub-retry", "client-libraries"],
+        },
+      ],
+      correctChoiceIds: ["c", "e"],
+    },
+  ],
+} satisfies QuestionSection<"implement">;
