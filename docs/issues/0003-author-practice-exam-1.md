@@ -121,13 +121,13 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p1-operate-01 | single | 6.1.a | T10 | no | none | Blameless postmortems with tracked action items | b | D6, D3, D8 | L2, L6 |
-| pca-p1-operate-02 | single | 6.2.a | T10 | no | none | Managed Service for Prometheus with the existing instrumentation | a | D1, D3, D2 | L2, L4 |
-| pca-p1-operate-03 | multiple | 6.2.c | T6 | no | EHR Healthcare | SLO burn-rate alerts routed to an on-call channel (choose two) | a, c | D6, D3, D6 | L2, L4 |
-| pca-p1-operate-04 | single | 6.3.a | T10 | no | none | Rolling update with readiness probes and no unavailable replicas | d | D3, D7, D8 | L2, L4 |
-| pca-p1-operate-05 | single | 6.4.a | T4 | yes | none | Provisioned Throughput for predictable peak traffic to Gemini | c | D6, D2, D3 | L1, L2, L4 |
-| pca-p1-operate-06 | single | 6.5.a | T6 | no | none | Error budget policy that pauses feature releases | a | D6, D3, D8 | L2, L6 |
-| pca-p1-operate-07 | single | 6.6.a | T6 | no | none | Fault injection in a production-like environment to verify failover | b | D5, D6, D3 | L2, L6 |
+| pca-p1-operate-01 | single | 6.1.a | T10 | no | none | Blameless post-incident reviews with tracked action items | b | D3, D6, D8 | L2, L3 |
+| pca-p1-operate-02 | single | 6.2.a | T10 | no | none | Managed Service for Prometheus with the existing instrumentation | a | D1, D2, D3 | L3, L4 |
+| pca-p1-operate-03 | multiple | 6.2.c | T6 | no | EHR Healthcare | SLO burn-rate alerts routed to an on-call channel (choose two) | a, c | D6, D3, D6 | L3, L4 |
+| pca-p1-operate-04 | single | 6.3.a | T10 | no | none | Rolling update with a readiness probe and no unavailable Pods | d | D3, D7, D1 | L4, L7 |
+| pca-p1-operate-05 | single | 6.4.a | T4 | yes | none | Provisioned Throughput for predictable peak traffic to Gemini | c | D6, D2, D3 | L1, L4 |
+| pca-p1-operate-06 | single | 6.5.a | T6 | no | none | Error budget policy that pauses feature releases | a | D6, D3, D8 | L1, L4 |
+| pca-p1-operate-07 | single | 6.6.a | T6 | no | none | Failover test in a staging environment that replicates production | b | D5, D6, D3 | L1, L3 |
 
 ### Progress
 
@@ -155,3 +155,11 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
   - implement-05 uses the Spanner emulator instead of the Pub/Sub emulator, so that the section does not test Pub/Sub twice.
   - implement-07 tests Pub/Sub publishing, because the Cloud Storage client libraries retry uploads by default only when a precondition makes them idempotent.
   - The correct option is strictly the longest in 14 of 50 single-choice questions, so the `operate` section may add at most 4.
+- 2026-10-02: Authored the `operate` section (author `claude-opus-5.5-p1-operate-20261002`), so all six sections of the draft exist. The full draft has the following measurements:
+  - correct letters a, b, c, and d: 14 each;
+  - 4 choose-two questions;
+  - near-miss pairs in 43 questions;
+  - the correct option strictly longest in 16 of 56 single-choice questions;
+  - 16 case-study questions: EHR Healthcare 8 in six sections, Cymbal Retail 8 in four;
+  - median reading load: 183.5 words;
+  - the coverage matrix's allocation for every objective.
