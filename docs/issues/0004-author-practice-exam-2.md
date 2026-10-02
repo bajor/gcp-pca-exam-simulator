@@ -44,21 +44,21 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p2-design-01 | single | 1.1.a | T1 | no | KnightMotives Automotive | BigQuery sharing exchange that licenses curated data products to partners | a | D2, D5, D3 | L2, L4 |
-| pca-p2-design-02 | single | 1.1.b | T11 | yes | none | Latency requirement that selects a low-latency Gemini model | c | D2, D6, D3 | L2, L6 |
-| pca-p2-design-03 | single | 1.1.c | T6 | no | none | Recovery tiers set by the business impact of each system | b | D2, D3, D6 | L1, L2 |
-| pca-p2-design-04 | single | 1.1.h | T2 | no | KnightMotives Automotive | Spanner for strongly consistent global build-to-order inventory | d | D3, D7, D2 | L1, L2 |
-| pca-p2-design-05 | single | 1.2.a | T1 | no | none | Well-Architected sustainability pillar: region with a higher carbon-free energy share | a | D6, D2, D7 | L2, L3 |
-| pca-p2-design-06 | single | 1.2.c | T2 | no | none | Capacity that changes without redesign through managed autoscaling | c | D3, D1, D2 | L2, L4 |
-| pca-p2-design-07 | single | 1.2.d | T2 | no | none | Horizontally scalable design for stated growth | b | D3, D6, D2 | L2, L4 |
-| pca-p2-design-08 | single | 1.3.a | T5 | no | Altostrat Media | Google Distributed Cloud software on premises with GKE fleet management | d | D1, D3, D2 | L2, L4 |
-| pca-p2-design-09 | single | 1.3.d | T2 | no | KnightMotives Automotive | Pub/Sub and Dataflow streaming for vehicle telemetry | a | D3, D7, D1 | L2, L4 |
-| pca-p2-design-10 | single | 1.3.g | T9 | no | none | Custom machine type that avoids paying for unused vCPUs | c | D2, D3, D7 | L2, L6 |
-| pca-p2-design-11 | single | 1.3.b | T11 | yes | Altostrat Media | Gemini multimodal summarization of audio and video | b | D3, D1, D7 | L2, L4 |
-| pca-p2-design-12 | single | 1.4.a | T3 | no | none | API facade over the mainframe during migration | d | D8, D1, D3 | L2, L4 |
-| pca-p2-design-13 | single | 1.4.b | T3 | no | none | Agent-based Storage Transfer Service transfers from an on-premises file system | a | D3, D2, D1 | L2, L4 |
-| pca-p2-design-14 | single | 1.4.c | T4 | no | none | Overlapping IP ranges found before connecting plant networks | c | D6, D3, D8 | L2, L6 |
-| pca-p2-design-15 | single | 1.5.b | T1 | no | none | Event-driven design that admits future consumers without changing producers | b | D2, D3, D6 | L2, L4 |
+| pca-p2-design-01 | single | 1.1.a | T1 | no | KnightMotives Automotive | BigQuery sharing listings that license curated datasets to partners without copies | a | D5, D5, D4 | L2, L4 |
+| pca-p2-design-02 | single | 1.1.b | T11 | yes | none | Location requirement that selects the eu multi-region endpoint for Gemini | c | D5, D4, D7 | L1, L2 |
+| pca-p2-design-03 | single | 1.1.c | T6 | no | none | Recovery tiers set by the business impact of each system | b | D2, D3, D4 | L1, L2 |
+| pca-p2-design-04 | single | 1.1.h | T2 | no | KnightMotives Automotive | Spanner multi-region configuration for consistent global build-to-order reservations | d | D4, D3, D1 | L1, L2 |
+| pca-p2-design-05 | single | 1.2.a | T1 | no | none | Well-Architected sustainability pillar: low-carbon region within the residency limits | a | D5, D3, D6 | L2, L3 |
+| pca-p2-design-06 | single | 1.2.c | T2 | no | none | Managed instance group autoscaling that can shrink outside the peak | c | D7, D1, D2 | L2, L4 |
+| pca-p2-design-07 | single | 1.2.d | T2 | no | none | Memorystore for Redis Cluster shards for write and memory growth | b | D3, D7, D1 | L2, L4 |
+| pca-p2-design-08 | single | 1.3.a | T5 | no | Altostrat Media | Google Distributed Cloud software on premises with GKE fleet management | d | D1, D4, D3 | L2, L4 |
+| pca-p2-design-09 | single | 1.3.d | T2 | no | KnightMotives Automotive | Dataflow streaming with event-time windows that allow late data | a | D7, D3, D1 | L2, L4 |
+| pca-p2-design-10 | single | 1.3.g | T9 | no | none | Custom machine type that avoids paying for unused vCPUs | c | D2, D3, D7 | L2, L7 |
+| pca-p2-design-11 | single | 1.3.b | T11 | yes | Altostrat Media | Gemini multimodal summarization of audio and video | b | D7, D1, D6 | L2, L4 |
+| pca-p2-design-12 | single | 1.4.a | T3 | no | none | API facade over the mainframe during migration | d | D1, D3, D8 | L2, L4 |
+| pca-p2-design-13 | single | 1.4.b | T3 | no | none | Agent-based Storage Transfer Service transfers from an on-premises file system | a | D3, D1, D7 | L2, L4 |
+| pca-p2-design-14 | single | 1.4.c | T4 | no | none | Overlapping IP ranges found before connecting plant networks | c | D6, D7, D3 | L2, L4 |
+| pca-p2-design-15 | single | 1.5.b | T1 | no | none | Event-driven design that admits future consumers without changing producers | b | D3, D3, D7 | L2, L4 |
 
 ### Plan: provision
 
@@ -133,3 +133,8 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
 ### Progress
 
 - 2026-10-02: Planned all 60 questions.
+- 2026-10-02: Authored the `design` section (author `claude-opus-5.5-p2-design-20261002`).
+  - design-02 tests the location requirement that selects the eu multi-region endpoint instead of a latency requirement, because Google documents where each endpoint processes data, while latency comparisons between models change with each model release.
+  - Before handoff, every distractor was checked against a stated constraint. design-01, design-06, design-12, and design-15 gained the constraints that rule out copies for partners, a platform move, a delayed launch, and reactions slower than seconds.
+  - Every design question has a near-miss pair, and the correct option is strictly the longest in 2 of 15 questions, so the remaining 41 single-choice questions may add at most 16.
+  - The product names page now lists BigQuery sharing, formerly Analytics Hub.

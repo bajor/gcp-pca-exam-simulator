@@ -66,6 +66,7 @@ Compute Engine, Spot VMs, Cloud Run, Config Sync, Google Cloud VMware Engine, Mi
 |---|---|---|
 | Cloud Spanner | Spanner | Documentation title [18] |
 | Cloud Bigtable | Bigtable | Documentation title [19] |
+| Analytics Hub | BigQuery sharing | Documentation states the former name; IAM roles keep the name Analytics Hub [33] |
 | Cloud Composer | Managed Service for Apache Airflow | Documentation title [20] |
 | Dataproc, Serverless for Apache Spark | Managed Service for Apache Spark | Documentation states the former names [21] |
 | Dataplex Universal Catalog | Knowledge Catalog | Renamed on April 10, 2026; API, client library, CLI, and IAM names are unchanged [22] |
@@ -158,3 +159,5 @@ Sources were fetched on 2026-10-01. Re-check this page before authoring each new
 [31] GOOGLE CLOUD. **Security Command Center overview**. Available at: <https://docs.cloud.google.com/security-command-center/docs/security-command-center-overview>. Accessed on: 2026-10-01.
 
 [32] GOOGLE CLOUD BLOG. **Introducing Gemini Enterprise Agent Platform, powering the next wave of agents**. Published 2026-04-22. Available at: <https://cloud.google.com/blog/products/ai-machine-learning/introducing-gemini-enterprise-agent-platform>. Accessed on: 2026-10-01.
+
+[33] GOOGLE CLOUD. **Introduction to BigQuery sharing**. Available at: <https://docs.cloud.google.com/bigquery/docs/analytics-hub-introduction>. Accessed on: 2026-10-02.
