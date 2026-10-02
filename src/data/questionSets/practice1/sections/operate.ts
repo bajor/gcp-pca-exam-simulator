@@ -110,7 +110,7 @@ export const practiceExamOneOperateSection = {
       section: "operate",
       objective: "6.2 Familiarity with Google Cloud Observability solutions: 6.2.c alerting strategies",
       caseStudyId: "ehr-healthcare",
-      prompt: "EHR Healthcare's monitoring sends alerts by email to a shared mailbox, where they are often ignored, and many alerts fire on high CPU usage that never affects customers. EHR wants to act early on problems that threaten the 99.9% availability that its customer-facing systems must meet, and it wants each of those alerts to reach the engineer on call within minutes. Which two actions should you take?",
+      prompt: "EHR Healthcare's monitoring sends alerts by email to a shared mailbox, where they are often ignored, and many alerts fire on high CPU usage that never affects customers. EHR wants to act early on problems that threaten the 99.9% availability that its customer-facing systems must meet, and it wants each of those alerts to reach the engineer on call within minutes. What should you do? Choose two.",
       verifiedOn: "2026-10-02",
       evidence: [
         {
