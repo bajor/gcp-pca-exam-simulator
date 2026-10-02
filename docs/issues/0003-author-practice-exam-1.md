@@ -150,6 +150,7 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
   - The rows above record each question's final mechanisms and levers.
 - 2026-10-02: Authored the `analyze` section (author `claude-opus-5.5-p1-analyze-20261002`).
   - analyze-02 tests Gemini content filter thresholds instead of a prompt rollback, because the style guide counts a question as AI-decisive only when its answer depends on an AI product, model, or control.
+  - analyze-04 counts as T11, AI solution design, because its decision is which Agent Platform capability validates a generative AI change before release. T11 is exactly at its minimum of 4.
   - The correct option is now strictly the longest in 14 of 44 single-choice questions, so the last 12 single-choice questions may add at most 4.
 - 2026-10-02: Authored the `implement` section (author `claude-opus-5.5-p1-implement-20261002`).
   - implement-05 uses the Spanner emulator instead of the Pub/Sub emulator, so that the section does not test Pub/Sub twice.
