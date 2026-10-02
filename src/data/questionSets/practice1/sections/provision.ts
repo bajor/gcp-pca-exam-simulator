@@ -22,7 +22,7 @@ export const practiceExamOneProvisionSection = {
       section: "provision",
       objective: "2.1 Configuring network topologies: 2.1.a extending to on-premises environments",
       caseStudyId: "ehr-healthcare",
-      prompt: "EHR Healthcare will keep its older insurance-provider integrations in its colocation facility while the systems that call them move to Google Cloud, and EHR needs a secure, high-performance link from that facility to Google Cloud. The network team has ordered one Dedicated Interconnect connection with a VLAN attachment to a Cloud Router in the nearest region. The facility is the only one in its metro that offers Dedicated Interconnect, and both edge availability domains are available there. The integrations exchange files in batches and tolerate brief interruptions, but the connection must qualify for an uptime SLA from Google at the lowest cost. What should you do?",
+      prompt: "EHR Healthcare will keep its older insurance-provider integrations at an on-premises colocation site while the systems that call them move to Google Cloud, and EHR needs a secure, high-performance link from that site to Google Cloud. The network team has ordered one Dedicated Interconnect connection with a VLAN attachment to a Cloud Router in the nearest region. The site is the only facility in its metro that offers Dedicated Interconnect, and both edge availability domains are available there. The integrations exchange files in batches and tolerate brief interruptions, but the connection must qualify for an uptime SLA from Google at the lowest cost. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -33,7 +33,7 @@ export const practiceExamOneProvisionSection = {
           id: "interconnect-overview",
           title: "Dedicated Interconnect overview",
           url: "https://docs.cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview",
-          claim: "Topologies for 99.99% and 99.9% availability provide uptime SLAs, and a single Dedicated Interconnect connection doesn't provide an uptime SLA.",
+          claim: "The SLA requires properly configured topologies that are defined by the 99.99% and 99.9% configurations, and a topology with a single Dedicated Interconnect connection doesn't provide an uptime SLA.",
         },
         {
           id: "availability-999",
@@ -76,7 +76,7 @@ export const practiceExamOneProvisionSection = {
         {
           id: "d",
           text: "Order three more Dedicated Interconnect connections so that two metros each have a connection in both edge availability domains, with VLAN attachments and Cloud Routers in two regions.",
-          feedback: "Incorrect. Four connections in two metros with Cloud Routers in two regions meet the 99.99% requirements, but each connection and VLAN attachment adds an hourly charge, so this costs more than the 99.9% topology.",
+          feedback: "Incorrect. This is the connection layout of the multi-region 99.99% topology, but each connection and VLAN attachment adds an hourly charge, so it costs more than the 99.9% topology.",
           evidenceIds: ["availability-9999", "interconnect-pricing"],
         },
       ],
@@ -87,7 +87,7 @@ export const practiceExamOneProvisionSection = {
       kind: "single",
       section: "provision",
       objective: "2.1 Configuring network topologies: 2.1.c security protection",
-      prompt: "A payments company runs a web tier and an application tier on Compute Engine VMs in one VPC network. A security assessment found that the application tier uses a library with a known vulnerability that its vendor will not fix until next quarter. Until then, the security team requires that all traffic from the web tier to the application tier be inspected for exploit attempts that match known threat signatures and that matching traffic be blocked, not only reported. The network team must not deploy or operate any network appliances. What should you do?",
+      prompt: "A payments company runs a web tier and an application tier on Compute Engine VMs in one VPC network. A security assessment found that the application tier uses a library with a known vulnerability that its vendor will not fix until next quarter. Until then, the security team requires that all traffic from the web tier to the application tier be inspected for exploit attempts that match known threat signatures and that matching traffic be blocked, not only reported. The network team must not run or maintain any appliance VMs of its own. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -100,7 +100,7 @@ export const practiceExamOneProvisionSection = {
           id: "firewall-endpoints",
           title: "Firewall endpoint overview",
           url: "https://docs.cloud.google.com/firewall/docs/about-firewall-endpoints",
-          claim: "A firewall endpoint is a zonal Cloud NGFW resource that enables Layer 7 protection such as the intrusion detection and prevention service.",
+          claim: "A firewall endpoint is a zonal Cloud NGFW resource that enables Layer 7 protection such as the intrusion detection and prevention service, and Google provides its dedicated VMs. Interception requires associating the VPC network with the endpoint and a firewall policy rule with the apply_security_profile_group action.",
         },
         {
           id: "cloud-ids",
@@ -136,14 +136,14 @@ export const practiceExamOneProvisionSection = {
         },
         {
           id: "c",
-          text: "Create Cloud NGFW firewall endpoints in the application tier's zones, and add a firewall policy rule that sends traffic from the web tier to them for intrusion prevention.",
-          feedback: "Correct. Firewall policy rules send the matched traffic to Google-managed firewall endpoints, which inspect it at Layer 7 for threat signatures and block threats, with no appliances to operate.",
+          text: "Create Cloud NGFW firewall endpoints in the application tier's zones, associate them with the VPC network, and add a firewall policy rule that applies a threat prevention security profile group to web-tier traffic.",
+          feedback: "Correct. The firewall policy rule sends matched web-tier traffic to the associated firewall endpoints, which inspect it at Layer 7 for threat signatures and block threats, with no appliance VMs for the team to run.",
           evidenceIds: ["intrusion-prevention", "firewall-endpoints"],
         },
         {
           id: "d",
-          text: "Deploy a pair of third-party firewall appliances on Compute Engine VMs with multiple network interfaces, and route traffic from the web tier to the application tier through them.",
-          feedback: "Incorrect. Appliance software on VMs with multiple network interfaces can inspect packets, but the network team would deploy and operate the appliances, which the requirement rules out.",
+          text: "Deploy a pair of third-party firewall appliances on Compute Engine VMs with multiple network interfaces, and route all traffic from the web tier to the application tier through those appliances for inspection and blocking.",
+          feedback: "Incorrect. Appliance software on VMs with multiple network interfaces can inspect packets, but the network team would run and maintain the appliance VMs itself, which the requirement rules out.",
           evidenceIds: ["multi-nic", "intrusion-prevention"],
         },
       ],
@@ -221,7 +221,7 @@ export const practiceExamOneProvisionSection = {
       kind: "single",
       section: "provision",
       objective: "2.2 Configuring individual storage systems: 2.2.e data retention and data lifecycle management",
-      prompt: "An insurance company stores scanned claim documents in a Cloud Storage bucket whose default storage class is Standard. Adjusters read each document several times while its claim is processed during the first 30 days after upload. After that, a document is read only if its claim is disputed, which happens to fewer than 1% of documents per year. The company keeps each document for 7 years and then deletes it, and the bucket grows by about 40 TB each month. You need to minimize the storage costs for this access pattern. What should you do?",
+      prompt: "An insurance company stores scanned claim documents in a Cloud Storage bucket whose default storage class is Standard. Adjusters read each document several times while its claim is processed during the first 30 days after upload. After that, a document is read only if its claim is disputed, which happens to fewer than 1% of documents per year. The company keeps each document for 7 years and then deletes it, and the bucket grows by about 40 TB each month. You need to minimize the total cost of storing and reading the documents. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -246,25 +246,25 @@ export const practiceExamOneProvisionSection = {
       choices: [
         {
           id: "a",
-          text: "Enable Autoclass on the bucket with Archive storage as the terminal storage class, and add a lifecycle rule that deletes objects when they are 2,555 days old.",
+          text: "Enable Autoclass on the bucket with Archive storage as the terminal storage class, and add a lifecycle rule that deletes objects when they are 2,557 days old.",
           feedback: "Incorrect. Autoclass moves a document to Archive storage only after 365 days without access, after periods in Standard, Nearline, and Coldline storage, and it adds a management fee. A lifecycle rule can move the documents at 30 days because their access pattern is known.",
           evidenceIds: ["autoclass", "lifecycle"],
         },
         {
           id: "b",
-          text: "Change the bucket's default storage class to Archive storage, and add a lifecycle rule that deletes objects when they are 2,555 days old.",
+          text: "Change the bucket's default storage class to Archive storage, and add a lifecycle rule that deletes objects when they are 2,557 days old.",
           feedback: "Incorrect. Archive storage has higher costs for data access, so storing new documents there adds charges for every read during the first 30 days, when adjusters read each document several times.",
           evidenceIds: ["storage-classes"],
         },
         {
           id: "c",
-          text: "Add lifecycle rules that change objects to Coldline storage when they are 30 days old and delete objects when they are 2,555 days old.",
+          text: "Add lifecycle rules that change objects to Coldline storage when they are 30 days old and delete objects when they are 2,557 days old.",
           feedback: "Incorrect. Coldline storage suits data read about once a quarter, and for documents read less than once a year, Archive storage has lower storage costs.",
           evidenceIds: ["storage-classes", "lifecycle"],
         },
         {
           id: "d",
-          text: "Add lifecycle rules that change objects to Archive storage when they are 30 days old and delete objects when they are 2,555 days old.",
+          text: "Add lifecycle rules that change objects to Archive storage when they are 30 days old and delete objects when they are 2,557 days old.",
           feedback: "Correct. After the 30 days of frequent reads, lifecycle rules move each document to Archive storage, the lowest-cost class for data read less than once a year, and delete it after 7 years.",
           evidenceIds: ["lifecycle", "storage-classes"],
         },
@@ -344,7 +344,7 @@ export const practiceExamOneProvisionSection = {
           id: "backup-vault",
           title: "Backup vaults for immutable and indelible backups",
           url: "https://docs.cloud.google.com/backup-disaster-recovery/docs/concepts/backup-vault",
-          claim: "After an enforced retention period is configured for a backup vault, its backups cannot be manually deleted by any user or by Google until the period passes.",
+          claim: "After an enforced retention period is configured for a backup vault, its backups cannot be manually deleted by any user or by Google until the period passes, and after the effective date of a lock, no one, not even a Project Owner, can decrease the retention period.",
         },
         {
           id: "backup-plans",
@@ -380,14 +380,14 @@ export const practiceExamOneProvisionSection = {
         },
         {
           id: "b",
-          text: "Create a backup vault with a 30-day minimum enforced retention, and apply a Backup and DR backup plan that backs up the instance daily into the vault.",
-          feedback: "Correct. Nobody, including Google, can delete the vault's backups until the enforced retention passes, and the backup plan backs up the instance daily without custom jobs.",
+          text: "Create a backup vault with a locked 30-day minimum enforced retention, and apply a Backup and DR backup plan that backs up the instance daily into the vault.",
+          feedback: "Correct. Nobody, including Google, can delete the vault's backups until the enforced retention passes, the lock stops even a project owner from shortening it, and the backup plan backs up the instance daily without custom jobs.",
           evidenceIds: ["backup-vault", "backup-plans"],
         },
         {
           id: "c",
           text: "Run a daily Cloud Run job that exports the database to a Cloud Storage bucket in a separate project with Object Versioning enabled.",
-          feedback: "Incorrect. The team would write and run the export job, and an attacker can still delete noncurrent object versions by naming their generation numbers.",
+          feedback: "Incorrect. The team would write and run the export job, and anyone with delete permission on that bucket, including its project's owners, can still delete noncurrent versions by naming their generation numbers.",
           evidenceIds: ["object-versioning"],
         },
         {
@@ -575,7 +575,7 @@ export const practiceExamOneProvisionSection = {
       kind: "single",
       section: "provision",
       objective: "2.4 Leveraging Gemini Enterprise Agent Platform for end-to-end ML workflows: 2.4.a using Agent Platform Pipelines to automate and orchestrate the ML lifecycle",
-      prompt: "A bank's data science team retrains a credit-risk model every month by running six notebooks by hand, in order: data extraction from BigQuery, validation, feature engineering, training, evaluation, and model registration. Steps are sometimes skipped or run on the wrong data. Auditors now require a record of the data, parameters, and artifacts behind every registered model, and the team wants retraining to run monthly without operating servers or a Kubernetes cluster. What should you do?",
+      prompt: "A bank's data science team retrains a credit-risk model every month by running six notebooks by hand, in order: data extraction from BigQuery, validation, feature engineering, training, evaluation, and model registration. Steps are sometimes skipped or run on the wrong data, and each step must start only after the previous step succeeds. Auditors now require a record of the data, parameters, and artifacts behind every registered model, and the team wants retraining to run monthly without operating servers or a Kubernetes cluster. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -664,9 +664,9 @@ export const practiceExamOneProvisionSection = {
         },
         {
           id: "speech-to-text",
-          title: "Cloud Speech-to-Text overview",
-          url: "https://docs.cloud.google.com/speech-to-text/docs/v1/speech-to-text-requests",
-          claim: "Speech-to-Text performs speech recognition on audio data and returns the recognized text.",
+          title: "Cloud Speech-to-Text documentation",
+          url: "https://docs.cloud.google.com/speech-to-text/docs",
+          claim: "Cloud Speech-to-Text receives audio and returns a text transcription.",
         },
       ],
       choices: [

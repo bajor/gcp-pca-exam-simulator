@@ -64,7 +64,7 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
 | pca-p1-provision-01 | single | 2.1.a | T5 | no | EHR Healthcare | Second connection in the other edge availability domain, the cheapest topology with an uptime SLA | b | D7, D4, D2 | L2, L4, L6 |
-| pca-p1-provision-02 | single | 2.1.c | T7 | no | none | Cloud NGFW intrusion prevention, which blocks threats inline instead of only detecting them | c | D7, D3, D1 | L2, L4 |
+| pca-p1-provision-02 | single | 2.1.c | T7 | no | none | Cloud NGFW intrusion prevention, which blocks threats inline instead of only detecting them | c | D3, D7, D1 | L3, L4 |
 | pca-p1-provision-03 | single | 2.1.d | T5 | no | none | Private Service Connect with a consumer accept list for consumers with overlapping IP ranges | a | D3, D4, D5 | L2, L4 |
 | pca-p1-provision-04 | single | 2.2.e | T9 | no | none | Lifecycle rule that moves objects to Archive storage at a known age, instead of Autoclass | d | D7, D7, D7 | L2, L3, L4, L6 |
 | pca-p1-provision-05 | single | 2.2.d | T2 | no | none | Bigtable clusters in each region with an app profile that uses multi-cluster routing | d | D1, D7, D3 | L2, L4 |
