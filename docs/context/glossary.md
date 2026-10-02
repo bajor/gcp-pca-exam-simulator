@@ -116,6 +116,10 @@ A numbered item under an exam-guide section, such as "2.3 Configuring compute sy
 
 One of the six weighted parts of the exam guide. The code identifies them as `design` (Designing and planning a cloud solution architecture), `provision` (Managing and provisioning a cloud solution infrastructure), `secure` (Designing for security and compliance), `analyze` (Analyzing and optimizing technical and business processes), `implement` (Managing implementation), and `operate` (Ensuring solution and operations excellence).
 
+## Feasibility check
+
+Rule 4 of the coverage matrix. A set passes when, for every objective, the testable considerations that no registered practice exam uses as a primary topic do not outnumber the questions that the practice exams still to be written will give that objective, so that covering every testable consideration across Practice Exams 1 to 3 stays possible.
+
 ## GA
 
 Generally Available. A product or feature without a Preview label. Practice questions make only GA features decisive.
@@ -162,7 +166,7 @@ A question that states the required number of choices and is correct only when t
 
 ## Near-miss pair
 
-Two options that share the same skeleton and differ in one decisive component, so the candidate must read both to the end. The style guide measures it as two options that share a run of at least 7 identical words, ignoring case and punctuation.
+Two options that share the same skeleton and differ in one decisive component, so the candidate must read both to the end. The style guide measures it as two options that share a run of at least 7 identical words, ignoring letter case and punctuation at the start or end of a word.
 
 ## OIDC
 

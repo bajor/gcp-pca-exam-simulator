@@ -25,11 +25,11 @@ Sources: the Agent Platform name-change page [4], the exam guide [2], and the do
 | Former name | Name to use in questions | Note |
 |---|---|---|
 | Vertex AI | Agent Platform (Gemini Enterprise Agent Platform) | The guide writes "Gemini Enterprise Agent Platform" in objective 2.4. |
-| Vertex AI Agent Builder | Agent Builder, the guide's name in objective 1.3 | Its former documentation URL redirects to the Agent Platform overview [5], and the Agent Search documentation lists Agent Builder among its former names [6]; cite those pages. |
+| Vertex AI Agent Builder | Agent Builder, the guide's name in objective 1.3 | Its former documentation URL redirects to the Agent Platform overview [5], and the Agent Search documentation lists Agent Builder among its former names [6]. No current page describes Agent Builder itself, so a question that uses the name must make a specific current product decisive, such as Agent Search or Agent Runtime, and cite that product's page. |
 | Vertex AI Pipelines | Agent Platform Pipelines | Named in the guide. |
 | Vertex AI Model Garden | Model Garden | Named in the guide. |
 | Vertex AI Search | Agent Search | The documentation states that the product is being renamed [6]. |
-| Vertex AI Search for commerce, Retail API | AI Commerce Search in Gemini Enterprise for Customer Experience | Documentation title [7]. The Cymbal Retail case study calls the capability "Discovery AI". |
+| Vertex AI Search for commerce, Retail API | AI Commerce Search | The documentation title [7] reads "AI Commerce Search in Gemini Enterprise for Customer Experience", and the name-change page [4] writes "on" instead of "in". The Cymbal Retail case study calls the capability "Discovery AI". |
 | Vertex AI Agent Engine | Agent Runtime | |
 | Vertex AI Workbench, Colab Enterprise | Agent Platform Workbench, Colab Enterprise | |
 | NotebookLM Enterprise | NotebookLM, the guide's name in objective 2.5 | The documentation title is Gemini Notebook Enterprise, and IAM roles keep the NotebookLM name [8]. |
@@ -81,7 +81,7 @@ A product on this list may appear as context or as a distractor whose feedback s
 | Product | Status on 2026-10-01 | Source |
 |---|---|---|
 | Gemini Cloud Assist | A Preview offering under the Pre-GA Offering Terms, although the guide names it in objectives 1.2 and 5.1 | [25] |
-| Gemini Notebook Enterprise search-source integration | Public Preview | [8] |
+| NotebookLM (Gemini Notebook Enterprise) search-source integration | Public Preview | [8] |
 | Video Intelligence API | Deprecated on September 14, 2026, with shutdown on September 14, 2027 | [26] |
 | Deployment Manager | End of support on March 31, 2026; use Infrastructure Manager or Terraform | [27] |
 | Cloud Source Repositories | Unavailable to new customers since June 17, 2024 | [28] |
