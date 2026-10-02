@@ -61,7 +61,7 @@ export const practiceExamOneSecureSection = {
           id: "service-account-credentials",
           title: "Service account credentials",
           url: "https://docs.cloud.google.com/iam/docs/service-account-creds",
-          claim: "Service account keys are long-lived credentials, which create more risk than short-lived credentials.",
+          claim: "Service account keys are long-lived credentials, which create more risk than short-lived credentials, and by default a user-managed service account key never expires.",
         },
         {
           id: "run-jobs-schedule",
@@ -86,7 +86,7 @@ export const practiceExamOneSecureSection = {
         {
           id: "c",
           text: "Create a service account with the Storage Object Viewer role on the bucket, and give the auditors a key for it that the security team deletes after the deadline.",
-          feedback: "Incorrect. A service account key is a long-lived credential that keeps working until someone deletes it, so the access does not end automatically.",
+          feedback: "Incorrect. A user-managed service account key is a long-lived credential that never expires by default, so the access does not end automatically.",
           evidenceIds: ["service-account-credentials"],
         },
         {
@@ -153,7 +153,7 @@ export const practiceExamOneSecureSection = {
       requiredSelections: 2,
       section: "secure",
       objective: "3.1 Designing for security: 3.1.d separation of duties",
-      prompt: "A bank encrypts the backups of its payments database in Cloud Storage with a customer-managed key in Cloud KMS. Regulators require separation of duties for encryption keys: the central security team must manage the lifecycle of all keys, application teams and their workloads may only use keys to encrypt and decrypt, and nobody who administers a key may also use it or access the data that it protects. Which two actions should you take?",
+      prompt: "A bank's backup job encrypts each backup of its payments database with a data key, wraps the data key with a Cloud KMS key, and stores the backup in Cloud Storage. Regulators require separation of duties for encryption keys: the central security team must manage the lifecycle of all keys, application teams and their workloads may only use keys to encrypt and decrypt, and nobody who administers a key may also use it or access the data that it protects. What should you do? Choose two.",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -173,13 +173,13 @@ export const practiceExamOneSecureSection = {
         {
           id: "b",
           text: "Create each key in its application's own project, and grant the application team the Owner role on that project so that it can manage and use the key.",
-          feedback: "Incorrect. An Owner can hold both administrative and cryptographic permissions on the key, which is the combination that separation of duties forbids.",
+          feedback: "Incorrect. The application team, not the central security team, would manage the key's lifecycle, and an Owner can hold both administrative and cryptographic permissions on the key, which separation of duties forbids.",
           evidenceIds: ["kms-separation"],
         },
         {
           id: "c",
           text: "Grant the application's service account both the Cloud KMS Admin role and the Cloud KMS CryptoKey Encrypter/Decrypter role on its key so that it can rotate and use it.",
-          feedback: "Incorrect. Separation of duties requires that key managers, such as holders of Cloud KMS Admin, and key users, such as holders of Encrypter/Decrypter, be different principals.",
+          feedback: "Incorrect. The service account would manage the key's lifecycle, which belongs to the central security team, and separation of duties requires key managers and key users to be different principals.",
           evidenceIds: ["kms-separation"],
         },
         {
@@ -202,7 +202,7 @@ export const practiceExamOneSecureSection = {
       kind: "single",
       section: "secure",
       objective: "3.1 Designing for security: 3.1.e security controls",
-      prompt: "A biotech company stores research data in BigQuery datasets and Cloud Storage buckets in three projects, and its analysts query the data from the corporate network. A risk assessment found that an analyst, or an attacker with an analyst's stolen credentials, could use the analyst's legitimate read access to copy the data into a dataset or bucket in a project that the company does not control. The security team must block such copies while the analysts keep their access from the corporate network. What should you do?",
+      prompt: "A biotech company stores research data in BigQuery datasets and Cloud Storage buckets in three projects, and its analysts query the data from the corporate network over the internet. A risk assessment found that an analyst, or an attacker with an analyst's stolen credentials, could use the analyst's legitimate read access to copy the data into a dataset or bucket in a project that the company does not control. The security team must block such copies while the analysts keep their access from the corporate network. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -265,7 +265,7 @@ export const practiceExamOneSecureSection = {
           id: "protection-levels",
           title: "Protection levels",
           url: "https://docs.cloud.google.com/kms/docs/protection-levels",
-          claim: "Software keys use FIPS 140-3 Level 1 validated primitives and are the cheapest protection level. HSM keys are used in FIPS 140-2 Level 3 validated HSMs in a fully managed service. Cloud EKM keys are generated and stored in an external key management partner system.",
+          claim: "Software keys use FIPS 140-3 Level 1 validated primitives and are the cheapest protection level. HSM keys are used in FIPS 140-2 Level 3 validated HSMs in a fully managed service, and single-tenant Cloud HSM costs more than multi-tenant Cloud HSM. Cloud EKM keys are generated and stored in an external key management partner system, and Cloud EKM protection levels are the most expensive.",
         },
         {
           id: "cmek-services",
@@ -290,7 +290,7 @@ export const practiceExamOneSecureSection = {
         {
           id: "c",
           text: "Create Cloud KMS keys with the HSM protection level, and configure Cloud SQL and Cloud Storage to use them as customer-managed encryption keys.",
-          feedback: "Correct. Cloud HSM performs the key operations in FIPS 140-2 Level 3 validated HSMs that Google manages, and the company controls the keys as customer-managed encryption keys.",
+          feedback: "Correct. Cloud HSM performs the key operations in FIPS 140-2 Level 3 validated HSMs that Google manages, the company controls the keys as customer-managed encryption keys, and it costs less than Cloud EKM or single-tenant Cloud HSM.",
           evidenceIds: ["protection-levels", "cmek", "cmek-services"],
         },
         {
@@ -362,7 +362,7 @@ export const practiceExamOneSecureSection = {
       kind: "single",
       section: "secure",
       objective: "3.1 Designing for security: 3.1.h securing software supply chain",
-      prompt: "A fintech company deploys microservices to a production GKE cluster from a Cloud Build pipeline that runs its tests and security checks. An incident review found that an engineer had deployed an image built on a laptop directly to the cluster with kubectl, bypassing the pipeline. The security team requires that the cluster run only images that the pipeline built and checked, and that any other deployment be rejected when it is attempted, whoever attempts it. What should you do?",
+      prompt: "A fintech company deploys microservices to a production GKE cluster from a Cloud Build pipeline that runs its tests and security checks. An incident review found that an engineer had deployed an image built on a laptop directly to the cluster with kubectl, bypassing the pipeline. The security team requires that the cluster run only images that the pipeline built and checked, and that the cluster block any other deployment when it is attempted, rather than only log it. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -435,26 +435,26 @@ export const practiceExamOneSecureSection = {
           id: "model-armor",
           title: "Model Armor overview",
           url: "https://docs.cloud.google.com/model-armor/overview",
-          claim: "Model Armor screens LLM prompts and responses, filtering both inputs and outputs, to protect against prompt injection and jailbreak attacks and to reduce the risk of leaking personally identifiable information in prompts or responses.",
+          claim: "Model Armor screens LLM prompts and responses, filtering both inputs and outputs, to protect against prompt injection and jailbreak attacks and to reduce the risk of leaking personally identifiable information. Its basic Sensitive Data Protection configuration covers a fixed set of categories, such as credit card and US Social Security numbers, while its advanced configuration uses Sensitive Data Protection templates for more detection rules.",
         },
         sensitiveDataInspection,
       ],
       choices: [
         {
           id: "a",
-          text: "Send each customer message to Model Armor for prompt injection and jailbreak screening, and return the model's answers to customers without screening them.",
+          text: "Send each customer message to Model Armor for prompt injection and jailbreak screening, and return each model answer to the customer as soon as the model generates it, without any screening.",
           feedback: "Incorrect. Screening only the incoming messages blocks injection attempts, but answers that contain other customers' phone numbers still reach customers.",
           evidenceIds: ["model-armor"],
         },
         {
           id: "b",
-          text: "Send each customer message to Model Armor for prompt injection and jailbreak screening, and send each model answer to Model Armor for sensitive data screening.",
-          feedback: "Correct. Model Armor screens prompts for prompt injection and jailbreak attempts and screens responses for personal data before they are passed on, which covers both risks found in testing.",
+          text: "Send each customer message to Model Armor for prompt injection and jailbreak screening, and screen each answer with a Model Armor template whose advanced Sensitive Data Protection settings detect phone numbers.",
+          feedback: "Correct. Model Armor screens prompts for prompt injection and jailbreak attempts, and an advanced Sensitive Data Protection configuration lets it detect phone numbers in responses before they are passed on.",
           evidenceIds: ["case-study", "model-armor"],
         },
         {
           id: "c",
-          text: "Add system instructions that tell the Gemini model to ignore requests that change its rules and never to reveal personal data in its answers.",
+          text: "Add system instructions that tell the Gemini model to ignore requests that change its rules and not to reveal personal data in its answers.",
           feedback: "Incorrect. Crafted messages already made the agent ignore its instructions, so more instructions do not screen messages or answers the way Model Armor filters do.",
           evidenceIds: ["model-armor"],
         },
@@ -473,7 +473,7 @@ export const practiceExamOneSecureSection = {
       section: "secure",
       objective: "3.2 Designing for compliance: 3.2.a legislation and regulation",
       caseStudyId: "ehr-healthcare",
-      prompt: "EHR Healthcare stores protected health information (PHI) about US patients in its electronic health record software and must keep complying with HIPAA after its move to Google Cloud. Development teams want to use several newly announced Google Cloud services, some of them in Preview, for a reporting feature that reads patient records. EHR's compliance officer asks what EHR must do so that its use of Google Cloud with PHI supports HIPAA compliance. What should you do?",
+      prompt: "EHR Healthcare stores protected health information (PHI) about US patients in its electronic health record software and must keep complying with HIPAA after its move to Google Cloud. Development teams want to use several newly announced Google Cloud services, some of them in Preview, for a reporting feature that reads patient records, and none of their terms mention PHI. EHR's compliance officer asks what EHR must do so that its use of Google Cloud with PHI supports HIPAA compliance. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -484,13 +484,13 @@ export const practiceExamOneSecureSection = {
           id: "hipaa",
           title: "HIPAA compliance on Google Cloud and Google Workspace",
           url: "https://docs.cloud.google.com/docs/security/compliance/hipaa",
-          claim: "HIPAA compliance is a shared responsibility, and Google supports it within the scope of a Business Associate Agreement (BAA). The BAA includes Google Cloud's entire infrastructure, so customers aren't restricted to a specific region. Customers should enter into the BAA, must not use unsupported services for PHI, and should not use pre-GA offerings with PHI.",
+          claim: "HIPAA compliance is a shared responsibility, and Google supports it within the scope of a Business Associate Agreement (BAA). The BAA includes Google Cloud's entire infrastructure, so customers aren't restricted to a specific region. Customers should enter into the BAA, must not use unsupported services for PHI, and should not use pre-GA offerings with PHI unless their terms expressly allow it.",
         },
       ],
       choices: [
         {
           id: "a",
-          text: "Rely on Google to make every workload on Google Cloud HIPAA compliant, because Google Cloud's infrastructure meets HIPAA requirements for all customers.",
+          text: "Rely on Google Cloud's HIPAA support without signing an agreement, because Google already secures the infrastructure that will store the PHI.",
           feedback: "Incorrect. Complying with HIPAA is a shared responsibility, and Google supports it only within the scope of a Business Associate Agreement that EHR must enter into.",
           evidenceIds: ["hipaa"],
         },
@@ -503,13 +503,13 @@ export const practiceExamOneSecureSection = {
         {
           id: "c",
           text: "Accept the Google Cloud BAA, and use only generally available services that the BAA covers for every workload that stores or processes PHI.",
-          feedback: "Correct. EHR must enter into the BAA, must not use unsupported services for PHI, and must not use pre-GA offerings with PHI, which keeps the Preview services out of the reporting feature.",
+          feedback: "Correct. EHR must enter into the BAA and must not use unsupported services for PHI, and it should not use pre-GA offerings with PHI unless their terms expressly allow it, which keeps these Preview services out of the reporting feature.",
           evidenceIds: ["case-study", "hipaa"],
         },
         {
           id: "d",
-          text: "Encrypt all PHI with customer-managed encryption keys, which makes any Google Cloud service, including services in Preview, acceptable for PHI.",
-          feedback: "Incorrect. Encryption does not change which services the BAA covers, and Google's guidance is not to use unsupported services or pre-GA offerings with PHI.",
+          text: "Encrypt all PHI with customer-managed encryption keys so that the development teams can also use the Preview services for the reporting feature.",
+          feedback: "Incorrect. Encryption does not change which services the BAA covers, and Google's guidance is not to use pre-GA offerings with PHI unless their terms expressly allow it.",
           evidenceIds: ["hipaa"],
         },
       ],
@@ -564,7 +564,7 @@ export const practiceExamOneSecureSection = {
         {
           id: "d",
           text: "Use Sensitive Data Protection to de-identify the names, phone numbers, and payment card numbers in each transcript before the transcripts are loaded into BigQuery.",
-          feedback: "Correct. Sensitive Data Protection detects personal data in text and masks or otherwise obscures it before loading, so analysts work with the conversations without seeing the identifiers.",
+          feedback: "Correct. Sensitive Data Protection detects personal data in text and masks or otherwise obscures it before loading, so analysts work with the conversations without seeing names, phone numbers, or payment card numbers.",
           evidenceIds: ["case-study", "sdp-deidentify"],
         },
       ],
@@ -576,7 +576,7 @@ export const practiceExamOneSecureSection = {
       requiredSelections: 2,
       section: "secure",
       objective: "3.2 Designing for compliance: 3.2.d audits",
-      prompt: "A brokerage firm must keep the Admin Activity audit logs of every project in its Google Cloud organization for 7 years, including projects created in the future. The organization has about 400 projects in several folders, and teams create new projects every week. During the 7 years, nobody, including administrators, may delete the stored logs or shorten their retention. The firm wants a central solution that needs no changes when projects are created. Which two actions should you take?",
+      prompt: "A brokerage firm must keep the Admin Activity audit logs of every project in its Google Cloud organization for 7 years, including projects created in the future. The organization has about 400 projects in several folders, and teams create new projects every week. During the 7 years, no user, including bucket administrators, may delete stored log files or shorten their retention. The firm wants a central solution that needs no changes when projects are created. What should you do? Choose two.",
       verifiedOn: "2026-10-02",
       evidence: [
         {
