@@ -95,14 +95,14 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p1-analyze-01 | single | 4.1.f | T6 | no | EHR Healthcare | Warm standby in a second region for the stated recovery objectives | a | D3, D2, D3 | L1, L2, L5 |
-| pca-p1-analyze-02 | single | 4.1.c | T4 | yes | none | Roll back the new prompt version before investigating | c | D8, D6, D8 | L2, L6 |
-| pca-p1-analyze-03 | single | 4.1.b | T10 | no | none | Cloud Deploy promotion with an approval before production | d | D3, D7, D2 | L2, L4 |
-| pca-p1-analyze-04 | single | 4.1.d | T11 | yes | Cymbal Retail | Evaluate generated content on an evaluation dataset before release | b | D6, D8, D3 | L2, L4 |
-| pca-p1-analyze-05 | single | 4.1.e | T10 | no | none | Service Catalog to share approved solutions | c | D3, D5, D2 | L2, L4 |
-| pca-p1-analyze-06 | single | 4.2.b | T12 | no | none | Phased rollout with training and feedback for a process change | a | D8, D6, D3 | L2, L6 |
-| pca-p1-analyze-07 | single | 4.2.c | T12 | no | none | Managed services and targeted training matched to the team's current skills | d | D1, D6, D2 | L2, L6 |
-| pca-p1-analyze-08 | single | 4.2.f | T9 | no | none | Rightsize with machine type recommendations before buying commitments | b | D8, D2, D6 | L2, L6 |
+| pca-p1-analyze-01 | single | 4.1.f | T6 | no | EHR Healthcare | Warm standby in a second region for the stated recovery objectives | a | D2, D3, D4 | L1, L5 |
+| pca-p1-analyze-02 | single | 4.1.c | T4 | yes | none | Content filter threshold raised only for the category that blocks legitimate answers | c | D6, D6, D4 | L2, L4 |
+| pca-p1-analyze-03 | single | 4.1.b | T10 | no | none | Cloud Deploy promotion with an approval before production | d | D3, D7, D1 | L2, L4 |
+| pca-p1-analyze-04 | single | 4.1.d | T11 | yes | Cymbal Retail | Gen AI evaluation service comparing the current and proposed versions before release | b | D8, D6, D7 | L2, L4 |
+| pca-p1-analyze-05 | single | 4.1.e | T10 | no | none | Service Catalog with Terraform solutions shared to the teams | c | D3, D5, D1 | L3, L4 |
+| pca-p1-analyze-06 | single | 4.2.b | T12 | no | none | Phased rollout with a pilot, training, sponsorship, and a fallback | a | D8, D6, D8 | L1, L3 |
+| pca-p1-analyze-07 | single | 4.2.c | T12 | no | none | Managed services and targeted training matched to the team's current skills | d | D1, D8, D2 | L1, L3 |
+| pca-p1-analyze-08 | single | 4.2.f | T9 | no | none | Rightsize with machine type recommendations before buying commitments | b | D8, D2, D3 | L2, L6 |
 | pca-p1-analyze-09 | single | 4.2.d | T12 | no | none | Architecture decision records for a contested choice | d | D3, D6, D8 | L2, L3 |
 
 ### Plan: implement
@@ -148,3 +148,6 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
   - secure-01 tests time-bounded IAM conditions instead of directory synchronization, because Workforce Identity Federation would make the planned synchronization question arguable.
   - secure-09 keeps the BAA decision. Google's BAA now covers the entire infrastructure, so the question tests the rule against unsupported services and pre-GA offerings for PHI.
   - The rows above record each question's final mechanisms and levers.
+- 2026-10-02: Authored the `analyze` section (author `claude-opus-5.5-p1-analyze-20261002`).
+  - analyze-02 tests Gemini content filter thresholds instead of a prompt rollback, because the style guide counts a question as AI-decisive only when its answer depends on an AI product, model, or control.
+  - The correct option is now strictly the longest in 14 of 44 single-choice questions, so the last 12 single-choice questions may add at most 4.
