@@ -109,13 +109,13 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p1-implement-01 | single | 5.1.b | T1 | no | EHR Healthcare | Apigee API products for onboarding insurance providers | b | D5, D1, D3 | L2, L4 |
-| pca-p1-implement-02 | single | 5.1.d | T3 | no | none | Database Migration Service continuous migration with a short cutover | a | D3, D3, D1 | L2, L4 |
-| pca-p1-implement-03 | single | 5.1.a | T10 | no | none | Cloud Run traffic splitting for a gradual rollout | c | D2, D3, D7 | L2, L4 |
-| pca-p1-implement-04 | single | 5.1.c | T6 | no | none | Distributed load test in a production-like environment before the peak | d | D5, D6, D3 | L2, L6 |
-| pca-p1-implement-05 | single | 5.2.c | T10 | no | none | Pub/Sub emulator for local and CI integration tests | a | D2, D5, D3 | L2, L4 |
-| pca-p1-implement-06 | single | 5.2.d | T4 | no | none | Remote Terraform state in Cloud Storage with state locking | c | D3, D6, D7 | L2, L4 |
-| pca-p1-implement-07 | multiple | 5.2.e | T7 | no | none | Attached service account through ADC and client-library retries (choose two) | c, e | D5, D3, D5 | L2, L4 |
+| pca-p1-implement-01 | single | 5.1.b | T1 | no | EHR Healthcare | Apigee API products and an app with its own credentials for each provider | b | D5, D1, D1 | L3, L4 |
+| pca-p1-implement-02 | single | 5.1.d | T3 | no | none | Database Migration Service continuous migration with a short cutover | a | D3, D7, D1 | L2, L4 |
+| pca-p1-implement-03 | single | 5.1.a | T10 | no | none | Cloud Run traffic splitting for a gradual rollout | c | D2, D7, D3 | L2, L4 |
+| pca-p1-implement-04 | single | 5.1.c | T6 | no | none | Distributed load test in a production-like environment before the peak | d | D5, D6, D3 | L1, L3 |
+| pca-p1-implement-05 | single | 5.2.c | T10 | no | none | Spanner emulator for isolated integration tests in CI | a | D2, D5, D3 | L3, L4 |
+| pca-p1-implement-06 | single | 5.2.d | T4 | no | none | Remote Terraform state in Cloud Storage with state locking | c | D3, D6, D7 | L4, L7 |
+| pca-p1-implement-07 | multiple | 5.2.e | T7 | no | none | Attached service account through ADC and Pub/Sub client-library retries (choose two) | c, e | D5, D3, D2 | L4, L7 |
 
 ### Plan: operate
 
@@ -151,3 +151,7 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
 - 2026-10-02: Authored the `analyze` section (author `claude-opus-5.5-p1-analyze-20261002`).
   - analyze-02 tests Gemini content filter thresholds instead of a prompt rollback, because the style guide counts a question as AI-decisive only when its answer depends on an AI product, model, or control.
   - The correct option is now strictly the longest in 14 of 44 single-choice questions, so the last 12 single-choice questions may add at most 4.
+- 2026-10-02: Authored the `implement` section (author `claude-opus-5.5-p1-implement-20261002`).
+  - implement-05 uses the Spanner emulator instead of the Pub/Sub emulator, so that the section does not test Pub/Sub twice.
+  - implement-07 tests Pub/Sub publishing, because the Cloud Storage client libraries retry uploads by default only when a precondition makes them idempotent.
+  - The correct option is strictly the longest in 14 of 50 single-choice questions, so the `operate` section may add at most 4.
