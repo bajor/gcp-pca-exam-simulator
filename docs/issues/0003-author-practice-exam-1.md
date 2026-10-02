@@ -124,10 +124,10 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
 | pca-p1-operate-01 | single | 6.1.a | T10 | no | none | Blameless post-incident reviews with tracked action items | b | D3, D6, D8 | L2, L3 |
 | pca-p1-operate-02 | single | 6.2.a | T10 | no | none | Managed Service for Prometheus with the existing instrumentation | a | D1, D2, D3 | L3, L4 |
 | pca-p1-operate-03 | multiple | 6.2.c | T6 | no | EHR Healthcare | SLO burn-rate alerts routed to an on-call channel (choose two) | a, c | D6, D3, D6 | L3, L4 |
-| pca-p1-operate-04 | single | 6.3.a | T10 | no | none | Rolling update with a readiness probe and no unavailable Pods | d | D3, D7, D1 | L4, L7 |
-| pca-p1-operate-05 | single | 6.4.a | T4 | yes | none | Provisioned Throughput for predictable peak traffic to Gemini | c | D6, D2, D3 | L1, L4 |
+| pca-p1-operate-04 | single | 6.3.a | T10 | no | none | Rolling update with a readiness probe and no unavailable Pods | d | D7, D7, D1 | L4, L7 |
+| pca-p1-operate-05 | single | 6.4.a | T4 | yes | none | Provisioned Throughput on the global endpoint for steady, always-on traffic to Gemini | c | D6, D2, D4 | L3, L4 |
 | pca-p1-operate-06 | single | 6.5.a | T6 | no | none | Error budget policy that pauses feature releases | a | D6, D3, D8 | L1, L4 |
-| pca-p1-operate-07 | single | 6.6.a | T6 | no | none | Failover test in a staging environment that replicates production | b | D5, D6, D3 | L1, L3 |
+| pca-p1-operate-07 | single | 6.6.a | T6 | no | none | Chaos experiment that makes a dependency slow or fail, instead of a load test | b | D6, D6, D8 | L2, L3 |
 
 ### Progress
 
@@ -162,5 +162,10 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
   - near-miss pairs in 43 questions;
   - the correct option strictly longest in 16 of 56 single-choice questions;
   - 16 case-study questions: EHR Healthcare 8 in six sections, Cymbal Retail 8 in four;
-  - median reading load: 183.5 words;
+  - median reading load: 185 words;
   - the coverage matrix's allocation for every objective.
+- 2026-10-02: Applied the fresh-session reviews of the `provision`, `secure`, `analyze`, `implement`, and `operate` sections in PRs #15 to #19.
+  - implement-01, implement-05, and implement-07 now each allow exactly one answer, and implement-06's option b no longer contradicts its stem.
+  - operate-05 tests Provisioned Throughput for steady, always-on traffic, because Google recommends it for steady-state workloads rather than for traffic spikes. operate-06 measures its SLO over calendar months, so the remaining days of the period are defined.
+  - operate-07 now tests a chaos experiment on a slow dependency. The earlier failover question used the same decisive contrast as implement-04, a staging environment that replicates production against a test in production.
+  - The full draft now has the following measurements: correct letters a, b, c, and d: 14 each; the correct option strictly longest in 14 of 56 single-choice questions; near-miss pairs in 44 questions; median reading load: 188 words.
