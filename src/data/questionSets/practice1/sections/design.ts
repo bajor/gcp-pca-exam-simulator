@@ -161,7 +161,7 @@ export const practiceExamOneDesignSection = {
         {
           id: "b",
           text: "Report the conversion rate and the product search success rate of visits that use the assistant compared with visits that do not, and the number of conversations that visitors start with the assistant.",
-          feedback: "Incorrect. The first two measures fit discoverability and conversion, but completed conversations count the assistant's activity, not whether call center staffing costs fell.",
+          feedback: "Incorrect. The first two measures fit discoverability and conversion, but conversations that visitors start count use of the assistant, not whether call center staffing costs fell.",
           evidenceIds: ["case-study", "waf-ai-kpis"],
         },
         {
@@ -877,12 +877,12 @@ export const practiceExamOneDesignSection = {
           id: "c",
           text: "Deploy the review application as a Cloud Run service with a Cloud SQL database, and allow unauthenticated invocations so that associates can reach it from any network.",
           feedback: "Incorrect. The managed services fit, but allowing unauthenticated invocations makes the service public, so anyone could reach the application that must admit only authenticated associates.",
-          evidenceIds: ["run-public", "iap-cloud-run"],
+          evidenceIds: ["what-is-cloud-run", "cloud-sql", "run-public", "iap-cloud-run"],
         },
         {
           id: "d",
           text: "Deploy the review application on a GKE Standard cluster with three always-on nodes, a self-managed PostgreSQL database, and an external load balancer with Identity-Aware Proxy.",
-          feedback: "Incorrect. Access control works, but in Standard mode Cymbal pays for always-on nodes that sit idle overnight and operates its own database, which adds the overhead it wants to avoid.",
+          feedback: "Incorrect. In Standard mode Cymbal pays for always-on nodes that sit idle overnight and operates its own database, which adds the overhead it wants to avoid.",
           evidenceIds: ["gke-modes", "cloud-sql"],
         },
       ],
