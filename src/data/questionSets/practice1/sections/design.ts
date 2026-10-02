@@ -22,12 +22,12 @@ export const practiceExamOneDesignSection = {
       section: "design",
       objective: "1.1 Designing a cloud solution infrastructure that meets business requirements: 1.1.i workload disposition strategies",
       caseStudyId: "ehr-healthcare",
-      prompt: "EHR Healthcare is moving its containerized customer-facing applications from its colocation facilities to Google Cloud, starting with the facility whose lease is about to expire. In another on-premises facility, EHR also hosts legacy file-based and API-based integrations with insurance providers. These integrations are scheduled to be replaced over the next several years, and EHR has no plan to upgrade or move them now. The new cloud applications must keep exchanging data with the integrations over a secure, high-performance connection that does not cross the public internet. You need to decide what to do with the legacy integrations at the lowest migration risk. What should you do?",
+      prompt: "EHR Healthcare is moving its containerized customer-facing applications from its colocation facilities to Google Cloud, starting with the facility whose lease is about to expire. From a separate on-premises site, EHR also runs older integrations that exchange files and API calls with insurance providers. EHR intends to retire these integrations gradually in the coming years and will leave them untouched where they are until then. The new cloud applications must keep exchanging data with the integrations over a secure, high-performance connection that does not cross the public internet. You need to decide what to do with the legacy integrations at the lowest migration risk. What should you do?",
       verifiedOn: "2026-10-01",
       evidence: [
         {
           ...ehrCaseStudy,
-          claim: "The legacy file- and API-based integrations with insurance providers are scheduled to be replaced over the next several years, with no plan to upgrade or move them at the current time; EHR requires connectivity to both on-premises systems and cloud providers and a secure, high-performance connection between on-premises systems and Google Cloud.",
+          claim: "EHR plans to retire its older insurance-provider integrations over the coming years and to leave them on-premises until then, and it needs secure, fast connectivity from its on-premises sites to Google Cloud.",
         },
         {
           id: "interconnect",
@@ -75,7 +75,7 @@ export const practiceExamOneDesignSection = {
       kind: "single",
       section: "design",
       objective: "1.1 Designing a cloud solution infrastructure that meets business requirements: 1.1.g movement of data",
-      prompt: "A national film archive is moving 450 TB of digitized footage from its on-premises storage array to Cloud Storage so that it can close its data center at the end of the quarter. The archive's only internet connection is a 500 Mbps link that staff and public services share during business hours, and upgrading the link would require a 12-month contract that the archive does not want after the data center closes. The footage does not change after it is digitized. You need to move all of the footage within six weeks without degrading the archive's other services. What should you do?",
+      prompt: "A national film archive is moving 450 TB of digitized footage from its on-premises storage array to Cloud Storage so that it can close its data center at the end of the quarter. The archive's only internet connection is a 500 Mbps link that staff and public services share during business hours, and any new or upgraded network connection, including a circuit to a colocation facility, would require a 12-month contract that the archive does not want after the data center closes. The footage does not change after it is digitized. You need to move all of the footage within eight weeks without degrading the archive's other services. What should you do?",
       verifiedOn: "2026-10-01",
       evidence: [
         {
@@ -88,7 +88,13 @@ export const practiceExamOneDesignSection = {
           id: "transfer-appliance",
           title: "Transfer Appliance",
           url: "https://docs.cloud.google.com/transfer-appliance/docs/4.0/overview",
-          claim: "Transfer Appliance is a high-capacity storage device that lets you transfer and securely ship your data to a Google upload facility, where Google uploads the data to Cloud Storage.",
+          claim: "Transfer Appliance is a high-capacity storage device that you ship to a Google upload facility, where Google uploads the data to Cloud Storage; you can capture 300 TB on an appliance in under 25 days, and the data is typically in Cloud Storage within another 10 business days, without using network bandwidth.",
+        },
+        {
+          id: "appliance-specs",
+          title: "Transfer Appliance specifications",
+          url: "https://docs.cloud.google.com/transfer-appliance/docs/4.0/specifications",
+          claim: "The largest Transfer Appliance models hold a maximum of 300 TB of encrypted data each.",
         },
         {
           id: "storage-transfer",
@@ -100,26 +106,26 @@ export const practiceExamOneDesignSection = {
       choices: [
         {
           id: "a",
-          text: "Order a Transfer Appliance, copy the footage to it in the data center, and ship it back to Google so that Google uploads the data to the destination Cloud Storage bucket.",
-          feedback: "Correct. Transfer Appliance moves large datasets without using the limited link, which the transfer guide recommends when a fast connection is unavailable and buying more bandwidth is too costly.",
-          evidenceIds: ["large-transfers", "transfer-appliance"],
+          text: "Request Transfer Appliances for the 450 TB, copy the footage to them in the data center, and ship them back so that Google uploads the data to the destination Cloud Storage bucket.",
+          feedback: "Correct. Each appliance holds up to 300 TB, so two appliances carry the footage without using the shared link. Capturing data in under 25 days and uploading it in about 10 more business days fits within eight weeks.",
+          evidenceIds: ["large-transfers", "transfer-appliance", "appliance-specs"],
         },
         {
           id: "b",
           text: "Create a Storage Transfer Service job from the storage array to Cloud Storage over the existing link, and schedule the job to run only outside business hours.",
-          feedback: "Incorrect. Scaling the guide's figure of 12 days for 100 TB at 1 Gbps, 450 TB at 500 Mbps needs about 108 days of continuous transfer, so a transfer limited to off-hours misses the six-week deadline by even more.",
+          feedback: "Incorrect. Scaling the guide's figure of 12 days for 100 TB at 1 Gbps, 450 TB at 500 Mbps needs about 108 days of continuous transfer, so a transfer limited to off-hours misses the eight-week deadline by even more.",
           evidenceIds: ["large-transfers", "storage-transfer"],
         },
         {
           id: "c",
           text: "Create a Storage Transfer Service job from the storage array to Cloud Storage over the existing link, and let the job use all of the link's bandwidth until it completes.",
-          feedback: "Incorrect. Using the whole link degrades the archive's other services, and at about 108 days for 450 TB at 500 Mbps the transfer still misses the six-week deadline.",
+          feedback: "Incorrect. Using the whole link degrades the archive's other services, and at about 108 days for 450 TB at 500 Mbps the transfer still misses the eight-week deadline.",
           evidenceIds: ["large-transfers", "storage-transfer"],
         },
         {
           id: "d",
           text: "Order a Dedicated Interconnect connection at a nearby colocation facility, and copy the footage to Cloud Storage over the new connection with the gcloud storage rsync command.",
-          feedback: "Incorrect. Buying connectivity only for a one-time transfer is what the guide calls potentially cost prohibitive, and the archive does not want a long-term connection after the data center closes.",
+          feedback: "Incorrect. A new connection to a colocation facility would require the 12-month contract that the archive does not want, and the guide notes that acquiring bandwidth only for a transfer can be cost prohibitive.",
           evidenceIds: ["large-transfers"],
         },
       ],
@@ -154,8 +160,8 @@ export const practiceExamOneDesignSection = {
         },
         {
           id: "b",
-          text: "Report the total number of conversations, the average number of messages in each conversation, and the number of distinct visitors who opened the assistant during the pilot.",
-          feedback: "Incorrect. Conversation volume shows use of the assistant, but it does not measure whether discoverability or conversion improved or whether call center staffing costs fell.",
+          text: "Report the conversion rate and the product search success rate of visits that use the assistant compared with visits that do not, and the number of conversations that the assistant completes.",
+          feedback: "Incorrect. The first two measures fit discoverability and conversion, but completed conversations count the assistant's activity, not whether call center staffing costs fell.",
           evidenceIds: ["case-study", "waf-ai-kpis"],
         },
         {
@@ -178,7 +184,7 @@ export const practiceExamOneDesignSection = {
       kind: "single",
       section: "design",
       objective: "1.1 Designing a cloud solution infrastructure that meets business requirements: 1.1.d cost optimization",
-      prompt: "A video analytics company serves its web API from 24 Compute Engine VMs that have handled a steady load around the clock for two years, and the load is expected to stay the same for at least three more years. Every night, the company also runs a transcoding batch on up to 300 VMs for about four hours; the batch checkpoints its progress and restarts any interrupted task automatically. Finance asks you to reduce compute costs without risking interruptions to the web API. What should you do?",
+      prompt: "A video analytics company serves its web API from 24 Compute Engine VMs that have handled a steady load around the clock for two years, and the load is expected to stay the same for at least three more years. Every night, the company also runs a transcoding batch on up to 300 VMs for about four hours; the batch checkpoints its progress and restarts any interrupted task automatically. Finance asks you to minimize compute costs without risking interruptions to the web API. What should you do?",
       verifiedOn: "2026-10-01",
       evidence: [
         {
@@ -234,12 +240,12 @@ export const practiceExamOneDesignSection = {
       section: "design",
       objective: "1.2 Designing a cloud solution infrastructure that meets technical requirements: 1.2.b high availability and fail-over design",
       caseStudyId: "ehr-healthcare",
-      prompt: "EHR Healthcare will run its containerized customer-facing web applications on GKE in one Google Cloud region near most of its customers. EHR's business requirements call for at least 99.9% availability for all customer-facing systems, and its executives attribute past outages to misconfigured systems and inadequate capacity during traffic spikes. The platform team wants the applications to keep serving if one zone of the region becomes unavailable, and it does not want to operate its own Kubernetes control plane. Which solution should you design?",
+      prompt: "EHR Healthcare will run its containerized customer-facing web applications on GKE in its first Google Cloud region. EHR's business requirements set an availability floor of 99.9% for every system that its customers use, and its executives attribute past outages to misconfigured systems and to running out of capacity when traffic spiked. The platform team wants the applications to keep serving if one zone of the region becomes unavailable, and it does not want to operate its own Kubernetes control plane. Which solution should you design?",
       verifiedOn: "2026-10-01",
       evidence: [
         {
           ...ehrCaseStudy,
-          claim: "EHR requires a minimum 99.9% availability for all customer-facing systems, and many past outages resulted from misconfigured systems and inadequate capacity to manage spikes in traffic.",
+          claim: "EHR sets an availability floor of 99.9% for the systems its customers use, and its executives trace many past outages to misconfiguration and to too little capacity during traffic peaks.",
         },
         {
           id: "regional-clusters",
@@ -253,6 +259,12 @@ export const practiceExamOneDesignSection = {
           url: "https://docs.cloud.google.com/kubernetes-engine/docs/concepts/kubernetes-engine-overview",
           claim: "GKE is a managed implementation of the Kubernetes open source container orchestration platform for deploying and operating containerized applications.",
         },
+        {
+          id: "cluster-autoscaler",
+          title: "About GKE cluster autoscaling",
+          url: "https://docs.cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler",
+          claim: "The cluster autoscaler resizes a Standard cluster's node pools based on workload demand, adding nodes when demand is high.",
+        },
       ],
       choices: [
         {
@@ -265,7 +277,7 @@ export const practiceExamOneDesignSection = {
           id: "b",
           text: "Create a zonal GKE cluster with node auto-repair and cluster autoscaling, and run several replicas of each application on nodes in that single zone.",
           feedback: "Incorrect. Autoscaling helps with traffic spikes, but every replica runs in one zone, so the applications stop serving when that zone becomes unavailable.",
-          evidenceIds: ["regional-clusters"],
+          evidenceIds: ["cluster-autoscaler", "regional-clusters"],
         },
         {
           id: "c",
@@ -397,7 +409,7 @@ export const practiceExamOneDesignSection = {
       evidence: [
         {
           ...cymbalCaseStudy,
-          claim: "Cymbal requires deriving product attributes from supplier titles, descriptions, and images, aligned with the product category and Cymbal's existing catalog structure, and a human-in-the-loop review of generated content before the catalog is updated.",
+          claim: "Cymbal needs product attributes derived from supplier titles, descriptions, and images that fit each category of its current catalog, and a step in which associates review generated content before catalog updates.",
         },
         {
           id: "structured-output",
@@ -495,7 +507,7 @@ export const practiceExamOneDesignSection = {
         {
           id: "c",
           text: "Create a VPC network in each application project, and peer each network with a central hub network by using VPC Network Peering so that traffic between projects flows through the hub.",
-          feedback: "Incorrect. VPC Network Peering is not transitive, so two application networks peered with the same hub cannot reach each other through it.",
+          feedback: "Incorrect. VPC Network Peering is not transitive, so two application networks peered with the same hub cannot reach each other through it, and peered networks remain administratively separate.",
           evidenceIds: ["vpc-peering"],
         },
         {
@@ -573,7 +585,7 @@ export const practiceExamOneDesignSection = {
       evidence: [
         {
           ...cymbalCaseStudy,
-          claim: "Cymbal's technical requirements include generating product image variations from a base image, with background changes, color adjustments, and text overlays, and its business requirements include reducing data-center hosting costs.",
+          claim: "Cymbal needs variations of each base product image, such as other backgrounds, colors, and text overlays, and it wants to cut data-center hosting costs.",
         },
         {
           id: "storage-triggers",
@@ -593,13 +605,19 @@ export const practiceExamOneDesignSection = {
           url: "https://docs.cloud.google.com/compute/docs/autoscaler",
           claim: "Managed instance groups of Compute Engine VMs can add and remove instances automatically based on load, such as CPU utilization.",
         },
+        {
+          id: "gke-modes",
+          title: "GKE overview",
+          url: "https://docs.cloud.google.com/kubernetes-engine/docs/concepts/kubernetes-engine-overview",
+          claim: "In GKE Standard mode, you pay for all resources on nodes regardless of Pod requests, while in Autopilot mode Google Cloud manages both the nodes and the control plane.",
+        },
       ],
       choices: [
         {
           id: "a",
           text: "Deploy the image processing on a GKE Standard cluster as a deployment that polls the bucket for new objects every minute, and use the cluster autoscaler to add nodes during business hours.",
-          feedback: "Incorrect. Cymbal would manage the cluster's nodes, and the nodes that keep polling the bucket overnight are the idle capacity it does not want to pay for.",
-          evidenceIds: ["what-is-cloud-run"],
+          feedback: "Incorrect. Cymbal would manage the cluster's nodes, and in Standard mode it pays for the nodes that keep polling the bucket overnight, the idle capacity it does not want to pay for.",
+          evidenceIds: ["gke-modes", "what-is-cloud-run"],
         },
         {
           id: "b",
@@ -628,12 +646,12 @@ export const practiceExamOneDesignSection = {
       section: "design",
       objective: "1.4 Creating a migration plan: 1.4.b assessing and migrating systems and data",
       caseStudyId: "ehr-healthcare",
-      prompt: "EHR Healthcare has chosen Google Cloud to replace its colocation facilities, and the lease on one facility is about to expire. That facility runs about 300 servers, including MySQL and Microsoft SQL Server databases, and nobody has a current inventory of their configurations or utilization. Before EHR commits to a migration plan, the executives want an estimate of the Google Cloud cost of the migrated environment that is based on measured utilization, so that they can compare it with the cost of renewing the lease. What should you do first?",
+      prompt: "EHR Healthcare has chosen Google Cloud to replace its colocation facilities, and the lease on one facility is about to expire. That facility runs about 300 servers, including MySQL and Microsoft SQL Server databases, and nobody has a current inventory of their configurations or utilization. Before EHR commits to a migration plan, the executives want an estimate of the Google Cloud cost of the migrated environment that is based on measured utilization, so that they can approve the migration budget before the lease expires. What should you do first?",
       verifiedOn: "2026-10-01",
       evidence: [
         {
           ...ehrCaseStudy,
-          claim: "EHR's software is hosted in multiple colocation facilities, the lease on one data center is about to expire, and Google Cloud has been chosen to replace the colocation facilities.",
+          claim: "EHR is replacing its colocation facilities with Google Cloud, and one data center's lease expires soon.",
         },
         {
           id: "migration-center",
@@ -645,7 +663,13 @@ export const practiceExamOneDesignSection = {
           id: "discovery-client",
           title: "Migration Center discovery client overview",
           url: "https://docs.cloud.google.com/migration-center/docs/discovery-client-overview",
-          claim: "The discovery client automatically discovers physical servers and VMs and collects the metrics required for a migration, which it can send to Migration Center for assessment.",
+          claim: "The discovery client automatically discovers physical servers and VMs and collects the metrics required for a migration, but it doesn't discover or collect database assets.",
+        },
+        {
+          id: "database-scripts",
+          title: "Discover and import databases",
+          url: "https://docs.cloud.google.com/migration-center/docs/discover-and-import-databases",
+          claim: "Migration Center's database collection scripts discover, collect, and upload data about Microsoft SQL Server, MySQL, and PostgreSQL databases.",
         },
         {
           id: "tco-report",
@@ -669,9 +693,9 @@ export const practiceExamOneDesignSection = {
         },
         {
           id: "b",
-          text: "Install the Migration Center discovery client in the facility to collect server and database inventory and utilization data, and then generate a Migration Center TCO report.",
-          feedback: "Correct. The discovery client builds the missing inventory and collects utilization metrics, and the TCO report compares migration scenarios that are sized from that performance data.",
-          evidenceIds: ["discovery-client", "migration-center", "tco-report"],
+          text: "Run the Migration Center discovery client and database collection scripts in the facility to gather server and database inventory and utilization data, and then generate a Migration Center TCO report.",
+          feedback: "Correct. The discovery client inventories the servers and the collection scripts cover the databases, which builds the missing inventory with utilization data, and the TCO report compares migration scenarios sized from that performance data.",
+          evidenceIds: ["discovery-client", "database-scripts", "migration-center", "tco-report"],
         },
         {
           id: "c",
@@ -681,7 +705,7 @@ export const practiceExamOneDesignSection = {
         },
         {
           id: "d",
-          text: "Install the Migration Center discovery client in the facility to collect server and database inventory and utilization data, and then generate a Migration Center rapid cost estimate.",
+          text: "Run the Migration Center discovery client and database collection scripts in the facility to gather server and database inventory and utilization data, and then generate a Migration Center rapid cost estimate.",
           feedback: "Incorrect. The rapid cost estimate is based on the size and configuration of resources rather than measured utilization, and it is a Preview feature.",
           evidenceIds: ["migration-center"],
         },
@@ -693,14 +717,14 @@ export const practiceExamOneDesignSection = {
       kind: "single",
       section: "design",
       objective: "1.4 Creating a migration plan: 1.4.c using migration methodologies, workload testing, network planning, and dependency planning",
-      prompt: "A logistics company plans to migrate 120 on-premises servers to Google Cloud in four waves over six months. A pilot move of its order-routing application failed last month: after the cutover, the application timed out because it made thousands of calls per minute to an on-premises inventory database that nobody had listed as a dependency. The Migration Center discovery client has been collecting data in the data center for eight weeks. You need to plan the remaining waves so that servers that depend on each other move together. What should you do?",
+      prompt: "A logistics company plans to migrate 120 on-premises servers to Google Cloud in four waves over six months. A pilot move of its order-routing application failed last month: after the cutover, the application timed out because it made thousands of calls per minute to an on-premises inventory database that nobody had listed as a dependency. The Migration Center discovery client has been collecting data in the data center with guest OS scans for eight weeks. You need to plan the remaining waves so that servers that depend on each other move together. What should you do?",
       verifiedOn: "2026-10-01",
       evidence: [
         {
           id: "dependencies-report",
           title: "Generate and analyze network dependencies report",
           url: "https://docs.cloud.google.com/migration-center/docs/network-dependencies-report",
-          claim: "The network dependencies report shows the connections to the servers and databases that the discovery client scanned, and the number of times each connection was observed, aggregated monthly.",
+          claim: "The network dependencies report shows the connections to the assets that the discovery client scanned with guest OS scans, and the number of times each connection was observed, aggregated monthly.",
         },
         {
           id: "assess-workloads",
@@ -748,7 +772,7 @@ export const practiceExamOneDesignSection = {
       kind: "single",
       section: "design",
       objective: "1.4 Creating a migration plan: 1.4.d determining software license implications and financial impact",
-      prompt: "A manufacturing company is migrating 40 Windows Server VMs from its data center to Compute Engine. The company owns Windows Server licenses that are counted per physical core and that require dedicated hardware, and it has already paid for them until the end of their term. Finance wants to keep using these licenses on Google Cloud instead of paying for on-demand licenses. You need to design the target environment so that the VMs comply with the license terms. What should you do?",
+      prompt: "A manufacturing company is migrating 40 Windows Server VMs from its data center to Compute Engine. The company owns Windows Server licenses that are counted per physical core and that require dedicated hardware, and it has already paid for them until the end of their term. The licenses cover Windows Server 2019 and were acquired under an enrollment that took effect in 2018. Finance wants to keep using these licenses on Google Cloud instead of paying for on-demand licenses. You need to design the target environment so that the VMs comply with the license terms. What should you do?",
       verifiedOn: "2026-10-01",
       evidence: [
         {
@@ -761,7 +785,7 @@ export const practiceExamOneDesignSection = {
           id: "ms-licensing",
           title: "Microsoft Licensing on Google Cloud",
           url: "https://docs.cloud.google.com/compute/docs/instances/windows/ms-licensing",
-          claim: "With on-demand licenses from Google Cloud, available in Google-provided prebuilt images, you pay an hourly fee that includes both the base compute cost and the Microsoft license.",
+          claim: "With on-demand licenses in Google-provided images, the hourly fee includes the Microsoft license; Windows Server licenses for versions released before October 1, 2019 under an enrollment effective before that date might be eligible for bring-your-own-license use, which requires dedicated servers such as sole-tenant nodes.",
         },
       ],
       choices: [
@@ -780,8 +804,8 @@ export const practiceExamOneDesignSection = {
         {
           id: "c",
           text: "Import the existing Windows Server images as bring-your-own-license images, and run the VMs on sole-tenant nodes so that the licensed physical cores are dedicated to the company.",
-          feedback: "Correct. Physical-core licenses with dedicated hardware requirements need your own media on hardware such as sole-tenant nodes, which are physical servers dedicated to the company's project.",
-          evidenceIds: ["byol"],
+          feedback: "Correct. Windows Server 2019 licenses from a 2018 enrollment can be brought only to dedicated hardware, and sole-tenant nodes are physical servers dedicated to the company's project, so the imported images comply.",
+          evidenceIds: ["byol", "ms-licensing"],
         },
         {
           id: "d",
@@ -798,7 +822,7 @@ export const practiceExamOneDesignSection = {
       section: "design",
       objective: "1.5 Envisioning future solution improvements: 1.5.c cloud-first design approach",
       caseStudyId: "cymbal-retail",
-      prompt: "Cymbal Retail needs a new web application in which about 200 merchandising associates review the attributes, descriptions, and images that its generative AI tools produce, and approve, reject, or modify them before the catalog is updated. Associates sign in with their corporate Google accounts, and use is concentrated in business hours. Cymbal wants to reduce data-center hosting costs, and its architects follow a cloud-first approach for new applications. The application must be reachable only by authenticated associates. Which solution should you design?",
+      prompt: "Cymbal Retail needs a new web application in which about 200 merchandising associates review the attributes, descriptions, and images that its generative AI tools produce, and approve, reject, or modify them before the catalog is updated. Associates sign in with their corporate Google accounts, and use is concentrated in business hours. Cymbal wants to reduce data-center hosting costs, and its architects follow a cloud-first approach for new applications. The application must be reachable only by authenticated associates, and Cymbal wants to minimize operational overhead and avoid paying for idle capacity outside business hours. Which solution should you design?",
       verifiedOn: "2026-10-01",
       evidence: [
         {
@@ -823,6 +847,18 @@ export const practiceExamOneDesignSection = {
           url: "https://docs.cloud.google.com/sql/docs/introduction",
           claim: "Cloud SQL is a fully managed relational database service that handles backups, high availability, maintenance, and updates.",
         },
+        {
+          id: "run-public",
+          title: "Allowing public (unauthenticated) access",
+          url: "https://docs.cloud.google.com/run/docs/authenticating/public",
+          claim: "A Cloud Run service becomes public when its Cloud Run Invoker IAM check is disabled or when the Cloud Run Invoker role is granted to allUsers.",
+        },
+        {
+          id: "gke-modes",
+          title: "GKE overview",
+          url: "https://docs.cloud.google.com/kubernetes-engine/docs/concepts/kubernetes-engine-overview",
+          claim: "In GKE Standard mode, you pay for all resources on nodes regardless of Pod requests, while in Autopilot mode Google Cloud manages both the nodes and the control plane.",
+        },
       ],
       choices: [
         {
@@ -840,14 +876,14 @@ export const practiceExamOneDesignSection = {
         {
           id: "c",
           text: "Deploy the review application as a Cloud Run service with a Cloud SQL database, and allow unauthenticated invocations so that associates can reach it from any network.",
-          feedback: "Incorrect. The managed services fit, but unauthenticated invocations let anyone reach the application, which must admit only authenticated associates.",
-          evidenceIds: ["what-is-cloud-run", "iap-cloud-run"],
+          feedback: "Incorrect. The managed services fit, but allowing unauthenticated invocations makes the service public, so anyone could reach the application that must admit only authenticated associates.",
+          evidenceIds: ["run-public", "iap-cloud-run"],
         },
         {
           id: "d",
           text: "Deploy the review application on a GKE Standard cluster with three always-on nodes, a self-managed PostgreSQL database, and an external load balancer with Identity-Aware Proxy.",
-          feedback: "Incorrect. Access control works, but Cymbal would manage nodes and a database that run all night, while Cloud SQL and Cloud Run provide the same capabilities as managed services.",
-          evidenceIds: ["cloud-sql", "what-is-cloud-run"],
+          feedback: "Incorrect. Access control works, but in Standard mode Cymbal pays for the always-on nodes overnight and operates its own database, the overhead and idle cost it wants to avoid.",
+          evidenceIds: ["gke-modes", "cloud-sql"],
         },
       ],
       correctChoiceId: "b",

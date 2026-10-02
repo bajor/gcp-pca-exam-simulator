@@ -37,15 +37,15 @@ The plan allocates questions exactly as the coverage matrix requires and keeps t
 | Considerations of objectives 1.1, 1.5, 2.4, and 2.5 | 1.1.d, 1.1.g, 1.1.i, 1.1.j, 1.5.c, 2.4.a, and 2.5.a, each used once across the three sets |
 | Feasibility check (coverage rule 4), counting Practice Exam 1 as written | Passes for all 22 objectives. The tightest are 1.1 (8 unused testable considerations for 8 remaining questions), 1.5, 2.4, and 2.5 (2 for 2 each), and 2.2 (4 for 6). |
 
-Near-miss pairs (lever L2) and the longest-option limit are checked per section with `npm run question-set-report`. Kind is `single` or `multiple` (choose-two).
+Near-miss pairs (lever L2) and the longest-option limit are checked per section with `npm run question-set-report`. Kind is `single` or `multiple` (choose-two). T4 and T9 are exactly at their minimums, so a revision that changes the type of a T4 or T9 question must add another question of that type.
 
 ### Plan: design
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p1-design-01 | single | 1.1.i | T3 | no | EHR Healthcare | Keep the legacy integrations on-premises and connect them over Dedicated Interconnect | c | D2, D2, D5 | L2, L3 |
+| pca-p1-design-01 | single | 1.1.i | T12 | no | EHR Healthcare | Keep the legacy integrations on-premises and connect them over Dedicated Interconnect | c | D2, D2, D5 | L2, L3 |
 | pca-p1-design-02 | single | 1.1.g | T3 | no | none | Transfer Appliance when the link cannot move 450 TB in time | a | D3, D3, D2 | L1, L2 |
-| pca-p1-design-03 | single | 1.1.j | T12 | no | Cymbal Retail | KPIs that measure the stated business objectives | d | D6, D6, D6 | L3, L6 |
+| pca-p1-design-03 | single | 1.1.j | T12 | no | Cymbal Retail | KPIs that measure the stated business objectives | d | D6, D6, D6 | L2, L3 |
 | pca-p1-design-04 | single | 1.1.d | T9 | no | none | Resource-based commitment for steady load and Spot VMs for the checkpointed batch | b | D2, D3, D7 | L1, L2, L4 |
 | pca-p1-design-05 | single | 1.2.b | T6 | no | EHR Healthcare | Regional GKE cluster for zone-failure resilience | a | D4, D1, D1 | L2, L4 |
 | pca-p1-design-06 | single | 1.2.g | T6 | no | none | Point-in-time recovery to a new instance, then copy back the affected rows | c | D7, D7, D3 | L2, L4 |
@@ -53,11 +53,11 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
 | pca-p1-design-08 | single | 1.3.b | T11 | yes | Cymbal Retail | Gemini with a response schema built from the catalog fields | b | D3, D7, D3 | L2, L4 |
 | pca-p1-design-09 | single | 1.3.c | T5 | no | none | Shared VPC for central network control | a | D3, D7, D2 | L2, L4 |
 | pca-p1-design-10 | single | 1.3.e | T2 | no | none | Filestore for a POSIX file system with locking | c | D3, D3, D7 | L2, L4 |
-| pca-p1-design-11 | single | 1.3.f | T2 | no | Cymbal Retail | Cloud Run function invoked by an Eventarc trigger for each upload | d | D1, D1, D4 | L2, L3 |
+| pca-p1-design-11 | single | 1.3.f | T2 | no | Cymbal Retail | Cloud Run function invoked by an Eventarc trigger for each upload | d | D1, D1, D7 | L2, L3 |
 | pca-p1-design-12 | single | 1.4.b | T3 | no | EHR Healthcare | Migration Center discovery client and TCO report | b | D8, D3, D7 | L2, L6 |
 | pca-p1-design-13 | single | 1.4.c | T3 | no | none | Migration Center network dependencies report to group dependent servers | a | D6, D3, D7 | L2, L7 |
-| pca-p1-design-14 | single | 1.4.d | T9 | no | none | Bring-your-own-license images on sole-tenant nodes | c | D4, D2, D4 | L2, L4 |
-| pca-p1-design-15 | single | 1.5.c | T1 | no | Cymbal Retail | Cloud Run with Cloud SQL and IAP enabled directly on the service | b | D2, D5, D1 | L2, L5 |
+| pca-p1-design-14 | single | 1.4.d | T3 | no | none | Bring-your-own-license images on sole-tenant nodes | c | D4, D2, D4 | L2, L4 |
+| pca-p1-design-15 | single | 1.5.c | T1 | no | Cymbal Retail | Cloud Run with Cloud SQL and IAP enabled directly on the service | b | D4, D5, D1 | L2, L5 |
 
 ### Plan: provision
 
@@ -71,7 +71,7 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
 | pca-p1-provision-06 | single | 2.2.g | T6 | no | none | Backup vault with enforced retention against deletion by a compromised administrator | b | D5, D7, D2 | L2, L4 |
 | pca-p1-provision-07 | single | 2.3.c | T4 | no | none | Direct VPC egress so that Cloud Run reaches a private Memorystore address | c | D6, D5, D2 | L2, L4 |
 | pca-p1-provision-08 | single | 2.3.d | T10 | no | none | VM Manager patch deployments rolled out zone by zone | a | D1, D3, D8 | L2, L4 |
-| pca-p1-provision-09 | single | 2.3.e | T10 | no | none | Fleet with Config Sync applying one Git configuration to every cluster | d | D3, D1, D2 | L2, L4 |
+| pca-p1-provision-09 | single | 2.3.e | T9 | no | none | GKE Autopilot, billed for Pod resource requests instead of whole nodes | d | D2, D7, D1 | L2, L4 |
 | pca-p1-provision-10 | single | 2.4.a | T11 | yes | none | Agent Platform Pipelines for scheduled, reproducible retraining | b | D1, D3, D2 | L2, L4 |
 | pca-p1-provision-11 | single | 2.5.a | T11 | yes | Cymbal Retail | AI Commerce Search for natural-language product discovery | c | D3, D2, D7 | L2, L4 |
 
@@ -133,3 +133,10 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
 
 - 2026-10-01: Planned all 60 questions and authored the `design` section.
 - 2026-10-01: Applied the revised authoring rules: added the Kind column, made provision-04 a single-choice cost question (T9) so that the plan meets the T9 minimum, made secure-11 a choose-two question, and checked coverage feasibility. In the `design` section, replaced design-07's option c, which named an unsupported Cloud CDN configuration, and rewrote design-06's option b and design-10's option a as near-miss pairs; the report counts near-miss pairs in 14 of 15 design questions.
+- 2026-10-02: Applied the fresh-session review of the `design` section in PR #9.
+  - design-02 now uses several Transfer Appliances, because one holds at most 300 TB, and has an eight-week deadline.
+  - design-12 adds the database collection scripts, because the discovery client does not collect databases.
+  - The stems of design-04, design-14, and design-15 now state the constraints that rule out their distractors.
+  - design-01, design-05, and five case-study evidence claims were reworded so that no run of 5 or more words matches a case study.
+  - design-03 gained a near-miss distractor.
+  - The plan relabels design-01 as T12, design-14 as T3, and the distractor mechanisms of design-11 and design-15. provision-09 becomes a T9 question about GKE Autopilot billing, so T9 stays at 4.
