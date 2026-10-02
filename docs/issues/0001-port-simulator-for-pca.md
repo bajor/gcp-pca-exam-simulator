@@ -2,16 +2,16 @@
 type: Issue
 title: Port the simulator for the Professional Cloud Architect exam
 description: Port the PMLE simulator without its content, adopt the PCA blueprint and reading-length floors, and add case studies on a split screen.
-status: in-progress
+status: complete
 labels: [feature, frontend]
 blocked_by: []
-tracker: "PR [1/5] and PR [2/5]"
+tracker: "PR [1/5], PR [2/5] (landed by #3), and #8"
 timestamp: 2026-10-01T00:00:00Z
 ---
 
 ## Port the Simulator for the Professional Cloud Architect Exam
 
-Implement [PRD 0001](/prd/0001-cloud-architect-exam-simulator.md), [ADR 0001](/adr/0001-port-pmle-simulator.md), [BDR 0001](/bdr/0001-exam-attempt-and-scoring.md), [BDR 0002](/bdr/0002-question-validation-and-publication.md), [BDR 0003](/bdr/0003-exam-presentation.md), [ADR 0002](/adr/0002-show-official-case-studies.md), and [BDR 0004](/bdr/0004-case-studies.md), based on [exam-format research](/research/0001-exam-format-and-blueprint.md).
+Implement [PRD 0001](/prd/0001-cloud-architect-exam-simulator.md), [ADR 0001](/adr/0001-port-pmle-simulator.md), [BDR 0001](/bdr/0001-exam-attempt-and-scoring.md), [BDR 0002](/bdr/0002-question-validation-and-publication.md), [BDR 0003](/bdr/0003-exam-presentation.md), [ADR 0002](/adr/0002-show-official-case-studies.md), [BDR 0004](/bdr/0004-case-studies.md), [ADR 0003](/adr/0003-decide-case-study-layout-in-exam-screen.md), and [BDR 0005](/bdr/0005-case-study-layout-modes.md), based on [exam-format research](/research/0001-exam-format-and-blueprint.md).
 
 ### Scope
 
@@ -28,3 +28,4 @@ Implement [PRD 0001](/prd/0001-cloud-architect-exam-simulator.md), [ADR 0001](/a
 
 - 2026-10-01: PR [1/5] ports the application and documentation.
 - 2026-10-01: PR [2/5] adds case-study references, the case-study rules, and the split-screen presentation of Google's case-study documents. The issue is complete when both are on `main` and GitHub Pages renders the catalog.
+- 2026-10-01: Both are on `main`, and GitHub Pages renders the catalog at `https://bajor.github.io/gcp-pca-exam-simulator/`. PR #8 moves the case-study embedding decision into the exam screen ([ADR 0003](/adr/0003-decide-case-study-layout-in-exam-screen.md), [BDR 0005](/bdr/0005-case-study-layout-modes.md)), so a wide browser without a PDF viewer links the case study under the question. Merging PR #8 completes this issue.

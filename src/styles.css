@@ -107,8 +107,12 @@ fieldset { display: grid; gap: 2px; margin: 0; padding: 0; border: 0; }
 .finish-button { width: 100%; color: var(--wrong); }
 
 .case-study-reference { margin: 6px 0 0; font-weight: bold; }
-/* The case-study column is wider because the embedded document scales to its width. */
-.exam-layout[data-case-study="true"] { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) 13rem; }
+/* The exam screen sets data-case-study to "document" when it embeds the case study and to "link" otherwise.
+   The case-study column is wider because the embedded document scales to its width. */
+.exam-layout[data-case-study="document"] { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) 13rem; }
+.exam-layout[data-case-study="link"] { grid-template-columns: minmax(0, 1fr) 13rem; grid-template-rows: auto 1fr; }
+.exam-layout[data-case-study="link"] > .case-study-pane { grid-column: 1; grid-row: 2; border-top: 1px solid var(--rule); border-left: 0; }
+.exam-layout[data-case-study="link"] > .navigator { grid-column: 2; grid-row: 1 / span 2; }
 .case-study-pane { display: flex; flex-direction: column; gap: 6px; border-left: 1px solid var(--rule); padding: 0 10px 10px; background: #f7f7f7; font-size: var(--small-text-size); overflow-wrap: anywhere; }
 .case-study-pane > .eyebrow { margin: 0 -10px; padding: 4px 10px; color: #fff; background: var(--title-bar); }
 .case-study-pane iframe { flex: 1; width: 100%; min-height: 32rem; border: 1px solid var(--rule); background: var(--panel); }
@@ -146,18 +150,10 @@ details { margin-top: 8px; font-size: var(--small-text-size); }
 summary { padding: 4px 0; cursor: pointer; }
 details li { margin: 4px 0; }
 
-/* Below the split-screen width, a case-study question keeps the question and navigator columns and shows the
-   case-study link under the question; src/components/CaseStudyPane.tsx embeds the document only from 1100 pixels. */
-@media (max-width: 1099px) {
-  .exam-layout[data-case-study="true"] { grid-template-columns: minmax(0, 1fr) 13rem; grid-template-rows: auto 1fr; }
-  .exam-layout[data-case-study="true"] > .case-study-pane { grid-column: 1; grid-row: 2; border-top: 1px solid var(--rule); border-left: 0; }
-  .exam-layout[data-case-study="true"] > .navigator { grid-column: 2; grid-row: 1 / span 2; }
-}
-
 /* The narrow layout. */
 @media (max-width: 800px) {
-  .exam-layout, .exam-layout[data-case-study="true"] { grid-template-columns: 1fr; grid-template-rows: none; align-content: start; }
-  .exam-layout[data-case-study="true"] > .case-study-pane, .exam-layout[data-case-study="true"] > .navigator { grid-column: auto; grid-row: auto; }
+  .exam-layout, .exam-layout[data-case-study] { grid-template-columns: 1fr; grid-template-rows: none; align-content: start; }
+  .exam-layout[data-case-study] > .case-study-pane, .exam-layout[data-case-study] > .navigator { grid-column: auto; grid-row: auto; }
   .navigator { border-top: 1px solid var(--rule); border-left: 0; }
   .question-grid { grid-template-columns: repeat(10, 1fr); }
   .catalog-grid { grid-template-columns: 1fr; }

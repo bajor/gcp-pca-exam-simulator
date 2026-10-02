@@ -133,6 +133,21 @@ test("links the case study below its question on a medium-width screen", async (
   expect(downloads()).toBe(0);
 });
 
+test("links the case study below its question on a wide screen without a PDF viewer", async ({ page, isMobile }) => {
+  test.skip(isMobile, "This checks a wide screen.");
+  await page.addInitScript(() => Object.defineProperty(Navigator.prototype, "pdfViewerEnabled", { get: () => false }));
+  const downloads = countDownloads(page);
+  await openCaseStudyQuestion(page);
+  await expect(page.getByTitle("EHR Healthcare case study document")).toHaveCount(0);
+  const link = (await page.getByRole("link", { name: "Open the EHR Healthcare case study in a new tab" }).boundingBox())!;
+  const next = (await page.getByRole("button", { name: "Next" }).boundingBox())!;
+  const questionNavigator = (await page.getByRole("complementary", { name: "Question navigator" }).boundingBox())!;
+  expect(link.y).toBeGreaterThan(next.y + next.height);
+  expect(link.x + link.width).toBeLessThanOrEqual(questionNavigator.x);
+  expect(await fitsViewport(page)).toBe(true);
+  expect(downloads()).toBe(0);
+});
+
 test("links the case study below its question on a phone", async ({ page, isMobile }) => {
   test.skip(!isMobile, "Wide screens embed the document.");
   const downloads = countDownloads(page);

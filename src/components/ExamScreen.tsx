@@ -1,9 +1,12 @@
-import { useEffect, useEffectEvent, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useRef, useState, useSyncExternalStore } from "react";
 import type { InProgressAttempt } from "../domain/attempt";
 import { caseStudies } from "../domain/caseStudies";
 import type { ChoiceId, QuestionSet } from "../domain/questions";
 import { CaseStudyPane } from "./CaseStudyPane";
 import { ConfirmDialog } from "./ConfirmDialog";
+
+// The split screen needs room for the question and the case-study document side by side.
+const splitScreenQuery = "(min-width: 1100px)";
 
 interface ExamScreenProps {
   readonly questionSet: QuestionSet;
@@ -30,6 +33,7 @@ export function ExamScreen({
   const expire = useEffectEvent(onExpire);
   const question = questionSet.questions[attempt.currentQuestionIndex];
   const caseStudy = question.caseStudyId === undefined ? undefined : caseStudies[question.caseStudyId];
+  const showsCaseStudyDocument = useSyncExternalStore(subscribeToSplitScreen, canShowCaseStudyDocument);
   const selected = attempt.answers[question.id] ?? [];
   const marked = attempt.markedQuestionIds.includes(question.id);
   const unanswered = questionSet.questions.filter((item) => !(attempt.answers[item.id]?.length)).length;
@@ -64,7 +68,7 @@ export function ExamScreen({
         </div>
       </header>
 
-      <div className="exam-layout" data-case-study={caseStudy !== undefined}>
+      <div className="exam-layout" data-case-study={caseStudy && (showsCaseStudyDocument ? "document" : "link")}>
         <section className="question-card" aria-labelledby="question-heading">
           <div className="question-meta">
             <span>{question.kind === "single" ? "Select one" : `Choose ${question.requiredSelections}`}</span>
@@ -108,7 +112,7 @@ export function ExamScreen({
           </nav>
         </section>
 
-        {caseStudy && <CaseStudyPane caseStudy={caseStudy} />}
+        {caseStudy && <CaseStudyPane caseStudy={caseStudy} showsDocument={showsCaseStudyDocument} />}
 
         <aside className="navigator" aria-label="Question navigator">
           <p><strong>{questionSet.questions.length - unanswered}</strong> answered</p>
@@ -150,6 +154,17 @@ export function ExamScreen({
       )}
     </main>
   );
+}
+
+function subscribeToSplitScreen(onChange: () => void): () => void {
+  const splitScreen = window.matchMedia(splitScreenQuery);
+  splitScreen.addEventListener("change", onChange);
+  return () => splitScreen.removeEventListener("change", onChange);
+}
+
+// A browser without an inline PDF viewer downloads an embedded PDF, so it only gets the link.
+function canShowCaseStudyDocument(): boolean {
+  return navigator.pdfViewerEnabled && window.matchMedia(splitScreenQuery).matches;
 }
 
 function formatTime(milliseconds: number): string {
