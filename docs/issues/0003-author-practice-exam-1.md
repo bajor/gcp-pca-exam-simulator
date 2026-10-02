@@ -79,17 +79,17 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p1-secure-01 | single | 3.1.a | T7 | no | none | Synchronize Active Directory users and groups and grant roles to groups | a | D3, D5, D1 | L2, L4 |
-| pca-p1-secure-02 | single | 3.1.b | T7 | no | none | Folder for the business unit with roles granted on the folder | b | D4, D5, D3 | L2, L4 |
-| pca-p1-secure-03 | multiple | 3.1.d | T7 | no | none | Separate key administration from key use (choose two) | a, d | D5, D5, D7 | L2, L4 |
-| pca-p1-secure-04 | single | 3.1.e | T7 | no | none | VPC Service Controls perimeter against copying data to outside projects | d | D7, D3, D5 | L2, L4 |
-| pca-p1-secure-05 | single | 3.1.f | T7 | no | none | Customer-managed key with HSM protection level for the validation requirement | c | D7, D2, D3 | L2, L4 |
-| pca-p1-secure-06 | single | 3.1.g | T7 | no | none | IAP TCP forwarding for administrator SSH without external IP addresses | a | D5, D1, D7 | L2, L4 |
-| pca-p1-secure-07 | single | 3.1.h | T7 | no | none | Binary Authorization requiring attestations from the build pipeline | d | D7, D6, D3 | L2, L4 |
-| pca-p1-secure-08 | single | 3.1.i | T7 | yes | Cymbal Retail | Model Armor screening of prompts and responses | b | D7, D3, D8 | L2, L4 |
-| pca-p1-secure-09 | single | 3.2.a | T8 | no | EHR Healthcare | Business associate agreement and covered products for health records | c | D6, D7, D3 | L2, L4 |
-| pca-p1-secure-10 | single | 3.2.b | T8 | no | Cymbal Retail | Sensitive Data Protection de-identification before transcripts reach analytics | d | D5, D7, D8 | L2, L4 |
-| pca-p1-secure-11 | multiple | 3.2.d | T8 | no | none | Aggregated organization sink to storage with a locked retention period (choose two) | b, e | D4, D7, D3 | L2, L4 |
+| pca-p1-secure-01 | single | 3.1.a | T7 | no | none | Bucket-level grant to a group with an IAM condition that expires at the deadline | a | D4, D5, D1 | L2, L4 |
+| pca-p1-secure-02 | single | 3.1.b | T7 | no | none | Folder for the business unit with roles granted and the location constraint set on the folder | b | D4, D4, D2 | L2, L4 |
+| pca-p1-secure-03 | multiple | 3.1.d | T7 | no | none | Dedicated key project, with key administration and key use granted to different principals (choose two) | a, d | D5, D5, D5 | L2, L4 |
+| pca-p1-secure-04 | single | 3.1.e | T7 | no | none | VPC Service Controls perimeter with an access level for the corporate network | d | D7, D7, D3 | L2, L4 |
+| pca-p1-secure-05 | single | 3.1.f | T7 | no | none | Customer-managed keys with the HSM protection level for FIPS 140-2 Level 3 | c | D7, D7, D2 | L2, L4, L6 |
+| pca-p1-secure-06 | single | 3.1.g | T7 | no | none | IAP TCP forwarding for administrator SSH without external IP addresses | a | D1, D5, D2 | L2, L4 |
+| pca-p1-secure-07 | single | 3.1.h | T7 | no | none | Binary Authorization in enforced mode requiring the pipeline's attestation | d | D7, D3, D7 | L2, L4 |
+| pca-p1-secure-08 | single | 3.1.i | T7 | yes | Cymbal Retail | Model Armor screening of both prompts and responses | b | D4, D3, D8 | L2, L4 |
+| pca-p1-secure-09 | single | 3.2.a | T8 | no | EHR Healthcare | Google Cloud BAA with only generally available covered services for PHI | c | D6, D7, D3 | L1, L2, L4 |
+| pca-p1-secure-10 | single | 3.2.b | T8 | no | Cymbal Retail | Sensitive Data Protection de-identification before transcripts reach BigQuery | d | D5, D7, D8 | L2, L4 |
+| pca-p1-secure-11 | multiple | 3.2.d | T8 | no | none | Organization-level aggregated sink and a locked bucket retention policy (choose two) | b, e | D4, D7, D7 | L3, L4 |
 
 ### Plan: analyze
 
@@ -144,3 +144,7 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
   - Two questions keep their planned consideration but test a different decision. provision-05 tests Bigtable replication with multi-cluster routing, because design-06's stem already describes the planned Cloud SQL read replica. provision-09 tests GKE Autopilot billing, a decision that the coverage matrix lists for 2.3.e.
   - provision-01 tests the cheapest SLA-backed Interconnect topology rather than 99.99% redundancy, because the 99.99% rules now allow a single-metro topology that changes often.
   - The rows above record each question's final distractor mechanisms and levers.
+- 2026-10-02: Authored the `secure` section (author `claude-opus-5.5-p1-secure-20261002`).
+  - secure-01 tests time-bounded IAM conditions instead of directory synchronization, because Workforce Identity Federation would make the planned synchronization question arguable.
+  - secure-09 keeps the BAA decision. Google's BAA now covers the entire infrastructure, so the question tests the rule against unsupported services and pre-GA offerings for PHI.
+  - The rows above record each question's final mechanisms and levers.
