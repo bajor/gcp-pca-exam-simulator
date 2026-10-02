@@ -80,17 +80,17 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p2-secure-01 | single | 3.1.c | T7 | no | none | Secret Manager with rotation for third-party API credentials | b | D5, D7, D1 | L2, L4 |
+| pca-p2-secure-01 | single | 3.1.c | T7 | no | none | Secret Manager with a rotation schedule for a partner's API key | b | D5, D7, D1 | L4, L7 |
 | pca-p2-secure-02 | single | 3.1.a | T7 | no | Altostrat Media | Workforce Identity Federation for users of a third-party identity provider | d | D1, D5, D7 | L2, L4 |
-| pca-p2-secure-03 | single | 3.1.b | T7 | no | none | Organization policy inherited with a folder-level exception | a | D4, D3, D5 | L2, L4 |
-| pca-p2-secure-04 | multiple | 3.1.e | T7 | no | none | Organization policies that block service account key creation and external IP addresses (choose two) | a, c | D5, D6, D3 | L2, L4 |
-| pca-p2-secure-05 | single | 3.1.f | T7 | no | none | Customer-managed key in the same location as the data with automatic rotation | c | D4, D7, D3 | L2, L4 |
-| pca-p2-secure-06 | single | 3.1.g | T7 | no | none | Identity-Aware Proxy with context-aware access for a partner web portal | b | D5, D1, D7 | L2, L4 |
-| pca-p2-secure-07 | single | 3.1.h | T7 | no | none | Vulnerability scanning gate in the build before images are pushed | d | D8, D6, D7 | L2, L4 |
-| pca-p2-secure-08 | single | 3.1.i | T11 | yes | Altostrat Media | Model endpoints reachable only inside the VPC Service Controls perimeter | a | D5, D7, D3 | L2, L4 |
-| pca-p2-secure-09 | single | 3.2.c | T8 | no | none | Compliance reports and the shared responsibility model for a SOC 2 audit | c | D6, D7, D3 | L2, L4 |
-| pca-p2-secure-10 | single | 3.2.a | T8 | no | KnightMotives Automotive | Assured Workloads for EU data residency | d | D7, D4, D3 | L2, L4 |
-| pca-p2-secure-11 | single | 3.2.b | T8 | no | none | Tokenization that reduces PCI DSS scope | b | D5, D7, D3 | L2, L4 |
+| pca-p2-secure-03 | single | 3.1.b | T7 | no | none | Public access prevention on the organization with a project-level exception | a | D4, D7, D5 | L2, L4 |
+| pca-p2-secure-04 | multiple | 3.1.e | T7 | no | none | Organization policies that block service account key creation and external IPv4 addresses (choose two) | a, c | D6, D4, D3 | L2, L4 |
+| pca-p2-secure-05 | single | 3.1.f | T7 | no | none | Regional customer-managed key with automatic rotation in the dataset's region | c | D4, D1, D3 | L2, L4 |
+| pca-p2-secure-06 | single | 3.1.g | T7 | no | none | Identity-Aware Proxy with an IP-based access level for a partner web portal | b | D5, D1, D4 | L2, L4 |
+| pca-p2-secure-07 | single | 3.1.h | T7 | no | none | On-Demand Scanning step that fails the build before images are pushed | d | D6, D3, D8 | L2, L4 |
+| pca-p2-secure-08 | single | 3.1.i | T11 | yes | Altostrat Media | VPC Service Controls perimeter around the AI and data projects | a | D7, D3, D4 | L2, L4 |
+| pca-p2-secure-09 | single | 3.2.c | T8 | no | none | Google's SOC 2 report plus the startup's own control evidence under shared responsibility | c | D6, D7, D3 | L2, L4 |
+| pca-p2-secure-10 | single | 3.2.a | T8 | no | KnightMotives Automotive | Assured Workloads EU Data Boundary and Support control package | d | D3, D7, D3 | L2, L4 |
+| pca-p2-secure-11 | single | 3.2.b | T8 | no | none | Tokenization in an isolated payment project that takes systems out of PCI DSS scope | b | D7, D6, D7 | L2, L4 |
 
 ### Plan: analyze
 
@@ -144,3 +144,9 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
   - provision-10 tests the AI Hypercomputer consumption options, and provision-11 uses the guide's name NotebookLM for the product that the documentation calls Gemini Notebook Enterprise.
   - AI decisive (6) and T4 (5) remain exactly at their minimums, so a later section should add one more AI-decisive question to give the set a margin.
   - The correct option is strictly the longest in 5 of 25 single-choice questions so far.
+- 2026-10-02: Authored the `secure` section (author `claude-opus-5.5-p2-secure-20261002`).
+  - secure-03 tests public access prevention with a project-level exception instead of domain-restricted sharing, because Google now offers three methods for domain-restricted sharing whose inheritance rules differ.
+  - secure-05 states that the key material must stay in Germany, because BigQuery accepts a global key through the bq tool and SQL, so a key's location alone would not rule out a distractor.
+  - secure-10 contrasts the EU Data Boundary and the EU Data Boundary and Support control packages, which differ in who handles support cases.
+  - secure-11 uses Google's tokenization service with Cloud KMS rather than Sensitive Data Protection, so that it does not repeat Practice Exam 1's secure-10.
+  - The correct option is strictly the longest in 8 of 35 single-choice questions so far.
