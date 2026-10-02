@@ -46,7 +46,7 @@ export const practiceExamOneAnalyzeSection = {
           id: "dr-patterns",
           title: "Disaster recovery scenarios for applications",
           url: "https://docs.cloud.google.com/architecture/dr-scenarios-for-applications",
-          claim: "A warm pattern keeps RTO and RPO values as small as possible without the effort and expense of a fully highly available configuration, while a cold pattern keeps only minimal resources in the recovery environment.",
+          claim: "A warm pattern keeps RTO and RPO values as small as possible without the effort and expense of a fully highly available configuration, while a cold pattern keeps only minimal resources in the recovery environment. When recovery relies on snapshots, the RPO is determined by the last snapshot taken.",
         },
         {
           id: "dr-outages",
@@ -71,8 +71,8 @@ export const practiceExamOneAnalyzeSection = {
         {
           id: "c",
           text: "Back up the databases to Cloud Storage every night, and rebuild the applications and restore the latest backups in another region during a regional outage.",
-          feedback: "Incorrect. Nightly backups can lose up to a day of data, which far exceeds the recovery point objective of 5 minutes.",
-          evidenceIds: ["dr-planning"],
+          feedback: "Incorrect. When recovery uses the latest backup, nightly backups can lose up to a day of data, which far exceeds the recovery point objective of 5 minutes.",
+          evidenceIds: ["dr-planning", "dr-patterns"],
         },
         {
           id: "d",
@@ -119,7 +119,7 @@ export const practiceExamOneAnalyzeSection = {
         },
         {
           id: "d",
-          text: "Change the threshold of the dangerous content category and of every other harm category to OFF, so that no response is blocked for safety reasons.",
+          text: "Change the threshold of the dangerous content category and of every other harm category to OFF, so that the configurable content filters block no responses.",
           feedback: "Incorrect. OFF turns off automated blocking for every category, which loosens the categories that the compliance team requires to stay as strict as they are.",
           evidenceIds: ["safety-filters"],
         },
@@ -151,7 +151,7 @@ export const practiceExamOneAnalyzeSection = {
         {
           id: "a",
           text: "Create a Cloud Build trigger for each environment that builds a new image from the same Git commit and deploys it whenever the branch is updated.",
-          feedback: "Incorrect. Building a new image for each environment can still put an untested image into production, unlike a Cloud Deploy release that references specific images, and the triggers record no approval.",
+          feedback: "Incorrect. Building a new image for each environment can still put an untested image into production, unlike a Cloud Deploy release that references specific images, and this option sets up no approval.",
           evidenceIds: ["deploy-overview"],
         },
         {
@@ -228,7 +228,7 @@ export const practiceExamOneAnalyzeSection = {
       kind: "single",
       section: "analyze",
       objective: "4.1 Analyzing and defining technical processes: 4.1.e service catalog and provisioning",
-      prompt: "A bank's platform team maintains approved Terraform configurations for a hardened GKE cluster and an encrypted Cloud SQL instance. Forty application teams copy these configurations from a wiki page that often lists outdated versions, so teams deploy unapproved settings. The platform team wants teams to find and deploy only the latest approved configurations from one curated place, to control which teams can see them, and to avoid building or hosting its own portal. What should you do?",
+      prompt: "A bank's platform team maintains approved Terraform configurations for a hardened GKE cluster and an encrypted Cloud SQL instance. Forty application teams copy these configurations from old email attachments and team folders, so many teams deploy outdated, unapproved settings. The platform team wants teams to find and deploy only the latest approved configurations from one curated place, to control which teams can see them, and to avoid building or hosting its own portal. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -244,6 +244,18 @@ export const practiceExamOneAnalyzeSection = {
           claim: "A Service Catalog solution can be a Terraform configuration that users deploy using Terraform, which Google recommends for an infrastructure as code approach.",
         },
         {
+          id: "manage-solutions",
+          title: "Managing solutions",
+          url: "https://docs.cloud.google.com/service-catalog/docs/manage-solutions",
+          claim: "Users who access a solution after you update it can only deploy the latest version.",
+        },
+        {
+          id: "share-catalog",
+          title: "Sharing a catalog",
+          url: "https://docs.cloud.google.com/service-catalog/docs/share-catalog",
+          claim: "You share a catalog to a Google Cloud resource, such as a project, folder, or organization, and users who have access to that resource can view and launch its solutions.",
+        },
+        {
           id: "basic-roles",
           title: "Roles overview",
           url: "https://docs.cloud.google.com/iam/docs/roles-overview",
@@ -253,8 +265,8 @@ export const practiceExamOneAnalyzeSection = {
       choices: [
         {
           id: "a",
-          text: "Keep the configurations on the wiki page, and add a banner that tells teams to check the version history before they copy a configuration.",
-          feedback: "Incorrect. The wiki still depends on each team copying the right version, which is how unapproved settings reached deployment, while a curated catalog keeps solutions current.",
+          text: "Keep sending the configurations by email, and ask every team to check the version number in each configuration before it deploys one.",
+          feedback: "Incorrect. Email still depends on each team using the right version, which is how unapproved settings reached deployment, while a curated catalog keeps solutions current.",
           evidenceIds: ["service-catalog"],
         },
         {
@@ -265,13 +277,13 @@ export const practiceExamOneAnalyzeSection = {
         },
         {
           id: "c",
-          text: "Add each configuration to Service Catalog as a Terraform solution, assign the solutions to a catalog, and share the catalog with the application teams.",
-          feedback: "Correct. Service Catalog lets the platform team curate Terraform solutions, control their distribution, and share a catalog with the teams that should see it, without a portal of its own.",
-          evidenceIds: ["service-catalog", "terraform-solutions"],
+          text: "Add each configuration to Service Catalog as a Terraform solution, assign the solutions to a catalog, and share the catalog with the folder that contains the teams' projects.",
+          feedback: "Correct. Service Catalog lets the platform team curate Terraform solutions and share the catalog through the teams' folder, and users can only deploy the latest version of an updated solution, without a portal of its own.",
+          evidenceIds: ["service-catalog", "terraform-solutions", "manage-solutions", "share-catalog"],
         },
         {
           id: "d",
-          text: "Build a web portal on Cloud Run with a Firestore database that lists the configurations, and have the teams download them from the portal.",
+          text: "Build a web portal on Cloud Run with a Firestore database that lists each approved configuration, and have the teams download the latest configurations from that portal before they deploy.",
           feedback: "Incorrect. The platform team would build and host its own portal, which it wants to avoid, while Service Catalog already provides curated catalogs that it can share.",
           evidenceIds: ["service-catalog"],
         },
@@ -290,20 +302,20 @@ export const practiceExamOneAnalyzeSection = {
           id: "manage-change",
           title: "Automate and manage change",
           url: "https://docs.cloud.google.com/architecture/framework/operational-excellence/automate-and-manage-change",
-          claim: "Effective change management includes change governance with approval processes and communication plans, the assessment and mitigation of risks, and the testing and validation of changes.",
+          claim: "Effective change management includes change governance with approval processes and communication plans, the assessment and mitigation of risks, the testing and validation of changes, and controlled deployment with mechanisms to roll back if needed.",
         },
         adoptionFramework,
       ],
       choices: [
         {
           id: "a",
-          text: "Pilot the pipeline with two teams, train them and collect their feedback, communicate the plan with the CIO's backing, and expand in phases while the ticket process remains available.",
-          feedback: "Correct. A pilot with training, feedback, and visible sponsorship validates the process and builds momentum, and a phased expansion with the old process still available keeps teams delivering with a fallback.",
+          text: "Pilot the pipeline with two teams, train them and fix the problems they find, communicate the plan with the CIO's backing, and expand in phases while the ticket process remains available.",
+          feedback: "Correct. The pilot validates the process before every team depends on it, training and a communicated plan with the CIO's mandate prepare the teams, and a controlled rollout with the ticket process still available keeps a way to roll back.",
           evidenceIds: ["manage-change", "adoption-framework"],
         },
         {
           id: "b",
-          text: "Move all 30 teams to the pipeline on the same day, and retire the ticket process at the same time so that the teams cannot return to old habits.",
+          text: "Move all 30 teams to the pipeline on the same day, and retire the ticket process at the same time so that the teams cannot return to their old habit of filing tickets.",
           feedback: "Incorrect. Switching every team at once without a fallback skips validation and risk mitigation, and it breaks the requirement that teams can return to the ticket process.",
           evidenceIds: ["manage-change"],
         },
@@ -327,7 +339,7 @@ export const practiceExamOneAnalyzeSection = {
       kind: "single",
       section: "analyze",
       objective: "4.2 Analyzing and defining business processes: 4.2.c team assessment and skills readiness",
-      prompt: "A regional retailer must launch eight containerized web services on Google Cloud within three months. Its six-person operations team has deep experience with VMware and Windows Server but has never run Kubernetes or containers in production. Leadership wants the services to run reliably from launch without moving the date, and it wants the team to build cloud skills for the long term. What should you do?",
+      prompt: "A regional retailer must launch eight containerized Linux web services on Google Cloud within three months. Its six-person operations team has deep experience with VMware and Windows Server but has never run Kubernetes or containers in production. Leadership wants the services to run reliably from launch without moving the date, wants the team to operate as little infrastructure as possible until it has run containers in production, and wants the team to build cloud skills for the long term. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         adoptionFramework,
@@ -341,14 +353,14 @@ export const practiceExamOneAnalyzeSection = {
           id: "gke-overview",
           title: "GKE overview",
           url: "https://docs.cloud.google.com/kubernetes-engine/docs/concepts/kubernetes-engine-overview",
-          claim: "GKE provides the operational power of Kubernetes while managing many of the underlying components, such as the control plane and nodes, for you.",
+          claim: "GKE provides the operational power of Kubernetes while managing many of the underlying components for you, and Autopilot mode minimizes operational overhead because Google Cloud manages both the nodes and the control plane.",
         },
       ],
       choices: [
         {
           id: "a",
           text: "Have the team build and operate a self-managed Kubernetes cluster on Compute Engine VMs, so that it learns Kubernetes internals while it runs the services.",
-          feedback: "Incorrect. A self-managed cluster puts the whole operation of Kubernetes on a team without that experience, while GKE and Cloud Run manage much of it.",
+          feedback: "Incorrect. A self-managed cluster makes the team operate all of Kubernetes, the opposite of operating as little infrastructure as possible, while GKE and Cloud Run manage much of it.",
           evidenceIds: ["gke-overview", "what-is-cloud-run"],
         },
         {
@@ -360,8 +372,8 @@ export const practiceExamOneAnalyzeSection = {
         {
           id: "c",
           text: "Run the services on a GKE Standard cluster with custom node pools and a service mesh, and have the team learn each component during the launch.",
-          feedback: "Incorrect. Custom node pools and a service mesh add more for an inexperienced team to configure and run at launch than the services need, while Cloud Run needs no cluster at all.",
-          evidenceIds: ["what-is-cloud-run"],
+          feedback: "Incorrect. Custom node pools and a service mesh are more infrastructure for the team to operate, which the constraint rules out, while Cloud Run needs no cluster and Autopilot would at least manage the nodes.",
+          evidenceIds: ["what-is-cloud-run", "gke-overview"],
         },
         {
           id: "d",
@@ -377,7 +389,7 @@ export const practiceExamOneAnalyzeSection = {
       kind: "single",
       section: "analyze",
       objective: "4.2 Analyzing and defining business processes: 4.2.f cost optimization and resource optimization",
-      prompt: "A logistics company runs 200 Compute Engine VMs for steady production workloads that will run for at least three more years. Finance wants to buy 3-year resource-based committed use discounts for the current machine types next week. Cloud Monitoring shows that 60 of the VMs use less than 25% of their vCPUs and memory, and Compute Engine shows machine type recommendations for them. You need to minimize the company's compute costs over the three years. What should you do?",
+      prompt: "A logistics company runs 200 Compute Engine VMs for steady production workloads that will run for at least three more years. The workloads keep state on the VMs and cannot tolerate interruptions. Finance wants to buy 3-year resource-based committed use discounts for the current machine types next week. Cloud Monitoring shows that 60 of the VMs use less than 25% of their vCPUs and memory, and Compute Engine shows machine type recommendations for them. You need to minimize the company's compute costs over the three years. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -396,7 +408,7 @@ export const practiceExamOneAnalyzeSection = {
           id: "spot",
           title: "Spot VMs",
           url: "https://docs.cloud.google.com/compute/docs/instances/spot",
-          claim: "Compute Engine can preempt Spot VMs at any time, and they suit fault-tolerant workloads such as batch processing jobs.",
+          claim: "Compute Engine can preempt Spot VMs at any time to reclaim resources, so you use Spot VMs to reduce costs for fault-tolerant workloads, such as batch processing jobs or stateless applications.",
         },
       ],
       choices: [
@@ -414,14 +426,14 @@ export const practiceExamOneAnalyzeSection = {
         },
         {
           id: "c",
-          text: "Purchase 3-year commitments that cover the current usage of all 200 VMs plus 30% for growth, so that no VM ever runs at on-demand prices.",
+          text: "Purchase 3-year commitments that cover the current usage of all 200 VMs plus 30% for growth, so that future growth also receives the discount.",
           feedback: "Incorrect. Committed resources are billed whether or not they are used, so an extra 30% on top of oversized VMs is paid for during the whole term.",
           evidenceIds: ["cuds"],
         },
         {
           id: "d",
           text: "Move all 200 VMs to Spot VMs instead of buying commitments, because Spot VMs cost less than standard VMs with committed use discounts.",
-          feedback: "Incorrect. Compute Engine can preempt Spot VMs at any time, which suits fault-tolerant work, not steady production workloads.",
+          feedback: "Incorrect. Compute Engine can preempt Spot VMs at any time, which suits fault-tolerant workloads, while these stateful workloads cannot tolerate interruptions.",
           evidenceIds: ["spot"],
         },
       ],
@@ -463,7 +475,7 @@ export const practiceExamOneAnalyzeSection = {
         },
         {
           id: "d",
-          text: "Write an architecture decision record for each significant decision that captures the options, the requirements, and the choice, and store it with the service's code.",
+          text: "Write an architecture decision record for each significant decision that captures the options, the requirements, and the reasons for the choice, and store it with the service's code.",
           feedback: "Correct. An ADR captures the key options, the main requirements that drive a decision, and the decision itself, and storing it near the code lets engineers find the background later.",
           evidenceIds: ["decision-records"],
         },
