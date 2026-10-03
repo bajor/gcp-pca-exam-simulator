@@ -16,7 +16,7 @@ export const practiceExamOneImplementSection = {
       section: "implement",
       objective: "5.1 Advising development and operation teams to ensure the successful deployment of the solution: 5.1.b API management best practices",
       caseStudyId: "ehr-healthcare",
-      prompt: "EHR Healthcare needs to bring new insurance providers onto its platform faster. Each provider will call EHR's claims and eligibility APIs, which run as backend services on GKE. Each provider must get its own credentials, reach only the API operations in its contract, and stay within a request quota set for that provider, and EHR wants usage analytics for each provider without changing the backend services. What should you do?",
+      prompt: "EHR Healthcare needs to bring new insurance providers onto its platform faster. Each new provider will call new claims and eligibility APIs that EHR runs as backend services on GKE. Each provider must get its own credentials, reach only the API operations in its contract, and stay within a request quota set for that provider. EHR wants usage analytics for each provider without changing the backend services, and it does not want to build or operate its own gateway code. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -33,33 +33,45 @@ export const practiceExamOneImplementSection = {
           id: "api-products",
           title: "Introduction to API products",
           url: "https://docs.cloud.google.com/apigee/docs/api-platform/publish/what-api-product",
-          claim: "An API product bundles operations, which can be limited by quota, and is the central mechanism for access control. Each registered developer app is associated with at least one API product and receives a unique consumer key.",
+          claim: "An API product bundles operations, which can be limited by quota, and is the central mechanism for access control. Each registered developer app is associated with at least one API product and receives a unique consumer key. Without a credential enforcement policy in the API proxy, any caller can invoke the APIs, and quota limits on an API product are not enforced automatically.",
+        },
+        {
+          id: "verify-api-key",
+          title: "VerifyAPIKey policy",
+          url: "https://docs.cloud.google.com/apigee/docs/api-platform/reference/policies/verify-api-key-policy",
+          claim: "The VerifyAPIKey policy enforces verification of API keys at runtime, letting only apps with approved API keys access the APIs, and ensures that each key is valid, not revoked, and approved for the specific resources associated with its API products.",
+        },
+        {
+          id: "quota-policy",
+          title: "Quota policy",
+          url: "https://docs.cloud.google.com/apigee/docs/api-platform/reference/policies/quota-policy",
+          claim: "If an API proxy is included in an API product, the Quota policy can use the quota settings defined in that product, and Apigee keeps a separate quota counter for each operation defined in the product by default.",
         },
       ],
       choices: [
         {
           id: "a",
           text: "Expose the backend services through an external Application Load Balancer, and give every provider the same API key, which the services check on each request.",
-          feedback: "Incorrect. A shared key cannot identify or limit individual providers, so it gives no per-provider credentials, quotas, or analytics, which Apigee provides through apps and API products.",
-          evidenceIds: ["api-products"],
+          feedback: "Incorrect. A shared key cannot identify individual providers or limit each one to its contract's operations, and checking the key in the services changes the backend, while Apigee apps and API products give each provider its own key and quota.",
+          evidenceIds: ["api-products", "apigee"],
         },
         {
           id: "b",
-          text: "Put the APIs behind Apigee proxies, bundle each contract's operations with a quota into an API product, and register an app with its own credentials for each provider.",
-          feedback: "Correct. API products bundle the allowed operations with a quota, each registered app gets a unique consumer key, and the Apigee proxy layer adds security, quotas, and analytics without changes to the backend services.",
-          evidenceIds: ["case-study", "apigee", "api-products"],
+          text: "Put the APIs behind Apigee proxies with VerifyAPIKey and Quota policies, bundle each contract's operations with a quota into an API product, and register an app for each provider.",
+          feedback: "Correct. Each registered app gets a unique consumer key, the VerifyAPIKey policy admits only approved keys for the operations in the app's API product, the Quota policy enforces the product's quota, and the proxy layer adds analytics without changes to the backend services.",
+          evidenceIds: ["case-study", "apigee", "api-products", "verify-api-key", "quota-policy"],
         },
         {
           id: "c",
           text: "Build a custom gateway on GKE that stores provider credentials in a database, counts the requests of each provider, and writes the usage records to BigQuery for monthly reporting.",
-          feedback: "Incorrect. A custom gateway could work, but EHR would build and operate the credentials, quotas, and analytics that the Apigee proxy layer already provides.",
+          feedback: "Incorrect. A custom gateway is gateway code that EHR would build and operate, which EHR does not want, while Apigee proxies provide credentials, quotas, and analytics without changes to the backend services.",
           evidenceIds: ["apigee"],
         },
         {
           id: "d",
           text: "Deploy a separate Cloud Run service for each provider that forwards its requests to the backend services and enforces the provider's quota in code.",
-          feedback: "Incorrect. A service for each provider adds code to write and run for every new provider, which slows onboarding, while one Apigee proxy layer serves all providers.",
-          evidenceIds: ["apigee", "case-study"],
+          feedback: "Incorrect. A forwarding service for each provider is gateway code that EHR would build and operate, which EHR does not want, while one Apigee proxy layer serves all providers.",
+          evidenceIds: ["apigee"],
         },
       ],
       correctChoiceId: "b",
@@ -80,7 +92,7 @@ export const practiceExamOneImplementSection = {
         },
         {
           id: "large-transfers",
-          title: "Migration to Google Cloud: Transferring your large datasets",
+          title: "Migrate to Google Cloud: Transfer your large datasets",
           url: "https://docs.cloud.google.com/architecture/migration-to-google-cloud-transferring-your-large-datasets",
           claim: "Ideally, transferring 100 TB takes about 12 days over a 1 Gbps network.",
         },
@@ -89,7 +101,7 @@ export const practiceExamOneImplementSection = {
         {
           id: "a",
           text: "Create a Database Migration Service continuous migration job from the MySQL database to Cloud SQL, and promote the Cloud SQL instance during the Sunday cutover.",
-          feedback: "Correct. A continuous migration loads an initial dump and then replicates changes, so promoting the destination while both are in sync keeps the cutover downtime minimal.",
+          feedback: "Correct. A continuous migration loads an initial dump and then replicates changes, so promoting the destination while both are in sync keeps the cutover downtime minimal, and Database Migration Service manages the replication instead of the team's own code.",
           evidenceIds: ["dms"],
         },
         {
@@ -102,7 +114,7 @@ export const practiceExamOneImplementSection = {
           id: "c",
           text: "Create a Database Migration Service one-time migration job from the MySQL database to Cloud SQL, and switch the applications when the job finishes on Sunday.",
           feedback: "Incorrect. A one-time migration is a point-in-time snapshot during which applications can take no new writes, which lasts far longer than the 15-minute window for 3 TB.",
-          evidenceIds: ["dms"],
+          evidenceIds: ["dms", "large-transfers"],
         },
         {
           id: "d",
@@ -132,7 +144,7 @@ export const practiceExamOneImplementSection = {
         {
           id: "a",
           text: "Deploy the new version as a second Cloud Run service, and change the API's DNS record from the current service to the new one when the team is ready.",
-          feedback: "Incorrect. Changing the DNS record moves all customers at once rather than 5% first, and a second service adds an endpoint to run, while Cloud Run splits traffic between revisions of one service.",
+          feedback: "Incorrect. A DNS record points the API at one service or the other, so it cannot send 5% of requests to the new version first, while Cloud Run splits traffic between revisions of one service by percentage.",
           evidenceIds: ["run-traffic"],
         },
         {
@@ -174,13 +186,19 @@ export const practiceExamOneImplementSection = {
           id: "test-environment",
           title: "Perform testing for recovery from failures",
           url: "https://docs.cloud.google.com/architecture/framework/reliability/perform-testing-for-recovery-from-failures",
-          claim: "Choose a test environment, preferably a staging or sandbox environment that replicates the production setup, and if you test in production, have safety measures such as automated monitoring and manual rollback procedures ready.",
+          claim: "Choose a test environment, preferably a staging or sandbox environment that replicates the production setup, and if you test in production, have safety measures such as automated monitoring and manual rollback procedures ready. The test scope must also specify any external dependencies, such as third-party APIs.",
         },
         {
           id: "cluster-autoscaler",
           title: "About GKE cluster autoscaling",
           url: "https://docs.cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler",
           claim: "The cluster autoscaler resizes a Standard cluster's node pools based on workload demand, adding nodes when demand is high.",
+        },
+        {
+          id: "pod-autoscaler",
+          title: "Horizontal Pod autoscaling",
+          url: "https://docs.cloud.google.com/kubernetes-engine/docs/concepts/horizontalpodautoscaler",
+          claim: "The Horizontal Pod autoscaler automatically increases or decreases the number of Pods in response to the workload's CPU or memory consumption, or to custom or external metrics.",
         },
       ],
       choices: [
@@ -200,12 +218,12 @@ export const practiceExamOneImplementSection = {
           id: "c",
           text: "Rely on the GKE cluster autoscaler and Horizontal Pod Autoscaling to add capacity automatically when the sale traffic arrives.",
           feedback: "Incorrect. Autoscaling adds nodes and Pods when demand is high, but it does not reveal limits outside the cluster, such as the database connection limit that failed last year.",
-          evidenceIds: ["cluster-autoscaler", "load-testing"],
+          evidenceIds: ["cluster-autoscaler", "pod-autoscaler", "load-testing"],
         },
         {
           id: "d",
           text: "Run a distributed load test at sale-level traffic against a staging environment that replicates production, with a stub for the payment API, and fix the limits that it finds.",
-          feedback: "Correct. A load test finds breakpoints and shows how the application scales, and a staging environment that replicates production keeps current customers' orders safe.",
+          feedback: "Correct. A load test finds breakpoints and shows how the application scales, a staging environment that replicates production keeps current customers' orders safe, and the stub covers the third-party payment API that the test scope must account for.",
           evidenceIds: ["load-testing", "test-environment"],
         },
       ],
@@ -216,7 +234,7 @@ export const practiceExamOneImplementSection = {
       kind: "single",
       section: "implement",
       objective: "5.2 Interacting with Google Cloud programmatically: 5.2.c cloud emulators",
-      prompt: "A gaming company's CI pipeline runs integration tests for a service that stores match results in Spanner. Each run creates a new Spanner instance, which adds minutes to every build and adds cloud costs, and parallel runs sometimes interfere through shared test data. The team wants fast, isolated tests that need no cloud resources, and it accepts that permissions and performance are tested separately before release. What should you do?",
+      prompt: "A gaming company's CI pipeline runs integration tests for a Go service that stores match results in Spanner. All runs share one Spanner test instance that runs around the clock, which adds cloud costs, and parallel runs sometimes interfere through shared test data. The team wants fast, isolated tests that create no resources in Google Cloud and still send the service's real queries through its Spanner client library, and it accepts that permissions and performance are tested separately before release. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -230,25 +248,25 @@ export const practiceExamOneImplementSection = {
         {
           id: "a",
           text: "Start the Spanner emulator in each CI job, and point the service's client library at it by setting the SPANNER_EMULATOR_HOST environment variable for the tests.",
-          feedback: "Correct. The emulator runs in memory with the same APIs as Spanner, client libraries reach it through SPANNER_EMULATOR_HOST, and each job's emulator starts empty, so the tests are isolated and need no cloud resources.",
+          feedback: "Correct. The emulator runs in memory with the same APIs as Spanner, the Go client library reaches it through SPANNER_EMULATOR_HOST, and each job's emulator starts empty, so the tests are isolated and create no resources in Google Cloud.",
           evidenceIds: ["spanner-emulator"],
         },
         {
           id: "b",
-          text: "Keep one shared Spanner instance for all CI runs, and create a separate database in it for each run so that test data does not collide.",
-          feedback: "Incorrect. A shared instance is still a cloud resource that costs money and that every build depends on, while the emulator needs no cloud resources.",
+          text: "Keep the shared Spanner test instance for all CI runs, and create a separate database in it for each run so that test data does not collide.",
+          feedback: "Incorrect. A database for each run isolates the test data, but every run still creates a resource in Google Cloud and the shared instance keeps adding costs, while the emulator runs locally.",
           evidenceIds: ["spanner-emulator"],
         },
         {
           id: "c",
           text: "Run the integration tests against the production Spanner database, and write test data with a prefix that the tests delete afterward.",
-          feedback: "Incorrect. Tests against the production database put production data at risk, while the emulator serves local development and testing.",
+          feedback: "Incorrect. The production database is a Google Cloud resource, and test data written beside production data is not isolated from other runs, while each job's emulator runs locally and starts empty.",
           evidenceIds: ["spanner-emulator"],
         },
         {
           id: "d",
           text: "Replace the Spanner client library in the tests with hand-written mock objects that return fixed results for every query.",
-          feedback: "Incorrect. Mocks return fixed results instead of exercising the Spanner API, while the emulator offers the same APIs as the production service.",
+          feedback: "Incorrect. Mocks replace the client library and return fixed results, so the service's real queries never run, while the emulator offers the same APIs as the production service.",
           evidenceIds: ["spanner-emulator"],
         },
       ],
@@ -290,9 +308,9 @@ export const practiceExamOneImplementSection = {
         },
         {
           id: "b",
-          text: "Delete the duplicated firewall rules by hand in the console, and edit the state file so that it matches the resources that exist.",
-          feedback: "Incorrect. Manual fixes treat this incident's symptom, and editing the state by hand risks the corruption that Google warns can cause major infrastructure problems.",
-          evidenceIds: ["terraform-operations"],
+          text: "Edit the local state file by hand so that it lists the firewall rules that already exist, and copy the edited file to every engineer's laptop.",
+          feedback: "Incorrect. Editing the state by hand risks the corruption that Google warns can cause major infrastructure problems, and copied local state files are still not locked against simultaneous applies.",
+          evidenceIds: ["terraform-operations", "terraform-security"],
         },
         {
           id: "c",
@@ -315,7 +333,7 @@ export const practiceExamOneImplementSection = {
       requiredSelections: 2,
       section: "implement",
       objective: "5.2 Interacting with Google Cloud programmatically: 5.2.e accessing Google API best practices",
-      prompt: "A logistics company's Cloud Run service publishes shipment events to a Pub/Sub topic by calling the Pub/Sub REST API with hand-written HTTP code. It authenticates with a service account key file that is stored in the container image, and some events are lost when publish requests fail with transient errors during traffic spikes. The security team prohibits key files, and the developers want transient publish failures retried without writing their own retry loops. Which two actions should you take?",
+      prompt: "A logistics company's Cloud Run service publishes shipment events to a Pub/Sub topic by calling the Pub/Sub REST API with hand-written HTTP code. It authenticates with a service account key file that is stored in the container image, and some events are lost when publish requests fail with transient errors during traffic spikes. The security team prohibits key files, and the developers want transient publish failures retried without writing their own retry loops or adding components to operate. What should you do? Choose two.",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -352,20 +370,20 @@ export const practiceExamOneImplementSection = {
         },
         {
           id: "b",
-          text: "Wrap each publish call in a loop that retries the request immediately until it succeeds, so that no shipment event is lost.",
+          text: "Wrap each publish call in a loop that retries failed requests with exponential backoff, so that transient errors during traffic spikes do not lose shipment events.",
           feedback: "Incorrect. A retry loop is the hand-written retrying that the developers want to avoid, and the client library's retry settings already handle transient publish errors.",
           evidenceIds: ["pubsub-retry"],
         },
         {
           id: "c",
-          text: "Attach a user-managed service account with the Pub/Sub Publisher role to the Cloud Run service, and let the client library get credentials through Application Default Credentials.",
-          feedback: "Correct. When no key file is configured, ADC uses the attached service account through the metadata server, so the service authenticates without a key.",
+          text: "Attach a user-managed service account with the Pub/Sub Publisher role to the Cloud Run service, remove the key file from the image, and let the client library use Application Default Credentials.",
+          feedback: "Correct. With the key file removed, ADC finds no key and uses the attached service account through the metadata server, so the service authenticates without a key.",
           evidenceIds: ["adc", "client-libraries"],
         },
         {
           id: "d",
           text: "Write each event to a Cloud Storage bucket first, and run a scheduled Cloud Run job that publishes the stored events to the topic later.",
-          feedback: "Incorrect. A bucket and a scheduled job add components to build and run, while the Pub/Sub client library retries transient publish failures itself.",
+          feedback: "Incorrect. A bucket and a scheduled job are components to operate, which the developers want to avoid, while the Pub/Sub client library retries transient publish failures itself.",
           evidenceIds: ["run-jobs-schedule", "pubsub-retry"],
         },
         {

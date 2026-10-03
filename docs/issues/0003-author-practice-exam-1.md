@@ -114,7 +114,7 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
 | pca-p1-implement-03 | single | 5.1.a | T10 | no | none | Cloud Run traffic splitting for a gradual rollout | c | D2, D7, D3 | L2, L4 |
 | pca-p1-implement-04 | single | 5.1.c | T6 | no | none | Distributed load test in a production-like environment before the peak | d | D5, D6, D3 | L1, L3 |
 | pca-p1-implement-05 | single | 5.2.c | T10 | no | none | Spanner emulator for isolated integration tests in CI | a | D2, D5, D3 | L3, L4 |
-| pca-p1-implement-06 | single | 5.2.d | T4 | no | none | Remote Terraform state in Cloud Storage with state locking | c | D3, D6, D7 | L4, L7 |
+| pca-p1-implement-06 | single | 5.2.d | T4 | no | none | Remote Terraform state in Cloud Storage with state locking | c | D3, D6, D7 | L3, L4 |
 | pca-p1-implement-07 | multiple | 5.2.e | T7 | no | none | Attached service account through ADC and Pub/Sub client-library retries (choose two) | c, e | D5, D3, D2 | L4, L7 |
 
 ### Plan: operate
