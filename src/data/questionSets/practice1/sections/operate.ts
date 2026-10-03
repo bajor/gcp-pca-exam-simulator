@@ -10,7 +10,7 @@ const recoveryTesting = {
   id: "recovery-testing",
   title: "Perform testing for recovery from failures",
   url: "https://docs.cloud.google.com/architecture/framework/reliability/perform-testing-for-recovery-from-failures",
-  claim: "Periodically run tests that include regional failovers, release rollbacks, and data restoration from backups, and test the effectiveness of automated failover mechanisms. Prefer a staging or sandbox environment that replicates the production setup, and if you test in production, have safety measures such as automated monitoring and manual rollback procedures ready.",
+  claim: "Simulate failure scenarios by planning and executing failures with tools like Chaos Monkey or with custom scripts that cause failures of critical services, and test cascading failure impacts, such as how frontend systems behave when backend services are unavailable. Introduce load testing alongside failure scenarios, and use Cloud Monitoring and Cloud Logging to capture metrics and events during the test.",
 } as const;
 
 export const practiceExamOneOperateSection = {
@@ -29,13 +29,13 @@ export const practiceExamOneOperateSection = {
           id: "incident-reviews",
           title: "Manage incidents and problems",
           url: "https://docs.cloud.google.com/architecture/framework/operational-excellence/manage-incidents-and-problems",
-          claim: "After an incident, conduct a post-incident review (PIR), also known as a postmortem, that identifies the root cause, contributing factors, and lessons learned and documents the timeline and recommended actions, which you implement to prevent recurrence. The organization must foster a blameless culture that focuses on learning and improvement rather than assigning blame.",
+          claim: "After an incident, conduct a post-incident review (PIR), also known as a postmortem, that identifies the root cause, contributing factors, and lessons learned and documents the timeline and recommended actions, which you implement to prevent recurrence. The organization must foster a blameless culture that focuses on learning and improvement rather than assigning blame, which encourages people to report incidents without fear of retribution.",
         },
       ],
       choices: [
         {
           id: "a",
-          text: "Require two managers to approve every production change from now on, so that no single engineer can cause another outage on their own.",
+          text: "Require two managers to approve each production change from now on, so that one engineer cannot push a risky change alone.",
           feedback: "Incorrect. More approvals do not identify the root causes and contributing factors of the outages, which a post-incident review uses to prevent recurrence.",
           evidenceIds: ["incident-reviews"],
         },
@@ -48,7 +48,7 @@ export const practiceExamOneOperateSection = {
         {
           id: "c",
           text: "Run a post-incident review after each incident that documents the timeline, root cause, and engineer at fault, and track the action items to completion.",
-          feedback: "Incorrect. Naming an engineer at fault assigns blame, while post-incident reviews need a blameless culture that focuses on learning, which this company has already lost.",
+          feedback: "Incorrect. Naming an engineer at fault assigns blame, while post-incident reviews need a blameless culture in which people report incidents without fear of retribution.",
           evidenceIds: ["incident-reviews"],
         },
         {
@@ -110,12 +110,12 @@ export const practiceExamOneOperateSection = {
       section: "operate",
       objective: "6.2 Familiarity with Google Cloud Observability solutions: 6.2.c alerting strategies",
       caseStudyId: "ehr-healthcare",
-      prompt: "EHR Healthcare's monitoring sends alerts by email to a shared mailbox, where they are often ignored, and many alerts fire on high CPU usage that never affects customers. EHR wants to act early on problems that threaten the 99.9% availability that its customer-facing systems must meet, and it wants each of those alerts to reach the engineer on call within minutes. What should you do? Choose two.",
+      prompt: "EHR Healthcare has started running its customer-facing applications on GKE. Its monitoring sends alerts by email to a shared mailbox, where they are often ignored, and many alerts fire on high CPU usage that never affects customers. EHR wants to act early on problems that threaten the 99.9% availability that its customer-facing systems must meet, and it wants each of those alerts to reach the engineer on call within minutes. What should you do? Choose two.",
       verifiedOn: "2026-10-02",
       evidence: [
         {
           ...ehrCaseStudy,
-          claim: "EHR's alerts arrive by email and tend to be ignored, EHR wants a single view of system health and early action on problems, and its customer-facing systems need at least 99.9% availability.",
+          claim: "EHR's alerts arrive by email and tend to be ignored, EHR wants a single view of system health and early action on problems, its customer-facing web applications already run in containers on Kubernetes, and its customer-facing systems need at least 99.9% availability.",
         },
         {
           id: "burn-rate-alerts",
@@ -145,7 +145,7 @@ export const practiceExamOneOperateSection = {
         },
         {
           id: "c",
-          text: "Send the SLO alerts to an on-call notification channel, such as PagerDuty, and keep email as a redundant channel for the same alerts.",
+          text: "Send the alerts about availability problems to an on-call notification channel, such as PagerDuty, and keep email as a redundant channel for the same alerts.",
           feedback: "Correct. An on-call channel such as PagerDuty reaches the responder directly, and Google recommends email or Pub/Sub as a redundant channel for that channel type.",
           evidenceIds: ["notification-channels", "case-study"],
         },
@@ -157,9 +157,9 @@ export const practiceExamOneOperateSection = {
         },
         {
           id: "e",
-          text: "Create an alerting policy for every metric that each service exports, so that no change in the behavior of a service goes unnoticed.",
-          feedback: "Incorrect. Alerts on every metric add noise about behavior that may not affect customers, while burn-rate alerts focus on the availability objective.",
-          evidenceIds: ["burn-rate-alerts"],
+          text: "Create an alerting policy for each metric that the services export, so that the team sees changes in service behavior as they happen.",
+          feedback: "Incorrect. Alerts on each metric include causes such as the CPU alerts that never affected customers, while burn-rate alerts warn when the availability SLO is in danger.",
+          evidenceIds: ["burn-rate-alerts", "case-study"],
         },
       ],
       correctChoiceIds: ["a", "c"],
@@ -169,7 +169,7 @@ export const practiceExamOneOperateSection = {
       kind: "single",
       section: "operate",
       objective: "6.3 Deployment and release management: 6.3.a deployment and release management",
-      prompt: "A ride-sharing company runs its dispatch API as a GKE Deployment of 12 replicas. During the last release, the team deleted all Pods so that new ones started with the new image, and the API returned errors for four minutes because each new Pod received traffic before it had loaded its routing data, which takes about 60 seconds. You need to plan the next release so that the API keeps serving every request while the Pods are replaced. What should you do?",
+      prompt: "A ride-sharing company runs its dispatch API as a GKE Deployment of 12 replicas. During the last release, the team deleted all Pods so that new ones started with the new image, and the API returned errors for four minutes because each new Pod received traffic before it had loaded its routing data, which takes about 60 seconds. The API already shuts down gracefully when a Pod is stopped. You need to plan the next release so that the API keeps serving every request while the Pods are replaced. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -182,15 +182,21 @@ export const practiceExamOneOperateSection = {
           id: "readiness-probes",
           title: "Best practices for running cost-optimized Kubernetes applications on GKE",
           url: "https://docs.cloud.google.com/architecture/best-practices-for-running-cost-effective-kubernetes-applications-on-gke",
-          claim: "GKE uses readiness probes to decide when to add Pods to or remove Pods from load balancers, and a readiness probe tells Kubernetes that an application isn't ready to receive traffic, for example while it loads large cache data at startup.",
+          claim: "GKE uses readiness probes to decide when to add Pods to or remove Pods from load balancers, and a readiness probe tells Kubernetes that an application isn't ready to receive traffic, for example while it loads large cache data at startup. Pods must also shut down gracefully, because if an application terminates before Kubernetes updates the load balancers, some requests might cause errors on the client side.",
+        },
+        {
+          id: "deployment-patterns",
+          title: "Best practices for continuous integration and delivery to Google Kubernetes Engine",
+          url: "https://docs.cloud.google.com/kubernetes-engine/docs/concepts/best-practices-continuous-integration-delivery-kubernetes",
+          claim: "GKE deployment patterns include recreating a deployment, which fully scales down the existing application version before it scales up the new version, and a rolling update, which updates a subset of the running instances at a time instead of all of them at once.",
         },
       ],
       choices: [
         {
           id: "a",
           text: "Change the Deployment's update strategy to Recreate, so that all old Pods stop before any new Pod starts and no old and new versions run at the same time.",
-          feedback: "Incorrect. Stopping every old Pod before new ones are ready leaves no Pods to serve requests during the release, which repeats the last outage.",
-          evidenceIds: ["rolling-updates"],
+          feedback: "Incorrect. Recreating a deployment fully scales down the old version before the new version scales up, so no Pods serve requests during the release, which repeats the last outage.",
+          evidenceIds: ["deployment-patterns"],
         },
         {
           id: "b",
@@ -218,14 +224,26 @@ export const practiceExamOneOperateSection = {
       kind: "single",
       section: "operate",
       objective: "6.4 Assisting with the support of deployed solutions: 6.4.a assisting with the support of deployed solutions",
-      prompt: "An airline's customer-service chatbot calls a Gemini model on Agent Platform with pay-as-you-go pricing through the global endpoint. Every weekday between 07:00 and 09:00, when passengers rebook after overnight delays, about 8% of requests fail with error 429, even though the client already retries with truncated exponential backoff. The traffic in that window is predictable and cannot move to other hours, and the airline wants a consistent experience for passengers during the peak. What should you do?",
+      prompt: "An airline's customer-service chatbot calls a Gemini model on Agent Platform with pay-as-you-go pricing through the global endpoint. Passengers in every time zone use the chatbot, so its traffic stays high and steady around the clock, and about 8% of requests fail with error 429, even though the client already retries with truncated exponential backoff. The airline wants a consistent experience for passengers, and it wants to keep its current Gemini model. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
           id: "error-429",
           title: "Error code 429",
           url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/deploy/error-code-429",
-          claim: "Error code 429 is returned when requests exceed the capacity allocated to process them. For pay-as-you-go, the options include using the global endpoint instead of a regional endpoint, retrying with truncated exponential backoff, and smoothing traffic, and a Provisioned Throughput subscription reserves throughput for specific models.",
+          claim: "Error code 429 is returned when requests exceed the capacity allocated to process them. For pay-as-you-go, the options include using the global endpoint instead of a regional endpoint, retrying with truncated exponential backoff, smoothing traffic, and subscribing to Provisioned Throughput for a more consistent level of service.",
+        },
+        {
+          id: "consumption-options",
+          title: "Consumption options",
+          url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/deploy/consumption-options",
+          claim: "Provisioned Throughput provides guaranteed throughput for a commitment period and is ideal for critical, steady-state, always-on workloads where an SLA is needed; for the most consistent performance, use Provisioned Throughput. It can cause underutilization if traffic has spikes.",
+        },
+        {
+          id: "provisioned-throughput-models",
+          title: "Supported models",
+          url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/provisioned-throughput/supported-models",
+          claim: "Provisioned Throughput supports the global endpoint for Google models; to assign Provisioned Throughput to a model's global endpoint, select global as the region when you place the order.",
         },
         {
           id: "provisioned-throughput",
@@ -237,27 +255,27 @@ export const practiceExamOneOperateSection = {
           id: "model-garden",
           title: "Overview of Model Garden",
           url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-garden/explore-models",
-          claim: "Model Garden is a model library that helps you discover, test, customize, and deploy models from Google and Google partners.",
+          claim: "Model Garden is a model library that helps you discover, test, customize, and deploy models from Google and Google partners; for open models, you are charged for the compute resources used to deploy the model to an endpoint.",
         },
       ],
       choices: [
         {
           id: "a",
           text: "Increase the number of retries and the maximum backoff time in the client, so that failed requests keep retrying until capacity becomes available.",
-          feedback: "Incorrect. The client already retries with backoff, and more retries only delay passengers' answers while the pay-as-you-go capacity is unavailable.",
+          feedback: "Incorrect. The client already retries with backoff, and longer retries make passengers wait longer, while Google recommends Provisioned Throughput for a more consistent level of service.",
           evidenceIds: ["error-429"],
         },
         {
           id: "b",
           text: "Deploy an open model from Model Garden on dedicated GPU endpoints in three regions, and send all chatbot traffic to those endpoints instead of Gemini.",
-          feedback: "Incorrect. Self-deployed endpoints add capacity for the airline to size and run and change the model, while Provisioned Throughput reserves capacity for the Gemini model in use.",
-          evidenceIds: ["model-garden", "provisioned-throughput"],
+          feedback: "Incorrect. Sending the traffic to an open model replaces the Gemini model that the airline wants to keep, and the airline pays for the compute that the self-deployed endpoints use.",
+          evidenceIds: ["model-garden"],
         },
         {
           id: "c",
-          text: "Purchase Provisioned Throughput for the Gemini model, sized for the morning peak, so that reserved throughput serves the requests in that window.",
-          feedback: "Correct. Provisioned Throughput reserves throughput for the model through a fixed-term subscription, which suits a critical chatbot that needs a consistent experience at a known peak.",
-          evidenceIds: ["provisioned-throughput", "error-429"],
+          text: "Purchase Provisioned Throughput for the Gemini model on the global endpoint, sized for the chatbot's steady traffic, so that reserved throughput serves its requests.",
+          feedback: "Correct. Provisioned Throughput reserves throughput for the model through a fixed-term subscription, suits critical, steady, always-on workloads that need consistent performance, and can be assigned to the global endpoint.",
+          evidenceIds: ["provisioned-throughput", "consumption-options", "provisioned-throughput-models"],
         },
         {
           id: "d",
@@ -273,27 +291,27 @@ export const practiceExamOneOperateSection = {
       kind: "single",
       section: "operate",
       objective: "6.5 Evaluating quality control measures: 6.5.a evaluating quality control measures",
-      prompt: "A video streaming company's playback API has an availability SLO of 99.9% over a rolling 28 days. In the current period, frequent feature releases have caused several short outages, and the error budget is nearly spent with 12 days left. Product managers want to keep shipping features every week, while the SRE team wants a quality control measure that keeps releases from putting the SLO at risk. What should you do?",
+      prompt: "A video streaming company's playback API has an availability SLO of 99.9%, measured over each calendar month. This month, frequent feature releases have caused several short outages, and the error budget is nearly spent with 12 days left. The 99.9% target matches the availability that viewers notice, so the company will not lower it. Product managers want to ship features every week whenever reliability allows, and the SRE team wants a quality control measure that keeps releases from putting the SLO at risk. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
           id: "slo-concepts",
           title: "Concepts in service monitoring",
           url: "https://docs.cloud.google.com/stackdriver/docs/solutions/slo-monitoring",
-          claim: "The error budget quantifies how much a service can fail during the compliance period and still meet its SLO, and the SLO determines the error budget. You can use the error budget to manage deployments of new versions: if it is close to depleted, risky actions like pushing new updates might violate the SLO.",
+          claim: "The error budget quantifies how much a service can fail during the compliance period and still meet its SLO, and the SLO determines the error budget; if it is close to depleted, risky actions like pushing new updates might violate the SLO. If users cannot tell the difference between 99% and 99.9% availability, use the lower value as the SLO. Calendar-based compliance periods reset the error budget on calendar boundaries.",
         },
       ],
       choices: [
         {
           id: "a",
-          text: "Adopt an error budget policy that pauses feature releases when the error budget is nearly spent and resumes them once the budget recovers.",
-          feedback: "Correct. When the error budget is close to depleted, pushing new updates might violate the SLO, so pausing feature releases until the budget recovers manages that risk.",
+          text: "Adopt an error budget policy that pauses feature releases while the error budget is nearly spent and resumes them when the budget resets.",
+          feedback: "Correct. When the error budget is close to depleted, pushing new updates might violate the SLO, so pausing feature releases until the calendar month resets the budget manages that risk without lowering the target.",
           evidenceIds: ["slo-concepts"],
         },
         {
           id: "b",
           text: "Lower the SLO to 99% so that the remaining error budget becomes large enough to absorb the weekly feature releases.",
-          feedback: "Incorrect. Because the SLO determines the error budget, lowering it only enlarges the budget on paper and reduces the reliability promised to users instead of controlling release risk.",
+          feedback: "Incorrect. Because the SLO determines the error budget, lowering it only enlarges the budget on paper, and Google advises a lower SLO only when users cannot tell the difference, while viewers notice this one.",
           evidenceIds: ["slo-concepts"],
         },
         {
@@ -316,32 +334,32 @@ export const practiceExamOneOperateSection = {
       kind: "single",
       section: "operate",
       objective: "6.6 Ensuring the reliability of solutions in production: 6.6.a ensuring the reliability of solutions in production",
-      prompt: "A bank runs its payment API in two regions behind a global external Application Load Balancer, with a Cloud SQL primary in one region and a cross-region replica in the other. The disaster recovery plan says that traffic and the database fail over to the second region within 15 minutes, but the failover has never been exercised. Auditors require evidence that the failover works, and the bank must not put customer payments at risk while it gathers that evidence. What should you do?",
+      prompt: "A food delivery company runs its order API on GKE, and the API calls a separate restaurant-availability service before it accepts each order. Last month, while traffic was normal, the availability service slowed down for 20 minutes, the API's requests waited on it, and customers could not place orders. The team has since added a 2-second timeout and a fallback that accepts the order and confirms availability later. Before the next release, you need evidence from the pre-production environment that the timeout and fallback work when the availability service slows down or stops responding. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [recoveryTesting],
       choices: [
         {
           id: "a",
-          text: "Shut down the primary region's backends and the Cloud SQL primary in production during business hours, and measure how long payments take to recover.",
-          feedback: "Incorrect. Failing production during business hours without safety measures puts customer payments at risk, while a staging environment that replicates production does not.",
+          text: "Run a load test in the pre-production environment that sends three times the normal order traffic to the API, and confirm that its latency stays within target.",
+          feedback: "Incorrect. A load test adds traffic while the availability service stays healthy, but the outage happened at normal traffic, so the test does not show how the API behaves when that backend service is slow or unavailable.",
           evidenceIds: ["recovery-testing"],
         },
         {
           id: "b",
-          text: "Inject a regional failure into a staging environment that replicates production, run the failover runbook, and record the recovery time and data loss as evidence.",
-          feedback: "Correct. A test that includes a regional failover verifies that the automated failover works, and a staging environment that replicates production produces the evidence without risking customer payments.",
+          text: "Run a chaos experiment in the pre-production environment that makes the API's calls to the availability service slow or fail, and confirm that orders are still accepted.",
+          feedback: "Correct. Making the calls to the availability service slow or fail simulates the failure that caused the outage, and Google recommends testing how a system behaves when the backend services that it depends on are unavailable.",
           evidenceIds: ["recovery-testing"],
         },
         {
           id: "c",
-          text: "Review the failover configuration and the runbook in a meeting with the auditors, and sign off that every step is documented correctly.",
-          feedback: "Incorrect. A review of documents does not show that the automated failover mechanisms work, which periodic tests that include regional failovers verify.",
+          text: "Run a chaos experiment in the pre-production environment that stops the API's own Pods one at a time, and confirm that the remaining Pods keep accepting orders.",
+          feedback: "Incorrect. Stopping the API's own Pods tests whether the API survives the loss of its replicas, not how it behaves when the availability service that it depends on slows down or stops responding.",
           evidenceIds: ["recovery-testing"],
         },
         {
           id: "d",
-          text: "Turn on more detailed monitoring and alerting in both regions, so that the team would detect a real regional outage faster.",
-          feedback: "Incorrect. Faster detection does not show that the failover works, which only a test that includes a regional failover demonstrates.",
+          text: "Set up Cloud Monitoring dashboards for the API's error rate and the availability service's latency, and review them after the next release.",
+          feedback: "Incorrect. Dashboards reviewed after the release produce no evidence from pre-production before the release, while a test that simulates the failure of the availability service does.",
           evidenceIds: ["recovery-testing"],
         },
       ],
