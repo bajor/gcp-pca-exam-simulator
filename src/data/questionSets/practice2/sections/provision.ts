@@ -1,0 +1,667 @@
+import type { QuestionSection } from "../../../../domain/questions";
+
+const altostratCaseStudy = {
+  id: "case-study",
+  title: "Altostrat Media Case Study",
+  url: "https://services.google.com/fh/files/misc/v6.1_pca_altostrat_media_case_study_english.pdf",
+} as const;
+
+const knightMotivesCaseStudy = {
+  id: "case-study",
+  title: "KnightMotives Automotive Case Study",
+  url: "https://services.google.com/fh/files/misc/v6.1_pca_knightmotives_automotive_case_study_english.pdf",
+} as const;
+
+const haVpn = {
+  id: "ha-vpn",
+  title: "Cloud VPN overview",
+  url: "https://docs.cloud.google.com/network-connectivity/docs/vpn/concepts/overview",
+  claim: "HA VPN gateways use external, internet-routable IP addresses, and the encrypted traffic traverses the public internet unless HA VPN runs over Cloud Interconnect.",
+} as const;
+
+const crossCloudInterconnect = {
+  id: "cross-cloud-interconnect",
+  title: "Cross-Cloud Interconnect overview",
+  url: "https://docs.cloud.google.com/network-connectivity/docs/interconnect/concepts/cci-overview",
+  claim: "Cross-Cloud Interconnect establishes high-bandwidth dedicated connectivity between Google Cloud and another cloud service provider, such as Microsoft Azure or AWS, through a dedicated physical connection between the Google network and the other provider's network, at 10 Gbps, 100 Gbps, or 400 Gbps.",
+} as const;
+
+const instanceGroups = {
+  id: "instance-groups",
+  title: "Instance groups",
+  url: "https://docs.cloud.google.com/compute/docs/instance-groups",
+  claim: "If a VM in a managed instance group stops, crashes, gets preempted, or is deleted by an action that the group did not start, the group recreates the VM from its original configuration so that it can resume its work.",
+} as const;
+
+export const practiceExamTwoProvisionSection = {
+  section: "provision",
+  author: "claude-opus-5.5-p2-provision-20261002",
+  questions: [
+    {
+      id: "pca-p2-provision-01",
+      kind: "single",
+      section: "provision",
+      objective: "2.1 Configuring network topologies: 2.1.b extending to a multicloud environment",
+      caseStudyId: "knightmotives-automotive",
+      prompt: "KnightMotives Automotive runs several applications, including its vehicle telemetry intake, on Microsoft Azure and is building new data products on Google Cloud. Each night, about 40 TB of telemetry must move from Azure to BigQuery. The security team requires that this traffic stay off the public internet, and KnightMotives wants at least 10 Gbps of dedicated capacity between the two clouds without routing the traffic through its own data centers. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          ...knightMotivesCaseStudy,
+          claim: "KnightMotives runs its IT mostly on premises, a few of its applications already run with other large cloud providers, and security is a top concern after earlier data breaches.",
+        },
+        crossCloudInterconnect,
+        haVpn,
+        {
+          id: "vpc-peering",
+          title: "VPC Network Peering",
+          url: "https://docs.cloud.google.com/vpc/docs/vpc-peering",
+          claim: "VPC Network Peering connects two Virtual Private Cloud (VPC) networks so that resources in each network can communicate with each other.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Create HA VPN tunnels between Google Cloud and Azure, and attach them to the VPC network through Cloud Router with BGP sessions.",
+          feedback: "Incorrect. HA VPN gateways use internet-routable addresses, so the tunnels between the two clouds carry the telemetry over the public internet, which the security team prohibits.",
+          evidenceIds: ["ha-vpn"],
+        },
+        {
+          id: "b",
+          text: "Order Dedicated Interconnect to a KnightMotives data center, connect Azure to the same data center with an ExpressRoute circuit, and route the nightly telemetry through that data center.",
+          feedback: "Incorrect. Routing the telemetry through a KnightMotives data center is the path that the company wants to avoid, while Cross-Cloud Interconnect connects Google Cloud and Azure directly.",
+          evidenceIds: ["cross-cloud-interconnect"],
+        },
+        {
+          id: "c",
+          text: "Order a pair of Cross-Cloud Interconnect connections between Google Cloud and Azure, and attach them to the VPC network through Cloud Router with BGP sessions.",
+          feedback: "Correct. Cross-Cloud Interconnect provides dedicated physical connections of 10 Gbps or more between Google's network and Azure, so the telemetry stays off the public internet and away from KnightMotives' data centers.",
+          evidenceIds: ["cross-cloud-interconnect", "case-study"],
+        },
+        {
+          id: "d",
+          text: "Configure VPC Network Peering between the VPC network and the Azure virtual network, so that the telemetry flows directly between the two clouds.",
+          feedback: "Incorrect. VPC Network Peering connects two VPC networks, so it cannot connect a VPC network to an Azure virtual network.",
+          evidenceIds: ["vpc-peering"],
+        },
+      ],
+      correctChoiceId: "c",
+    },
+    {
+      id: "pca-p2-provision-02",
+      kind: "single",
+      section: "provision",
+      objective: "2.1 Configuring network topologies: 2.1.a extending to on-premises environments",
+      caseStudyId: "altostrat-media",
+      prompt: "Altostrat Media ingests new recordings at an on-premises facility and uploads them to Cloud Storage over the internet, which is slow and unpredictable. Altostrat wants a private connection of about 5 Gbps between the facility and its VPC network that does not traverse the public internet. The facility's city has no Dedicated Interconnect colocation facility, but two service providers that already connect to Google's network serve the building. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          ...altostratCaseStudy,
+          claim: "Altostrat still runs older on-premises systems for workflows such as content ingestion and archival, and it needs secure, high-performance hybrid connectivity to bring in data.",
+        },
+        {
+          id: "partner-interconnect",
+          title: "Partner Interconnect overview",
+          url: "https://docs.cloud.google.com/network-connectivity/docs/interconnect/concepts/partner-overview",
+          claim: "Partner Interconnect connects an on-premises network to a VPC network through a supported service provider, and it is useful when a data center is in a location that can't reach a Dedicated Interconnect colocation facility or doesn't need an entire 10-Gbps connection.",
+        },
+        {
+          id: "interconnect-overview",
+          title: "Cloud Interconnect overview",
+          url: "https://docs.cloud.google.com/network-connectivity/docs/interconnect/concepts/overview",
+          claim: "With Cloud Interconnect, traffic between your networks doesn't traverse the public internet.",
+        },
+        {
+          id: "dedicated-interconnect",
+          title: "Dedicated Interconnect overview",
+          url: "https://docs.cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview",
+          claim: "Dedicated Interconnect provides direct physical connections between an on-premises network and Google's network, and the network must physically meet Google's network in a colocation facility.",
+        },
+        haVpn,
+        crossCloudInterconnect,
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Order Partner Interconnect through one of the service providers, with VLAN attachments in two edge availability domains, and connect them to Cloud Router.",
+          feedback: "Correct. Partner Interconnect reaches the VPC network through a supported service provider when a location can't reach a Dedicated Interconnect colocation facility, and Cloud Interconnect traffic doesn't traverse the public internet.",
+          evidenceIds: ["partner-interconnect", "interconnect-overview", "case-study"],
+        },
+        {
+          id: "b",
+          text: "Order Dedicated Interconnect for the facility, with connections in two edge availability domains, and connect them to Cloud Router.",
+          feedback: "Incorrect. Dedicated Interconnect requires the network to physically meet Google's network in a colocation facility, which the facility's city does not have.",
+          evidenceIds: ["dedicated-interconnect"],
+        },
+        {
+          id: "c",
+          text: "Create HA VPN tunnels from the facility's router to the VPC network, and keep adding tunnels until their combined capacity reaches about 5 Gbps.",
+          feedback: "Incorrect. HA VPN gateways use internet-routable addresses, so the tunnels cross the public internet, which Altostrat wants to avoid.",
+          evidenceIds: ["ha-vpn"],
+        },
+        {
+          id: "d",
+          text: "Order Cross-Cloud Interconnect between the facility and Google Cloud, and connect the new connections to Cloud Router in the VPC network.",
+          feedback: "Incorrect. Cross-Cloud Interconnect connects Google Cloud to another cloud service provider, not to an on-premises facility.",
+          evidenceIds: ["cross-cloud-interconnect"],
+        },
+      ],
+      correctChoiceId: "a",
+    },
+    {
+      id: "pca-p2-provision-03",
+      kind: "multiple",
+      requiredSelections: 2,
+      section: "provision",
+      objective: "2.1 Configuring network topologies: 2.1.c security protection",
+      prompt: "An online ticket marketplace serves its web application through a global external Application Load Balancer with managed instance group backends. During popular on-sale events, bots on thousands of IP addresses send bursts of login attempts that overload the backends, and the security team also sees SQL injection attempts against the search page. The team wants to stop both threats at the edge, before the requests enter the VPC network, without changing application code. What should you do? Choose two.",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          id: "armor-overview",
+          title: "Cloud Armor overview",
+          url: "https://docs.cloud.google.com/armor/docs/cloud-armor-overview",
+          claim: "Cloud Armor security policies permit or deny access at the Google Cloud edge, close to the traffic source, which prevents unwanted traffic from consuming resources or entering VPC networks. Security policies attach to the backend services of external Application Load Balancers.",
+        },
+        {
+          id: "rate-limiting",
+          title: "Rate limiting overview",
+          url: "https://docs.cloud.google.com/armor/docs/rate-limiting-overview",
+          claim: "Cloud Armor rate-based rules include throttle and rate-based ban. A rate-based ban rule rate limits matching requests for each client and temporarily bans clients that exceed a configured threshold.",
+        },
+        {
+          id: "waf-rules",
+          title: "Preconfigured WAF rules overview",
+          url: "https://docs.cloud.google.com/armor/docs/waf-rules",
+          claim: "Cloud Armor preconfigured WAF rules include a SQL injection (SQLi) rule and a separate cross-site scripting (XSS) rule, each with its own signatures.",
+        },
+        {
+          id: "vpc-firewall",
+          title: "VPC firewall rules",
+          url: "https://docs.cloud.google.com/firewall/docs/firewalls",
+          claim: "VPC firewall rules allow or deny connections to or from VMs in a VPC network based on the traffic's protocol, destination ports, sources, and destinations.",
+        },
+        {
+          id: "lb-firewall",
+          title: "Firewall rules",
+          url: "https://docs.cloud.google.com/load-balancing/docs/firewall-rules",
+          claim: "Load balancers based on Google Front Ends (GFEs) require an ingress allow firewall rule that permits traffic from the GFE proxy to reach the backend instances.",
+        },
+        {
+          id: "cloud-ids",
+          title: "Cloud IDS overview",
+          url: "https://docs.cloud.google.com/intrusion-detection-system/docs/overview",
+          claim: "Cloud IDS inspects mirrored traffic in the VPC network, and it detects and alerts on threats but does not take action to prevent attacks.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Create VPC firewall rules that deny the bots' IP address ranges, and update the rules each time the security team finds new addresses.",
+          feedback: "Incorrect. Behind this load balancer, connections reach the backends from Google Front End proxies, and VPC firewall rules filter connections inside the VPC network by address and port, so they neither stop the bots at the edge nor inspect requests for SQL injection.",
+          evidenceIds: ["vpc-firewall", "lb-firewall"],
+        },
+        {
+          id: "b",
+          text: "Add a Cloud Armor rate-based ban rule that limits login requests from each client IP address and temporarily bans clients that exceed the limit.",
+          feedback: "Correct. A rate-based ban rule limits each client's requests and temporarily bans clients that exceed the threshold, and Cloud Armor enforces it at the edge before traffic enters the VPC network.",
+          evidenceIds: ["rate-limiting", "armor-overview"],
+        },
+        {
+          id: "c",
+          text: "Deploy Cloud IDS in the VPC network, so that it inspects the traffic to the backends and raises alerts about the login bursts and SQL injection.",
+          feedback: "Incorrect. Cloud IDS detects and alerts on threats but does not take action to prevent attacks, and it inspects traffic inside the VPC network rather than at the edge.",
+          evidenceIds: ["cloud-ids"],
+        },
+        {
+          id: "d",
+          text: "Add the Cloud Armor preconfigured WAF rule for SQL injection to the security policy that is attached to the load balancer's backend service.",
+          feedback: "Correct. The preconfigured SQL injection rule matches SQL injection signatures in requests, and Cloud Armor blocks the matching requests at the edge without application changes.",
+          evidenceIds: ["waf-rules", "armor-overview"],
+        },
+        {
+          id: "e",
+          text: "Add the Cloud Armor preconfigured WAF rule for cross-site scripting to the security policy that is attached to the load balancer's backend service.",
+          feedback: "Incorrect. The cross-site scripting rule matches XSS signatures, not the SQL injection attempts against the search page, which need the SQL injection rule.",
+          evidenceIds: ["waf-rules"],
+        },
+      ],
+      correctChoiceIds: ["b", "d"],
+    },
+    {
+      id: "pca-p2-provision-04",
+      kind: "single",
+      section: "provision",
+      objective: "2.2 Configuring individual storage systems: 2.2.a data storage allocation",
+      caseStudyId: "altostrat-media",
+      prompt: "Altostrat Media keeps its growing media library in a Cloud Storage bucket that uses Standard storage. Most files are rarely opened after their first weeks, but old documentaries and interviews can become popular again without warning, and they must then play immediately. Altostrat wants to cut storage costs without paying extra fees to read an old file when it becomes popular again, and without maintaining rules that depend on file age. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          ...altostratCaseStudy,
+          claim: "Altostrat stores its large media library in Cloud Storage and wants to lower storage costs as the volume of media grows, while keeping content available.",
+        },
+        {
+          id: "autoclass",
+          title: "Autoclass",
+          url: "https://docs.cloud.google.com/storage/docs/autoclass",
+          claim: "Autoclass transitions objects to storage classes based on each object's access pattern: data that isn't accessed moves to colder storage classes, and data that is read moves to Standard storage. Retrieval fees and early deletion fees are not charged except as part of enablement charges.",
+        },
+        {
+          id: "lifecycle",
+          title: "Object Lifecycle Management",
+          url: "https://docs.cloud.google.com/storage/docs/lifecycle",
+          claim: "Lifecycle rules act on objects that meet conditions such as age, and the SetStorageClass action supports only transitions to colder storage classes, such as from Standard storage to Nearline, Coldline, or Archive storage.",
+        },
+        {
+          id: "storage-classes",
+          title: "Storage classes",
+          url: "https://docs.cloud.google.com/storage/docs/storage-classes",
+          claim: "Nearline storage has costs for data access and a 30-day minimum storage duration, and Coldline storage has higher costs for data access and a 90-day minimum storage duration.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Add a lifecycle rule that moves files to Coldline storage 90 days after creation, and keep the newer files in Standard storage.",
+          feedback: "Incorrect. The rule depends on file age, which Altostrat wants to avoid, and Coldline storage has higher costs for data access when an old file becomes popular again.",
+          evidenceIds: ["lifecycle", "storage-classes"],
+        },
+        {
+          id: "b",
+          text: "Move the whole library to Nearline storage, because most files are opened less than once a month after their first weeks.",
+          feedback: "Incorrect. Nearline storage has costs for data access, so every read of a file that becomes popular again adds fees, while Autoclass charges no retrieval fees.",
+          evidenceIds: ["storage-classes", "autoclass"],
+        },
+        {
+          id: "c",
+          text: "Add lifecycle rules that move each file to colder storage classes when it is not accessed and back to Standard storage when it is.",
+          feedback: "Incorrect. Lifecycle rules use conditions such as age, and their SetStorageClass action supports only transitions to colder classes, so they cannot move a file back to Standard storage when it is read.",
+          evidenceIds: ["lifecycle"],
+        },
+        {
+          id: "d",
+          text: "Enable Autoclass so that Cloud Storage moves each file to colder storage classes when it is not accessed and back to Standard storage when it is.",
+          feedback: "Correct. Autoclass moves data that isn't accessed to colder classes and moves data that is read back to Standard storage, without retrieval fees and without rules based on file age.",
+          evidenceIds: ["autoclass", "case-study"],
+        },
+      ],
+      correctChoiceId: "d",
+    },
+    {
+      id: "pca-p2-provision-05",
+      kind: "single",
+      section: "provision",
+      objective: "2.2 Configuring individual storage systems: 2.2.b data processing and compute provisioning",
+      prompt: "A logistics company runs all of its BigQuery queries with on-demand pricing. Scheduled reports keep about 400 slots busy throughout each business day, and analysts add unpredictable bursts that sometimes need up to 1,600 slots. The monthly bill varies widely, and finance wants a predictable cost for the steady reporting workload while the analysts' bursts still complete. The company does not want to pay for burst capacity while it sits idle. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          id: "slots",
+          title: "Understand slots",
+          url: "https://docs.cloud.google.com/bigquery/docs/slots",
+          claim: "The slots of a reservation are a baseline amount, which is always allocated, or an autoscaled amount, which is allocated when needed.",
+        },
+        {
+          id: "workload-management",
+          title: "Introduction to workload management",
+          url: "https://docs.cloud.google.com/bigquery/docs/reservations-intro",
+          claim: "On-demand pricing has variable usage and billing, and its optional project-level or user-level quotas are hard caps. Capacity-based pricing provides predictable billing through baselines and commitments, with optional slot commitments for steady-state workloads.",
+        },
+        {
+          id: "editions",
+          title: "Understand BigQuery editions",
+          url: "https://docs.cloud.google.com/bigquery/docs/editions-intro",
+          claim: "Reservations with slots autoscaling scale to accommodate the demands of their workloads, and capacity commitments are not required to purchase slots but can reduce costs.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Create an Enterprise edition reservation with a baseline of 1,600 slots and no autoscaling, so that every burst finds its slots already allocated.",
+          feedback: "Incorrect. A baseline of 1,600 slots is always allocated, so the company pays for the burst capacity even while it sits idle.",
+          evidenceIds: ["slots"],
+        },
+        {
+          id: "b",
+          text: "Create an Enterprise edition reservation with a baseline of 400 slots covered by a capacity commitment, and let autoscaling add up to 1,200 slots for the bursts.",
+          feedback: "Correct. A commitment that covers the always-allocated baseline of 400 slots makes the steady cost predictable and can reduce it, while autoscaled slots are allocated only when the bursts need them.",
+          evidenceIds: ["slots", "workload-management", "editions"],
+        },
+        {
+          id: "c",
+          text: "Keep on-demand pricing, and set project-level and user-level custom quotas that cap how much data the queries can scan each day.",
+          feedback: "Incorrect. On-demand billing stays variable, and quotas are hard caps that would stop the analysts' bursts from completing.",
+          evidenceIds: ["workload-management"],
+        },
+        {
+          id: "d",
+          text: "Create an Enterprise edition reservation with a baseline of 0 slots and no commitment, and let autoscaling add up to 1,600 slots for all of the queries.",
+          feedback: "Incorrect. Without a baseline or commitment, the steady reports also run on autoscaled slots that are billed as they are used, while baselines and commitments provide predictable billing.",
+          evidenceIds: ["workload-management", "slots"],
+        },
+      ],
+      correctChoiceId: "b",
+    },
+    {
+      id: "pca-p2-provision-06",
+      kind: "single",
+      section: "provision",
+      objective: "2.2 Configuring individual storage systems: 2.2.c security and access management",
+      prompt: "A SaaS company stores the shipment records of all its customers in one BigQuery table with a customer_id column. Each customer's analysts sign in with accounts that belong to one Google group per customer, and every customer uses the same dashboard, which queries the table directly. Today the company copies each customer's rows to a separate dataset every night. The company wants each customer to see only its own rows in that dashboard, without copies or a separate table or view for each customer. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          id: "row-level-security",
+          title: "Introduction to BigQuery row-level security",
+          url: "https://docs.cloud.google.com/bigquery/docs/row-level-security-intro",
+          claim: "Row-level access policies act as filters that hide or display rows of a table depending on whether a user or group is in the policy's grantee list. They suit sharing data with people who all use the same dashboard, even if some people have access to more data than others.",
+        },
+        {
+          id: "data-viewer",
+          title: "BigQuery IAM roles and permissions",
+          url: "https://docs.cloud.google.com/bigquery/docs/access-control",
+          claim: "The BigQuery Data Viewer role granted on a dataset lets a principal query the data of the dataset's tables.",
+        },
+        {
+          id: "column-level",
+          title: "Introduction to column-level access control",
+          url: "https://docs.cloud.google.com/bigquery/docs/column-level-security-intro",
+          claim: "BigQuery provides fine-grained access to sensitive columns by using policy tags or data governance tags.",
+        },
+        {
+          id: "authorized-views",
+          title: "Authorized views",
+          url: "https://docs.cloud.google.com/bigquery/docs/authorized-views",
+          claim: "An authorized view shares a subset of the data in a dataset with specific users and groups, who can query the view but can't access the source dataset directly.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Create a row-level access policy for each customer that filters on its customer_id, and grant each customer's group read access to the shipment table.",
+          feedback: "Correct. Row-level access policies filter the rows that each group can see in the table, so every customer uses the same dashboard on one table and sees only its own rows, without copies or extra views.",
+          evidenceIds: ["row-level-security"],
+        },
+        {
+          id: "b",
+          text: "Grant each customer's group the BigQuery Data Viewer role on the dataset that holds the shipment table, and filter on customer_id in the dashboard.",
+          feedback: "Incorrect. The Data Viewer role on the dataset lets each group query every row of the table, so a filter in the dashboard does not stop a customer from reading other customers' rows.",
+          evidenceIds: ["data-viewer"],
+        },
+        {
+          id: "c",
+          text: "Attach a policy tag to the customer_id column, and grant each customer's group the Fine-Grained Reader role on that policy tag.",
+          feedback: "Incorrect. Policy tags control access to columns, not rows, so they cannot limit each customer to its own shipment records.",
+          evidenceIds: ["column-level"],
+        },
+        {
+          id: "d",
+          text: "Create an authorized view for each customer that filters on its customer_id, and grant each customer's group read access to its own view.",
+          feedback: "Incorrect. An authorized view for each customer is the separate view for each customer that the company wants to avoid, and the shared dashboard would have to query a different view for each customer.",
+          evidenceIds: ["authorized-views", "row-level-security"],
+        },
+      ],
+      correctChoiceId: "a",
+    },
+    {
+      id: "pca-p2-provision-07",
+      kind: "single",
+      section: "provision",
+      objective: "2.3 Configuring compute systems: 2.3.a compute resource provisioning",
+      prompt: "A payments company runs a stateless API on six Compute Engine VMs that an engineer created by hand in a single zone. Last quarter, a zonal outage stopped the API for two hours, and twice an API process hung while its VM kept running, so requests failed until someone restarted the VM. The company wants the API to keep serving during a zonal outage and wants hung VMs replaced automatically, without writing monitoring scripts. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          id: "regional-migs",
+          title: "About regional MIGs",
+          url: "https://docs.cloud.google.com/compute/docs/instance-groups/regional-migs",
+          claim: "A regional managed instance group spreads its VMs across multiple zones in a region, which protects against zonal failures.",
+        },
+        {
+          id: "autohealing",
+          title: "Set up an application-based health check and autohealing",
+          url: "https://docs.cloud.google.com/compute/docs/instance-groups/autohealing-instances-in-migs",
+          claim: "An application-based health check verifies that the application on a VM responds as expected. If the application isn't responding, the managed instance group marks the VM as unhealthy and repairs it, which is called autohealing.",
+        },
+        instanceGroups,
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Create an instance template, run the API in a zonal managed instance group, and set up autohealing with an application-based health check.",
+          feedback: "Incorrect. Autohealing replaces hung VMs, but a zonal group keeps every VM in one zone, so a zonal outage still stops the API, while a regional group spreads the VMs across zones.",
+          evidenceIds: ["regional-migs", "autohealing"],
+        },
+        {
+          id: "b",
+          text: "Keep the VMs in their zone, and install a cron script on each VM that restarts the API process when it stops responding.",
+          feedback: "Incorrect. A cron script on each VM is the monitoring script that the company wants to avoid, and VMs in one zone still stop during a zonal outage.",
+          evidenceIds: ["regional-migs"],
+        },
+        {
+          id: "c",
+          text: "Create an instance template, run the API in a regional managed instance group across three zones, and set up autohealing with an application-based health check.",
+          feedback: "Correct. A regional managed instance group spreads the VMs across zones, which protects against a zonal failure, and an application-based health check lets the group repair VMs whose application stops responding.",
+          evidenceIds: ["regional-migs", "autohealing"],
+        },
+        {
+          id: "d",
+          text: "Create an instance template, run the API in a regional managed instance group across three zones, and rely on it to recreate stopped VMs.",
+          feedback: "Incorrect. Without a health check, the group recreates VMs that stop or crash, but only an application-based health check detects a hung process on a VM that keeps running.",
+          evidenceIds: ["instance-groups", "autohealing"],
+        },
+      ],
+      correctChoiceId: "c",
+    },
+    {
+      id: "pca-p2-provision-08",
+      kind: "single",
+      section: "provision",
+      objective: "2.3 Configuring compute systems: 2.3.b compute volatility configuration",
+      prompt: "An engineering firm runs crash simulations on Compute Engine. Each simulation has one coordinator VM that schedules the work and collects the results, and 200 worker VMs that each process part of the model and save a checkpoint every 10 minutes, so that a replacement worker can resume from the last checkpoint. The coordinator keeps its state in memory and cannot resume if it stops. The firm wants to cut compute costs as far as possible without putting a simulation's completion at risk. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          id: "spot",
+          title: "Spot VMs",
+          url: "https://docs.cloud.google.com/compute/docs/instances/spot",
+          claim: "Spot VMs are available at discounts of up to 91% compared with standard VMs, but Compute Engine can preempt them at any time. Use Spot VMs to reduce costs for fault-tolerant workloads, such as batch processing jobs.",
+        },
+        instanceGroups,
+        {
+          id: "committed-use",
+          title: "Committed use discounts (CUDs) for Compute Engine",
+          url: "https://docs.cloud.google.com/compute/docs/instances/committed-use-discounts-overview",
+          claim: "Committed use discounts give discounted prices in return for 1-year or 3-year commitments, and resource-based commitments are ideal for predictable, steady-state resource usage.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Run the coordinator and all 200 workers on standard VMs, and buy resource-based committed use discounts for the workers' machine type.",
+          feedback: "Incorrect. Commitments suit predictable, steady usage, while Spot VMs offer discounts of up to 91% for fault-tolerant work such as the checkpointed workers, so standard VMs for every worker cost more.",
+          evidenceIds: ["committed-use", "spot"],
+        },
+        {
+          id: "b",
+          text: "Run the coordinator and all 200 workers on Spot VMs in a managed instance group, and restart the simulation whenever the coordinator is preempted.",
+          feedback: "Incorrect. Compute Engine can preempt Spot VMs at any time, and the coordinator cannot resume, so a preempted coordinator puts the simulation's completion at risk.",
+          evidenceIds: ["spot"],
+        },
+        {
+          id: "c",
+          text: "Run the coordinator on a Spot VM to save money, and run the 200 workers on standard VMs so that no worker ever loses its progress.",
+          feedback: "Incorrect. The coordinator is the part that cannot tolerate preemption, while the workers resume from checkpoints, so this placement risks the simulation and saves little.",
+          evidenceIds: ["spot"],
+        },
+        {
+          id: "d",
+          text: "Run the coordinator on a standard VM, and run the 200 workers on Spot VMs in a managed instance group that recreates preempted workers.",
+          feedback: "Correct. The checkpointed workers tolerate preemption, so Spot VMs cut their cost by up to 91% and the group recreates preempted workers, while the coordinator, which cannot resume, runs on a standard VM.",
+          evidenceIds: ["spot", "instance-groups"],
+        },
+      ],
+      correctChoiceId: "d",
+    },
+    {
+      id: "pca-p2-provision-09",
+      kind: "single",
+      section: "provision",
+      objective: "2.3 Configuring compute systems: 2.3.f serverless computing",
+      prompt: "A bank's internal approval API runs on Cloud Run. It receives a few requests per minute during business hours and almost none at night. Users report that the first approval each morning, and some after quiet periods, take about 9 seconds, while other requests take under 300 milliseconds. Logs show that each slow request started a new container instance, which loads a large rules file at startup. The bank wants no business-hours request to wait for an instance to start. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          id: "min-instances",
+          title: "Set minimum instances for services",
+          url: "https://docs.cloud.google.com/run/docs/configuring/min-instances",
+          claim: "Cloud Run removes instances that are not processing requests, and you can set a minimum number of container instances to be kept warm and ready to serve requests, which avoids slow container start times and reduces latency when scaling from zero.",
+        },
+        {
+          id: "max-instances",
+          title: "Set maximum instances for services",
+          url: "https://docs.cloud.google.com/run/docs/configuring/max-instances",
+          claim: "The maximum number of instances limits how far a service scales in response to incoming requests, for example to control costs.",
+        },
+        {
+          id: "cpu-boost",
+          title: "Configure CPU limits for services",
+          url: "https://docs.cloud.google.com/run/docs/configuring/services/cpu",
+          claim: "Startup CPU boost temporarily increases the vCPU allocation during instance startup to reduce startup latency.",
+        },
+        {
+          id: "concurrency",
+          title: "Maximum concurrent requests for services",
+          url: "https://docs.cloud.google.com/run/docs/about-concurrency",
+          claim: "With a maximum concurrency of 1, Cloud Run sends only one request at a time to each instance, and scaling on concurrency makes Cloud Run start more instances to handle the load.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Raise the maximum number of instances for the service, so that Cloud Run can start more instances when the slow requests arrive.",
+          feedback: "Incorrect. The maximum number of instances only limits how far the service scales, so raising it does not keep an instance ready when a request arrives after a quiet period.",
+          evidenceIds: ["max-instances"],
+        },
+        {
+          id: "b",
+          text: "Set a minimum number of instances for the service, so that Cloud Run keeps at least one instance warm and ready to serve requests.",
+          feedback: "Correct. A minimum number of instances keeps container instances warm and ready to serve requests, so requests after quiet periods no longer wait for a slow container start.",
+          evidenceIds: ["min-instances"],
+        },
+        {
+          id: "c",
+          text: "Turn on startup CPU boost for the service, so that each new instance gets extra CPU while it starts and loads the rules file.",
+          feedback: "Incorrect. Startup CPU boost reduces startup latency, but each request after a quiet period still waits for a new instance to start.",
+          evidenceIds: ["cpu-boost", "min-instances"],
+        },
+        {
+          id: "d",
+          text: "Set the service's maximum concurrency to 1, so that Cloud Run sends each request to its own instance instead of queuing it.",
+          feedback: "Incorrect. A concurrency of 1 sends one request at a time to each instance, so Cloud Run starts more instances, which does not keep an instance ready after a quiet period.",
+          evidenceIds: ["concurrency", "min-instances"],
+        },
+      ],
+      correctChoiceId: "b",
+    },
+    {
+      id: "pca-p2-provision-10",
+      kind: "single",
+      section: "provision",
+      objective: "2.4 Leveraging Gemini Enterprise Agent Platform for end-to-end ML workflows: 2.4.c using AI Hypercomputer",
+      caseStudyId: "knightmotives-automotive",
+      prompt: "KnightMotives Automotive is replacing its obsolete AI infrastructure. Its autonomous driving team will train a new perception model on a cluster of GPU VMs for about 60 days, starting on the first day of next quarter, when the training data will be ready. The run must not be interrupted, the GPUs must be available on the start date, and KnightMotives wants to pay only for the training period instead of holding capacity for a year or more. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          ...knightMotivesCaseStudy,
+          claim: "KnightMotives describes its existing AI infrastructure as obsolete, and developing autonomous vehicles requires investment in advanced AI and machine learning technology.",
+        },
+        {
+          id: "ai-hypercomputer",
+          title: "AI Hypercomputer overview",
+          url: "https://docs.cloud.google.com/ai-hypercomputer/docs/overview",
+          claim: "AI Hypercomputer provides accelerators such as GPUs and TPUs with flexible consumption options, including Flex-start VMs, Spot VMs, and reservations.",
+        },
+        {
+          id: "consumption-models",
+          title: "Consumption options for AI Hypercomputer",
+          url: "https://docs.cloud.google.com/ai-hypercomputer/docs/consumption-models",
+          claim: "Flex-start suits short-duration workloads of up to seven days that can wait for capacity, and Spot VMs are preemptible. Future reservations in calendar mode reserve capacity for clustered GPU workloads of up to 90 days, with very high capacity assurance and exclusive access during the period. Reservations of one year or longer require a resource-based commitment.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Create a future reservation in calendar mode for the GPU VMs that covers the 60-day training period, and run the training on the reserved VMs.",
+          feedback: "Correct. A future reservation in calendar mode reserves the GPUs for up to 90 days with very high capacity assurance and exclusive access, so the 60-day run starts on time without a longer commitment.",
+          evidenceIds: ["consumption-models", "ai-hypercomputer", "case-study"],
+        },
+        {
+          id: "b",
+          text: "Create the GPU VMs as Flex-start VMs on the start date, and run the 60-day training on them at the discounted Flex-start price.",
+          feedback: "Incorrect. Flex-start suits workloads of up to seven days that can wait for capacity, so it can neither run a 60-day job nor guarantee the GPUs on the start date.",
+          evidenceIds: ["consumption-models"],
+        },
+        {
+          id: "c",
+          text: "Create the GPU VMs as Spot VMs on the start date, and resume the training from its latest checkpoint after each preemption.",
+          feedback: "Incorrect. Spot VMs are preemptible, so the training could be interrupted, which the run must avoid.",
+          evidenceIds: ["consumption-models"],
+        },
+        {
+          id: "d",
+          text: "Create a future reservation for capacity blocks for the GPU VMs with a one-year commitment, and run the training on the reserved VMs.",
+          feedback: "Incorrect. A one-year commitment holds capacity long after the 60-day run, which KnightMotives wants to avoid, while calendar mode reserves only the training period.",
+          evidenceIds: ["consumption-models"],
+        },
+      ],
+      correctChoiceId: "a",
+    },
+    {
+      id: "pca-p2-provision-11",
+      kind: "single",
+      section: "provision",
+      objective: "2.5 Configuring prebuilt solutions or APIs with Agent Platform: 2.5.b integrating Gemini Enterprise features",
+      prompt: "An elevator maintenance company has 900 field technicians who search about 120 PDF service manuals and bulletins for repair procedures. The company wants technicians to ask questions in natural language and get answers based only on those documents, and the documents must stay in the company's Google Cloud project. No developers are available, so the company wants a managed product instead of a custom application. What should you do?",
+      verifiedOn: "2026-10-02",
+      evidence: [
+        {
+          id: "notebooklm",
+          title: "What is Gemini Notebook Enterprise?",
+          url: "https://docs.cloud.google.com/gemini/enterprise/notebooklm-enterprise/docs/overview",
+          claim: "The enterprise version of NotebookLM, documented as Gemini Notebook Enterprise, lets users add sources such as PDFs to a notebook and query or chat with their content, and the model relies on the uploaded sources to answer questions. Its data stays in the customer's Google Cloud project, while users of the personal version can't specify where data resides. A notebook can have up to 300 sources.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Build a retrieval-augmented generation application on Agent Platform that indexes the manuals and calls a Gemini model, and host its interface on Cloud Run.",
+          feedback: "Incorrect. A retrieval-augmented generation application is a custom application that developers would build and run, which the company cannot staff, while NotebookLM is a managed product.",
+          evidenceIds: ["notebooklm"],
+        },
+        {
+          id: "b",
+          text: "Tune a Gemini model on Agent Platform with the text of the manuals, and give the technicians a chat page that sends their questions to the tuned model.",
+          feedback: "Incorrect. Tuning a model and building a chat page are custom development that the company cannot staff, while NotebookLM answers questions from the sources added to a notebook.",
+          evidenceIds: ["notebooklm"],
+        },
+        {
+          id: "c",
+          text: "Set up NotebookLM in the company's Google Cloud project, and create notebooks that use the manuals and bulletins as sources for the technicians.",
+          feedback: "Correct. NotebookLM answers questions from the PDFs added to a notebook as sources, and its enterprise version keeps the data in the company's Google Cloud project without custom development.",
+          evidenceIds: ["notebooklm"],
+        },
+        {
+          id: "d",
+          text: "Have each technician use the personal version of NotebookLM, and create notebooks that use the manuals and bulletins as sources for the technicians.",
+          feedback: "Incorrect. Users of the personal version of NotebookLM can't specify where data resides, while the enterprise version keeps the data in the company's Google Cloud project.",
+          evidenceIds: ["notebooklm"],
+        },
+      ],
+      correctChoiceId: "c",
+    },
+  ],
+} satisfies QuestionSection<"provision">;

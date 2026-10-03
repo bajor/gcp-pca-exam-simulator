@@ -64,17 +64,17 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p2-provision-01 | single | 2.1.b | T5 | no | KnightMotives Automotive | Cross-Cloud Interconnect to the other cloud provider | c | D3, D2, D7 | L2, L4 |
-| pca-p2-provision-02 | single | 2.1.a | T5 | no | Altostrat Media | Partner Interconnect where no Dedicated Interconnect location is reachable | a | D3, D7, D2 | L2, L4 |
-| pca-p2-provision-03 | multiple | 2.1.c | T7 | no | none | Cloud Armor rate limiting and preconfigured WAF rules (choose two) | b, d | D7, D3, D2 | L2, L4 |
-| pca-p2-provision-04 | single | 2.2.a | T9 | no | Altostrat Media | Autoclass for a media library with unpredictable access | d | D7, D7, D2 | L2, L4 |
-| pca-p2-provision-05 | single | 2.2.b | T9 | no | none | BigQuery editions reservation with a baseline and autoscaling | b | D2, D6, D7 | L2, L4 |
-| pca-p2-provision-06 | single | 2.2.c | T7 | no | none | BigQuery row-level access policies instead of copies per customer | a | D2, D5, D7 | L2, L4 |
-| pca-p2-provision-07 | single | 2.3.a | T6 | no | none | Regional managed instance group with autohealing | c | D4, D1, D7 | L2, L4 |
-| pca-p2-provision-08 | single | 2.3.b | T9 | no | none | Spot VMs for checkpointed simulation runs | d | D2, D3, D7 | L2, L4 |
-| pca-p2-provision-09 | single | 2.3.f | T4 | no | none | Cloud Run minimum instances against cold-start latency | b | D6, D2, D7 | L2, L4 |
-| pca-p2-provision-10 | single | 2.4.c | T11 | yes | KnightMotives Automotive | AI Hypercomputer accelerators for large-scale model training | a | D1, D3, D2 | L2, L4 |
-| pca-p2-provision-11 | single | 2.5.b | T11 | yes | none | Gemini Enterprise with NotebookLM for technicians' manuals | c | D1, D3, D2 | L2, L4 |
+| pca-p2-provision-01 | single | 2.1.b | T5 | no | KnightMotives Automotive | Cross-Cloud Interconnect between Google Cloud and Microsoft Azure | c | D5, D2, D7 | L2, L4 |
+| pca-p2-provision-02 | single | 2.1.a | T5 | no | Altostrat Media | Partner Interconnect where no Dedicated Interconnect colocation facility is reachable | a | D3, D5, D7 | L2, L4 |
+| pca-p2-provision-03 | multiple | 2.1.c | T7 | no | none | Cloud Armor rate-based ban and the preconfigured SQL injection rule (choose two) | b, d | D7, D3, D7 | L2, L4 |
+| pca-p2-provision-04 | single | 2.2.a | T9 | no | Altostrat Media | Autoclass for a media library with unpredictable access | d | D7, D2, D7 | L2, L4 |
+| pca-p2-provision-05 | single | 2.2.b | T9 | no | none | BigQuery Enterprise reservation with a committed baseline and autoscaling | b | D2, D6, D7 | L2, L4 |
+| pca-p2-provision-06 | single | 2.2.c | T7 | no | none | BigQuery row-level access policies instead of copies or a view for each customer | a | D5, D7, D2 | L2, L4 |
+| pca-p2-provision-07 | single | 2.3.a | T6 | no | none | Regional managed instance group with application-based autohealing | c | D4, D1, D7 | L2, L4 |
+| pca-p2-provision-08 | single | 2.3.b | T9 | no | none | Spot VMs for checkpointed workers and a standard VM for the coordinator | d | D2, D3, D7 | L2, L7 |
+| pca-p2-provision-09 | single | 2.3.f | T4 | no | none | Cloud Run minimum instances against cold-start latency | b | D6, D7, D6 | L2, L4 |
+| pca-p2-provision-10 | single | 2.4.c | T11 | yes | KnightMotives Automotive | AI Hypercomputer future reservation in calendar mode for a fixed 60-day training run | a | D7, D3, D2 | L2, L4 |
+| pca-p2-provision-11 | single | 2.5.b | T11 | yes | none | NotebookLM in the company's Google Cloud project with the manuals as sources | c | D1, D2, D5 | L2, L4 |
 
 ### Plan: secure
 
@@ -138,3 +138,9 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
   - Before handoff, every distractor was checked against a stated constraint. design-01, design-06, design-12, and design-15 gained the constraints that rule out copies for partners, a platform move, a delayed launch, and reactions slower than seconds.
   - Every design question has a near-miss pair, and the correct option is strictly the longest in 2 of 15 questions, so the remaining 41 single-choice questions may add at most 16.
   - The product names page now lists BigQuery sharing, formerly Analytics Hub.
+- 2026-10-02: Authored the `provision` section (author `claude-opus-5.5-p2-provision-20261002`).
+  - provision-01 connects Google Cloud to Microsoft Azure, because partner Cross-Cloud Interconnect also serves AWS and OCI and would make a second option defensible.
+  - provision-02 tests Partner Interconnect by the reach of a colocation facility, and its redundant attachments are not decisive, so that it does not repeat Practice Exam 1's provision-01, which tested the second edge availability domain.
+  - provision-10 tests the AI Hypercomputer consumption options, and provision-11 uses the guide's name NotebookLM for the product that the documentation calls Gemini Notebook Enterprise.
+  - AI decisive (6) and T4 (5) remain exactly at their minimums, so a later section should add one more AI-decisive question to give the set a margin.
+  - The correct option is strictly the longest in 5 of 25 single-choice questions so far.
