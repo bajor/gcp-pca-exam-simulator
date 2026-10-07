@@ -1,4 +1,5 @@
 import type { DraftQuestionSet, QuestionSet } from "../../domain/questions";
+import { practiceExamOneCandidateQuestionSets } from "./practice1/candidates";
 import { practiceExamOneDraftQuestionSets } from "./practice1/drafts";
 import { practiceExamTwoDraftQuestionSets } from "./practice2/drafts";
 
@@ -8,4 +9,4 @@ export const draftQuestionSets: readonly DraftQuestionSet[] = [
   ...practiceExamTwoDraftQuestionSets,
 ];
 
-export const candidateQuestionSets: readonly QuestionSet[] = [];
+export const candidateQuestionSets: readonly QuestionSet[] = [...practiceExamOneCandidateQuestionSets];
