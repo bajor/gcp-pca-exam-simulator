@@ -96,10 +96,10 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p2-analyze-01 | single | 4.1.a | T10 | no | none | Separate projects per environment, with the tested image promoted to production | c | D5, D3, D7 | L2, L4 |
+| pca-p2-analyze-01 | single | 4.1.a | T10 | no | none | Separate projects per environment, with the tested image promoted to production | c | D4, D3, D7 | L2, L4 |
 | pca-p2-analyze-02 | single | 4.1.c | T4 | no | none | Cloud Trace to find the slow downstream call in checkout | a | D8, D6, D8 | L2, L4 |
 | pca-p2-analyze-03 | single | 4.1.b | T10 | no | Altostrat Media | Cloud Deploy targets for GKE and fleet-registered on-premises clusters through Connect gateway | d | D1, D3, D7 | L2, L4 |
-| pca-p2-analyze-04 | single | 4.1.d | T10 | no | none | Integration and end-to-end tests of Terraform modules in an isolated test project | b | D8, D6, D3 | L2, L4 |
+| pca-p2-analyze-04 | single | 4.1.d | T10 | no | none | Integration and end-to-end tests of Terraform modules in an isolated test project | b | D8, D6, D4 | L2, L4 |
 | pca-p2-analyze-05 | single | 4.1.f | T6 | no | none | Cold pattern with geo-redundant standard snapshots for relaxed recovery objectives | c | D2, D2, D7 | L1, L2 |
 | pca-p2-analyze-06 | single | 4.2.a | T12 | no | KnightMotives Automotive | Executive sponsor and cross-functional working group for the data monetization initiative | a | D6, D8, D3 | L1, L3 |
 | pca-p2-analyze-07 | single | 4.2.e | T12 | no | none | SLO on the promised outcome, measured and reviewed for each customer | d | D6, D6, D3 | L2, L3 |
@@ -160,5 +160,7 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
 - 2026-10-07: Authored the `analyze` section (author `claude-opus-5.5-p2-analyze-20261007`). Before authoring, the exam guide and both case studies were confirmed byte-identical to the copies checked on 2026-10-02.
   - analyze-04 tests Terraform module tests in an isolated test project, because `gcloud beta terraform vet` is not generally available and cannot be decisive.
   - analyze-05 contrasts standard and instant snapshots, so that it tests a different decision from design-03, which tiers several systems by business impact.
-  - analyze-08 relies on Google's guidance for documented, rehearsed procedures and manual interventions.
+  - analyze-08 relies on Google's guidance for business continuity plans with step-by-step instructions, exercises, and training.
+  - After the fresh-session review, analyze-03 tests Cloud Deploy targets for fleet-registered on-premises clusters without a production approval, so that it does not repeat Practice Exam 1's analyze-03, and its stem names Kubernetes clusters so that it does not reveal design-08's answer.
+  - analyze-01's option a uses predefined roles, because legacy basic roles cannot take IAM conditions, and analyze-05's option d restores instant snapshots in place, because a disk created from an instant snapshot keeps the source disk's location.
   - The correct option is strictly the longest in 10 of 43 single-choice questions so far.

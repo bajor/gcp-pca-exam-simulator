@@ -35,7 +35,7 @@ export const practiceExamTwoAnalyzeSection = {
       kind: "single",
       section: "analyze",
       objective: "4.1 Analyzing and defining technical processes: 4.1.a software development lifecycle",
-      prompt: "A startup's developers deploy straight from their laptops to the one Google Cloud project that runs its development, test, and production workloads. Last week, a developer testing a schema change deleted a production table. The CTO wants developers to experiment freely without any access to production, and wants only container images that passed testing to reach production, exactly as they were tested. What should you do?",
+      prompt: "A startup's developers deploy straight from their laptops to the one Google Cloud project that runs its development, staging, and production workloads. Last week, a developer testing a schema change deleted a production table. The CTO wants developers to experiment freely without any access to production, and wants only container images that passed testing to reach production, exactly as they were tested. What should you do?",
       verifiedOn: "2026-10-07",
       evidence: [
         {
@@ -51,24 +51,30 @@ export const practiceExamTwoAnalyzeSection = {
           claim: "Container images shouldn't be rebuilt as they pass through the stages of a CI/CD pipeline. To ensure that the image you tested is the image you deploy, build once and promote along your environments, which are ideally separate development, pre-production, and production environments.",
         },
         {
-          id: "basic-roles",
-          title: "Roles overview",
-          url: "https://docs.cloud.google.com/iam/docs/roles-overview",
-          claim: "Basic roles, which include the legacy Editor role, are highly permissive roles that give broad access to Google Cloud resources.",
+          id: "iam-conditions",
+          title: "Overview of IAM Conditions",
+          url: "https://docs.cloud.google.com/iam/docs/conditions-overview",
+          claim: "In a role binding, a condition expression can allow access only during specified working hours, but conditions can't be used when you grant legacy basic roles, such as Owner, Editor, and Viewer.",
+        },
+        {
+          id: "labels-overview",
+          title: "Labels overview",
+          url: "https://docs.cloud.google.com/resource-manager/docs/labels-overview",
+          claim: "Labels can be used as queryable annotations for resources, but they can't be used to set conditions on policies.",
         },
       ],
       choices: [
         {
           id: "a",
-          text: "Keep the single project, and grant developers the Editor role only during business hours with an IAM condition, so that they cannot change production at night.",
-          feedback: "Incorrect. The Editor role still gives developers broad access to production during business hours, while separate environments let IAM keep developers out of production entirely.",
-          evidenceIds: ["basic-roles", "environment-folders"],
+          text: "Keep the single project, and grant developers predefined roles with an IAM condition that allows access only during business hours, so that they cannot change production at night.",
+          feedback: "Incorrect. A time-based IAM condition still lets developers change production during business hours, while separate environment projects let IAM keep developers out of production entirely.",
+          evidenceIds: ["iam-conditions", "environment-folders"],
         },
         {
           id: "b",
-          text: "Keep the single project, create separate VPC networks for development, test, and production, and label every resource with its environment.",
-          feedback: "Incorrect. VPC networks and labels do not separate IAM access, so developers keep their access to production resources in the shared project.",
-          evidenceIds: ["environment-folders"],
+          text: "Keep the single project, create separate VPC networks for development, staging, and production, and label every resource with its environment.",
+          feedback: "Incorrect. Labels can't be used to set conditions on IAM policies, and separate VPC networks don't remove developers' roles on the project, so developers keep their access to production resources in the shared project.",
+          evidenceIds: ["labels-overview", "environment-folders"],
         },
         {
           id: "c",
@@ -90,7 +96,7 @@ export const practiceExamTwoAnalyzeSection = {
       kind: "single",
       section: "analyze",
       objective: "4.1 Analyzing and defining technical processes: 4.1.c troubleshooting and root cause analysis",
-      prompt: "A furniture retailer runs online ordering as eight microservices on GKE. Since last week's release, checkout sometimes takes 6 seconds instead of under one second. Error rates, CPU, and memory look normal, and the logs show no errors, so the team cannot tell which downstream call slows checkout. The team wants to find the cause before it changes the system. What should you do first?",
+      prompt: "A furniture retailer runs online ordering as eight microservices on GKE. Since last week's release, checkout sometimes takes 6 seconds instead of under one second. Error rates, CPU, and memory look normal, and the logs show no errors, so the team cannot tell which downstream call slows checkout. The team wants to find the cause before it changes capacity or rolls back the release. What should you do first?",
       verifiedOn: "2026-10-07",
       evidence: [
         cloudTrace,
@@ -105,13 +111,13 @@ export const practiceExamTwoAnalyzeSection = {
         {
           id: "a",
           text: "Instrument the services with OpenTelemetry and send the data to Cloud Trace, then examine slow checkout requests to see which downstream call takes the time.",
-          feedback: "Correct. Cloud Trace measures end-to-end request latency and pinpoints which downstream dependencies cause delays, so it finds the cause without changing the system.",
+          feedback: "Correct. Cloud Trace measures end-to-end request latency and pinpoints which downstream dependencies cause delays, so it finds the slow call before the team changes capacity or rolls back the release.",
           evidenceIds: ["cloud-trace", "trace-instrumentation"],
         },
         {
           id: "b",
           text: "Add nodes and replicas to every service, because extra capacity usually removes slow requests during busy periods.",
-          feedback: "Incorrect. Adding capacity changes the system before the cause is known, and normal CPU and memory suggest that capacity is not what slows checkout.",
+          feedback: "Incorrect. Adding capacity before the cause is known is what the team wants to avoid, and normal CPU and memory suggest that capacity is not what slows checkout.",
           evidenceIds: ["cloud-trace"],
         },
         {
@@ -123,7 +129,7 @@ export const practiceExamTwoAnalyzeSection = {
         {
           id: "d",
           text: "Roll back last week's release on all services, and then redeploy the changes one service at a time until checkout slows down again.",
-          feedback: "Incorrect. Rolling back and redeploying changes the system before the cause is known, while traces of the slow requests show the slow downstream call directly.",
+          feedback: "Incorrect. Rolling back the release before the cause is known is what the team wants to avoid, while traces of the slow requests show the slow downstream call directly.",
           evidenceIds: ["cloud-trace"],
         },
       ],
@@ -135,7 +141,7 @@ export const practiceExamTwoAnalyzeSection = {
       section: "analyze",
       objective: "4.1 Analyzing and defining technical processes: 4.1.b continuous integration and continuous deployment",
       caseStudyId: "altostrat-media",
-      prompt: "Altostrat Media builds container images with Cloud Build and stores them in Artifact Registry. Each release must reach its GKE clusters in Google Cloud and its on-premises Google Distributed Cloud clusters, which are registered to Altostrat's fleet. Today, engineers run kubectl by hand against each cluster, and releases drift between environments. Altostrat wants one managed, central pipeline that promotes each release through the same sequence of environments, with an approval before production. What should you do?",
+      prompt: "Altostrat Media builds container images with Cloud Build and stores them in Artifact Registry. Each release must reach its GKE clusters in Google Cloud and its on-premises Kubernetes clusters, which are registered to Altostrat's fleet. Today, engineers run kubectl by hand against each cluster, so the on-premises clusters often run different versions than the GKE clusters. Altostrat wants one managed, central pipeline that promotes each release through the same sequence of environments in both places. What should you do?",
       verifiedOn: "2026-10-07",
       evidence: [
         {
@@ -154,19 +160,13 @@ export const practiceExamTwoAnalyzeSection = {
           url: "https://docs.cloud.google.com/deploy/docs/anthos-targets",
           claim: "Cloud Deploy can deploy container workloads to clusters that it can access through Connect gateway, which enables deployment to AWS, Azure, and on-premises clusters, including existing Kubernetes clusters that are registered to a fleet.",
         },
-        {
-          id: "deploy-approvals",
-          title: "Promote your release and manage approvals",
-          url: "https://docs.cloud.google.com/deploy/docs/promote-release",
-          claim: "Cloud Deploy promotes a release to the next target in a delivery pipeline progression, and you can require approval for any target.",
-        },
       ],
       choices: [
         {
           id: "a",
           text: "Write a script that runs kubectl apply against each cluster's kubeconfig file for every release, and run the script from a Compute Engine VM.",
-          feedback: "Incorrect. A self-managed script is hand-built tooling with no promotion sequence or approval step, while Cloud Deploy is a managed service that provides both.",
-          evidenceIds: ["cloud-deploy", "deploy-approvals"],
+          feedback: "Incorrect. A script on a self-managed VM is hand-built tooling with no promotion sequence, while Cloud Deploy is a managed service that promotes each release through its targets in a defined order.",
+          evidenceIds: ["cloud-deploy"],
         },
         {
           id: "b",
@@ -182,9 +182,9 @@ export const practiceExamTwoAnalyzeSection = {
         },
         {
           id: "d",
-          text: "Use Cloud Deploy with a delivery pipeline whose targets include the GKE clusters and the fleet's on-premises clusters through Connect gateway, and require approval for production.",
-          feedback: "Correct. Cloud Deploy delivers each release to targets in a defined promotion sequence, reaches the on-premises clusters through Connect gateway, and can require approval for the production target.",
-          evidenceIds: ["cloud-deploy", "deploy-attached", "deploy-approvals", "case-study"],
+          text: "Use Cloud Deploy with a delivery pipeline whose targets include the GKE clusters and the fleet's on-premises clusters, which Cloud Deploy reaches through Connect gateway.",
+          feedback: "Correct. Cloud Deploy is a managed service that delivers each release to a series of targets in a defined promotion sequence, and it reaches the fleet's on-premises clusters through Connect gateway, so one pipeline serves both places.",
+          evidenceIds: ["cloud-deploy", "deploy-attached", "case-study"],
         },
       ],
       correctChoiceId: "d",
@@ -237,7 +237,7 @@ export const practiceExamTwoAnalyzeSection = {
       kind: "single",
       section: "analyze",
       objective: "4.1 Analyzing and defining technical processes: 4.1.f disaster recovery",
-      prompt: "A logistics company runs an internal route-history application on two Compute Engine VMs in one region, and keeps a full copy running in a second region at all times. A new business impact analysis says the application can be offline for up to 12 hours after a regional outage and can lose up to 24 hours of data. The CFO wants to cut the cost of the second region while still meeting those objectives. What should you do?",
+      prompt: "A logistics company runs an internal route-history application on two Compute Engine VMs in one region, and keeps a full copy running in a second region at all times. A new business impact analysis says the application can be offline for up to 12 hours after a regional outage and can lose up to 24 hours of data. The CFO wants to minimize the cost of disaster recovery while still meeting those objectives. What should you do?",
       verifiedOn: "2026-10-07",
       evidence: [
         drPlanning,
@@ -251,7 +251,13 @@ export const practiceExamTwoAnalyzeSection = {
           id: "snapshots",
           title: "About archive and standard disk snapshots",
           url: "https://docs.cloud.google.com/compute/docs/disks/snapshots",
-          claim: "Standard snapshots are geo-redundant data backups that safeguard against local, zonal, and regional outages. Instant snapshots are in-place backups for quick restores after user error or application corruption, and they exist only until the source disk is deleted.",
+          claim: "Standard snapshots are geo-redundant data backups that safeguard against local, zonal, and regional outages. Instant snapshots are local backups for quick restores after user error or application corruption, stored only in the same zone or region as the source disk.",
+        },
+        {
+          id: "instant-restore",
+          title: "Restore disks from instant snapshots",
+          url: "https://docs.cloud.google.com/compute/docs/disks/restore-instant-snapshot",
+          claim: "When you create a disk from an instant snapshot, the new disk always has the same type, location, and encryption as the source disk of the snapshot.",
         },
       ],
       choices: [
@@ -275,9 +281,9 @@ export const practiceExamTwoAnalyzeSection = {
         },
         {
           id: "d",
-          text: "Remove the copy in the second region, take daily instant snapshots of the disks, and keep templates that recreate the VMs from the snapshots in another region.",
-          feedback: "Incorrect. Instant snapshots are in-place backups for quick restores after user error or corruption, not geo-redundant backups like standard snapshots, so they don't protect against a regional outage.",
-          evidenceIds: ["snapshots"],
+          text: "Remove the copy in the second region, take daily instant snapshots of the disks, and restore new disks and VMs from the latest instant snapshots after an outage.",
+          feedback: "Incorrect. Instant snapshots are stored only in the source disk's zone or region, and disks restored from them keep that location, so they don't protect against a regional outage as geo-redundant standard snapshots do.",
+          evidenceIds: ["snapshots", "instant-restore"],
         },
       ],
       correctChoiceId: "c",
@@ -299,14 +305,14 @@ export const practiceExamTwoAnalyzeSection = {
           id: "adoption-framework",
           title: "Google Cloud Adoption Framework",
           url: "https://services.google.com/fh/files/misc/google_cloud_adoption_framework_whitepaper.pdf",
-          claim: "The effectiveness of cloud adoption depends on a top-down mandate from sponsors and bottom-up cross-functional collaboration among teams. Sponsors control which resources are allocated and bring stakeholders from different business functions and reporting lines together.",
+          claim: "The effectiveness of cloud adoption depends on a top-down mandate from sponsors and bottom-up cross-functional collaboration among teams. Sponsors control which resources are allocated and bring stakeholders from different business functions and reporting lines together, and executive sponsorship gives early adopters a widely recognized mandate for change.",
         },
       ],
       choices: [
         {
           id: "a",
           text: "Ask an executive sponsor to bring legal, dealer relations, security, and finance into one working group that agrees on goals, constraints, and success measures before a design is chosen.",
-          feedback: "Correct. A sponsor brings stakeholders from different business functions together, and a cross-functional group that agrees on goals and constraints first gives the initiative a recognized mandate.",
+          feedback: "Correct. A sponsor brings stakeholders from different business functions together and gives the initiative a widely recognized mandate, which the stalled groups lack, and cross-functional collaboration then drives the work.",
           evidenceIds: ["adoption-framework", "case-study"],
         },
         {
@@ -335,7 +341,7 @@ export const practiceExamTwoAnalyzeSection = {
       kind: "single",
       section: "analyze",
       objective: "4.2 Analyzing and defining business processes: 4.2.e customer success management",
-      prompt: "A SaaS company sells route planning to delivery fleets and promises each customer that its daily routes are ready by 6:00 AM local time. Several customers say they do not get the promised value, while account managers report only login counts and the platform team reports server uptime. The company wants to show each customer whether it receives the promised value and to find shortfalls before customers do. What should you do?",
+      prompt: "A SaaS company sells route planning to delivery fleets and promises each customer that its daily routes are ready by 6:00 AM local time. Several customers say they do not get the promised value, while account managers report only login counts and the platform team reports server uptime. The company wants to use its own measurements to show each customer whether the promised value was delivered and when it was not. What should you do?",
       verifiedOn: "2026-10-07",
       evidence: [
         {
@@ -373,7 +379,7 @@ export const practiceExamTwoAnalyzeSection = {
         {
           id: "d",
           text: "Define an SLO for routes ready by 6:00 AM, measured for each customer, and review each customer's SLO report and any shortfalls with that customer every month.",
-          feedback: "Correct. An SLO on the promised outcome, measured for each customer, reflects the customers' actual experience, and regular reviews show the value delivered and expose shortfalls early.",
+          feedback: "Correct. An SLO on the promised outcome, measured for each customer, reflects the customers' actual experience, and a monthly review shows each customer when its routes were ready on time and when they were not.",
           evidenceIds: ["slo-concepts", "user-experience"],
         },
       ],
@@ -388,6 +394,12 @@ export const practiceExamTwoAnalyzeSection = {
       verifiedOn: "2026-10-07",
       evidence: [
         drPlanning,
+        {
+          id: "bcp",
+          title: "Business continuity with CI/CD on Google Cloud",
+          url: "https://docs.cloud.google.com/architecture/business-continuity-with-cicd-on-google-cloud",
+          claim: "Business continuity plan development includes writing step-by-step instructions for employees to follow during a disruption. After the plan is documented, test it through simulations and exercises, and train employees on their roles and responsibilities during a disruption.",
+        },
         {
           id: "incident-procedures",
           title: "Manage incidents and problems",
@@ -405,14 +417,14 @@ export const practiceExamTwoAnalyzeSection = {
         {
           id: "a",
           text: "Move the app to an active-active deployment in two regions, so that the app stays available to the nurses during an outage in one region.",
-          feedback: "Incorrect. A second region does not help visits in homes without mobile coverage, and the change cannot ship this quarter, while a documented manual procedure covers both kinds of disruption.",
-          evidenceIds: ["incident-procedures", "dr-planning"],
+          feedback: "Incorrect. A second region keeps the app available during a regional outage, but it does not help nurses in homes without mobile coverage, while a documented manual procedure covers both kinds of disruption.",
+          evidenceIds: ["bcp", "dr-planning"],
         },
         {
           id: "b",
           text: "Write a runbook for a paper fallback that assigns roles, explains how to record visits and enter them into the app afterward, and rehearse it every quarter.",
-          feedback: "Correct. A runbook gives a standard procedure with clear roles and steps for each stage of a disruption, and regular rehearsals prepare the nurses for the manual work while the app is unavailable.",
-          evidenceIds: ["incident-procedures", "recovery-testing", "dr-planning"],
+          feedback: "Correct. A business continuity plan includes step-by-step instructions for employees to follow during a disruption, and exercises and training on their roles prepare the nurses to record visits on paper while the app is unavailable.",
+          evidenceIds: ["bcp", "incident-procedures", "recovery-testing"],
         },
         {
           id: "c",
@@ -473,7 +485,7 @@ export const practiceExamTwoAnalyzeSection = {
         {
           id: "b",
           text: "Create a budget with alert thresholds for each project, and send the budget alerts to the finance team's mailing list.",
-          feedback: "Incorrect. Budget alerts track spend against a planned amount and send notifications, but they do not attribute costs to teams or support analysis by product.",
+          feedback: "Incorrect. Budget alerts compare actual spend with a planned amount and send email notifications, but they don't produce each team's monthly charges or the SQL analysis that finance needs.",
           evidenceIds: ["budgets"],
         },
         {
