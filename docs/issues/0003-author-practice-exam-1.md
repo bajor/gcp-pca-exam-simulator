@@ -170,3 +170,7 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
   - operate-07 now tests a chaos experiment on a slow dependency. The earlier failover question used the same decisive contrast as implement-04, a staging environment that replicates production against a test in production.
   - The full draft now has the following measurements: correct letters a, b, c, and d: 14 each; the correct option strictly longest in 14 of 56 single-choice questions; near-miss pairs in 44 questions; median reading load: 188 words.
 - 2026-10-07: Registered candidate `professional-cloud-architect-v6-1-practice-1` version 1 in `src/data/questionSets/practice1/candidates.ts` for the independent acceptance review. The candidate has the measurements recorded in the previous entry.
+- 2026-10-07: The independent acceptance review (PR #29) rejected version 1. 58 of 60 questions passed, and design-13 and operate-04 were returned because each stem stated one explicit constraint.
+  - Version 2, `professional-cloud-architect-v6-1-practice-1-v2`, is registered as a second candidate. Version 1 stays registered and unchanged, because the rejection record is bound to it.
+  - The new modules `designV2.ts` and `operateV2.ts` derive from the version 1 modules with `reviseQuestionInSection` and change only the two rejected questions.
+  - design-13 now also requires a plan that rests on observed connections, without new tools. operate-04 now also limits the release to one extra Pod at a time and rules out replacing Pods by hand.

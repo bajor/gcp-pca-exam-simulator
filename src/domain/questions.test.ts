@@ -12,6 +12,7 @@ import {
   parseRejectionRecord,
   parseReviewRecord,
   questionSetContentSha256,
+  reviseQuestionInSection,
   validateDraftQuestionSet,
   validateDraftQuestionSets,
   validateQuestionSet,
@@ -341,4 +342,28 @@ it("binds the same content digest whether a missing case study is omitted or und
   const set = validSet();
   const explicit = { ...set, questions: set.questions.map((question) => ({ caseStudyId: undefined, ...question })) };
   expect(questionSetContentSha256(explicit)).toBe(questionSetContentSha256(set));
+});
+
+it("revises one question in a new section and leaves the original section unchanged", () => {
+  const section = validDraft().sections[0];
+  const [target, ...others] = section.questions;
+  const originalPrompt = target.prompt;
+  const revised = reviseQuestionInSection(section, "reviser", target.id, {
+    prompt: "A revised prompt.",
+    verifiedOn: "2026-10-07",
+    feedback: { a: "Correct. The revised feedback." },
+  });
+  expect(revised.author).toBe("reviser");
+  expect(revised.questions[0]).toMatchObject({ id: target.id, prompt: "A revised prompt.", verifiedOn: "2026-10-07" });
+  expect(revised.questions[0].choices).toHaveLength(target.choices.length);
+  expect(revised.questions[0].choices.find((choice) => choice.id === "a")?.feedback).toBe("Correct. The revised feedback.");
+  expect(revised.questions.slice(1)).toEqual(others);
+  expect(section.questions[0].prompt).toBe(originalPrompt);
+});
+
+it("refuses to revise a question that the section does not contain", () => {
+  const section = validDraft().sections[0];
+  expect(() =>
+    reviseQuestionInSection(section, "reviser", "missing-question", { prompt: "P.", verifiedOn: "2026-10-07", feedback: {} }),
+  ).toThrow("missing-question");
 });
