@@ -185,7 +185,7 @@ export const practiceExamTwoProvisionSection = {
           id: "vpc-firewall",
           title: "VPC firewall rules",
           url: "https://docs.cloud.google.com/firewall/docs/firewalls",
-          claim: "VPC firewall rules allow or deny connections to or from VMs in a VPC network based on the traffic's protocol, destination ports, sources, and destinations.",
+          claim: "Firewall rules allow or deny connections to or from VMs in a VPC network based on the traffic's protocol, destination ports, sources, and destinations.",
         },
         {
           id: "lb-firewall",
@@ -203,8 +203,8 @@ export const practiceExamTwoProvisionSection = {
       choices: [
         {
           id: "a",
-          text: "Create VPC firewall rules that deny the bots' IP address ranges, and update the rules each time the security team finds new addresses.",
-          feedback: "Incorrect. Behind this load balancer, connections reach the backends from Google Front End proxies, and VPC firewall rules filter connections inside the VPC network by address and port, so they neither stop the bots at the edge nor inspect requests for SQL injection.",
+          text: "Create firewall rules in the VPC network that deny the bots' IP address ranges, and update the rules each time the security team finds new addresses.",
+          feedback: "Incorrect. Behind this load balancer, connections reach the backends from Google Front End proxies, and firewall rules filter connections inside the VPC network by address and port, so they neither stop the bots at the edge nor inspect requests for SQL injection.",
           evidenceIds: ["vpc-firewall", "lb-firewall"],
         },
         {
