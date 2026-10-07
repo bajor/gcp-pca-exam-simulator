@@ -35,7 +35,7 @@ export const practiceExamTwoSecureSection = {
       kind: "single",
       section: "secure",
       objective: "3.1 Designing for security: 3.1.c data security",
-      prompt: "A travel company's booking service on Cloud Run calls a flight-pricing partner's API with an API key that the partner issues. The key is stored as a plain environment variable in the service's deployment file in Git. The partner requires a new key every 90 days, and the security team wants the key out of source control, readable only by the booking service's identity, and a notification sent to the team's automation whenever a rotation is due. What should you do?",
+      prompt: "A travel company's booking service on Cloud Run calls a flight-pricing partner's API with an API key that the partner issues. The key is stored as a plain environment variable in the service's deployment file in Git. The partner requires a new key every 90 days, and the security team wants the key out of source control, readable only by the booking service's identity, and a notification sent to the team's automation whenever a rotation is due, without building its own key store or scheduler. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -73,7 +73,7 @@ export const practiceExamTwoSecureSection = {
         {
           id: "b",
           text: "Store the key in Secret Manager with a 90-day rotation schedule that notifies Pub/Sub, grant the service's service account the Secret Accessor role, and mount the secret in Cloud Run.",
-          feedback: "Correct. Secret Manager keeps the key out of source control, the Secret Accessor role on that secret limits who can read it, and the rotation schedule notifies Pub/Sub whenever a rotation is due.",
+          feedback: "Correct. Secret Manager keeps the key out of source control, the Secret Accessor role limits who can read it, and the rotation schedule notifies Pub/Sub whenever a rotation is due.",
           evidenceIds: ["secret-rotation", "secret-access", "run-secrets"],
         },
         {
@@ -85,7 +85,7 @@ export const practiceExamTwoSecureSection = {
         {
           id: "d",
           text: "Store the key in a Cloud SQL table, and write a scheduled job that emails the team every 90 days and updates the table with each new key.",
-          feedback: "Incorrect. A table and a custom scheduled job rebuild the secret storage, access control, and rotation notifications that Secret Manager provides.",
+          feedback: "Incorrect. A Cloud SQL table and a scheduled job are the key store and scheduler that the team does not want to build, while Secret Manager stores the key and its rotation schedule notifies Pub/Sub.",
           evidenceIds: ["secret-rotation", "run-secrets"],
         },
       ],
@@ -102,7 +102,7 @@ export const practiceExamTwoSecureSection = {
       evidence: [
         {
           ...altostratCaseStudy,
-          claim: "Altostrat combines Google Identity with third-party identity providers for user management and sign-in.",
+          claim: "Altostrat uses Google Identity and external identity providers to manage users and their sign-in.",
         },
         {
           id: "workforce-federation",
@@ -132,7 +132,7 @@ export const practiceExamTwoSecureSection = {
         },
         {
           id: "b",
-          text: "Create a service account for each team, download a key for it, and share the key with the team's users so that they can use gcloud and the console.",
+          text: "Create a service account for each team, download a key for it, and share the key with the team's users so that they can run gcloud commands.",
           feedback: "Incorrect. A shared service account key does not let each user sign in individually, and a leaked key lets anyone authenticate, while Workforce Identity Federation uses the existing single sign-on.",
           evidenceIds: ["service-account-keys", "workforce-federation"],
         },
@@ -227,7 +227,7 @@ export const practiceExamTwoSecureSection = {
           id: "vpc-firewall",
           title: "VPC firewall rules",
           url: "https://docs.cloud.google.com/firewall/docs/firewalls",
-          claim: "VPC firewall rules allow or deny connections to or from VM instances in a VPC network.",
+          claim: "Firewall rules allow or deny connections to or from VM instances in a VPC network.",
         },
       ],
       choices: [
@@ -257,7 +257,7 @@ export const practiceExamTwoSecureSection = {
         },
         {
           id: "e",
-          text: "Create a VPC firewall rule in each network that denies ingress traffic from 0.0.0.0/0 to all VMs in the network.",
+          text: "Create a firewall rule in each VPC network that denies ingress traffic from 0.0.0.0/0 to all VMs in the network.",
           feedback: "Incorrect. Firewall rules allow or deny connections to VMs, but they do not stop anyone from giving a VM an external IPv4 address.",
           evidenceIds: ["vpc-firewall"],
         },
@@ -269,8 +269,8 @@ export const practiceExamTwoSecureSection = {
       kind: "single",
       section: "secure",
       objective: "3.1 Designing for security: 3.1.f managing customer-managed encryption keys with Cloud KMS",
-      prompt: "A German bank stores loan data in a BigQuery dataset in the europe-west3 region. A new regulation requires that the data be protected with an encryption key that the bank controls in Cloud KMS, that the key material never be stored outside Germany, and that the key be rotated every 90 days without manual work. The bank's analysts must keep using the same dataset and queries. What should you do?",
-      verifiedOn: "2026-10-02",
+      prompt: "A German bank is creating a BigQuery dataset in the europe-west3 region, where nightly jobs will load loan data for its 40 analysts. A new regulation requires that the data be protected with an encryption key that the bank controls in Cloud KMS, that the key material never be stored outside Germany, and that the key be rotated every 90 days without code or manual steps that the bank must maintain. What should you do?",
+      verifiedOn: "2026-10-07",
       evidence: [
         {
           id: "kms-locations",
@@ -282,7 +282,7 @@ export const practiceExamTwoSecureSection = {
           id: "bigquery-cmek",
           title: "Customer-managed Cloud KMS keys",
           url: "https://docs.cloud.google.com/bigquery/docs/customer-managed-encryption",
-          claim: "Create the key ring in a location that matches the BigQuery dataset, so regional datasets use matching regional keys, and grant the BigQuery service account the Cloud KMS CryptoKey Encrypter/Decrypter role on the key.",
+          claim: "Create the key ring in a location that matches the BigQuery dataset, so regional datasets use matching regional keys, and grant the BigQuery service account the Cloud KMS CryptoKey Encrypter/Decrypter role on the key. A dataset default key applies to tables created in the dataset after it is set, not to existing tables.",
         },
         {
           id: "kms-rotation",
@@ -307,13 +307,13 @@ export const practiceExamTwoSecureSection = {
         {
           id: "b",
           text: "Create a key in a europe-west3 key ring, and run a scheduled script every 90 days that creates a new key and re-encrypts the dataset with it.",
-          feedback: "Incorrect. A script that creates keys and re-encrypts the dataset is manual work that the bank must build and run, while Cloud KMS rotates symmetric keys automatically on a schedule.",
+          feedback: "Incorrect. A scheduled script that creates keys and re-encrypts the dataset is code that the bank must maintain, while Cloud KMS rotates symmetric keys automatically on a schedule.",
           evidenceIds: ["kms-rotation"],
         },
         {
           id: "c",
           text: "Create a key with a 90-day automatic rotation period in a europe-west3 key ring, grant BigQuery's service account the Encrypter/Decrypter role on it, and make it the dataset's default key.",
-          feedback: "Correct. Key material in the europe-west3 region stays in that region for the key's whole lifecycle, the key matches the dataset's region, and Cloud KMS rotates it automatically every 90 days.",
+          feedback: "Correct. Key material in the europe-west3 region stays there for the key's whole lifecycle, the dataset default key protects each table that the jobs create, and Cloud KMS rotates the key automatically every 90 days.",
           evidenceIds: ["kms-locations", "bigquery-cmek", "kms-rotation"],
         },
         {
@@ -330,8 +330,8 @@ export const practiceExamTwoSecureSection = {
       kind: "single",
       section: "secure",
       objective: "3.1 Designing for security: 3.1.g secure remote access",
-      prompt: "A manufacturer runs a supplier portal on Compute Engine VMs behind a global external Application Load Balancer. Suppliers reach it today through site-to-site VPN tunnels that the network team maintains for each of 60 suppliers. Supplier staff have Google accounts in a supplier group. The company wants to remove the VPNs, require each user to sign in with a Google account, and allow access only from the suppliers' registered office IP ranges. What should you do?",
-      verifiedOn: "2026-10-02",
+      prompt: "A manufacturer runs a supplier portal on Compute Engine VMs behind a global external Application Load Balancer. Suppliers reach it today through site-to-site VPN tunnels that the network team maintains for each of 60 suppliers. Each supplier user has an account in the manufacturer's Cloud Identity and belongs to a supplier group. The company wants to remove the VPNs without operating new infrastructure, require each user to sign in with that account, and allow access only from the suppliers' registered office IP ranges. What should you do?",
+      verifiedOn: "2026-10-07",
       evidence: [
         {
           id: "iap-overview",
@@ -345,24 +345,30 @@ export const practiceExamTwoSecureSection = {
           url: "https://docs.cloud.google.com/iap/docs/cloud-iap-context-aware-access-howto",
           claim: "IAP access policies can be extended with access levels through IAM Conditions, and access levels restrict access based on IP address and end-user device attributes.",
         },
+        {
+          id: "iap-oauth-clients",
+          title: "Use custom OAuth clients with IAP",
+          url: "https://docs.cloud.google.com/iap/docs/custom-oauth-configuration",
+          claim: "By default, IAP uses Google-managed OAuth clients, which manage access only for internal users within an organization.",
+        },
       ],
       choices: [
         {
           id: "a",
           text: "Make the portal reachable through the load balancer without the VPNs, and protect it with one password that the company shares with all suppliers.",
-          feedback: "Incorrect. A shared password does not require each user to sign in with a Google account, while IAP authorizes each user's account without a VPN.",
+          feedback: "Incorrect. A shared password does not require each user to sign in with their own account, while IAP authorizes each user's account without a VPN.",
           evidenceIds: ["iap-overview"],
         },
         {
           id: "b",
           text: "Turn on IAP for the load balancer's backend service, and grant the supplier group the IAP-secured Web App User role with an access level for the registered IP ranges.",
           feedback: "Correct. IAP authorizes HTTPS access without a VPN, the IAP-secured Web App User role admits the supplier group, and an access level limits that access to the registered IP ranges.",
-          evidenceIds: ["iap-overview", "iap-access-levels"],
+          evidenceIds: ["iap-overview", "iap-access-levels", "iap-oauth-clients"],
         },
         {
           id: "c",
           text: "Deploy a self-managed authentication proxy on GKE that checks each user's Google sign-in and source IP address before it forwards requests to the portal.",
-          feedback: "Incorrect. A self-managed proxy rebuilds the authorization and IP checks that IAP and access levels provide as managed features, and the team must run and patch it.",
+          feedback: "Incorrect. A self-managed proxy on GKE is new infrastructure that the team must run and patch, while IAP and access levels provide the sign-in and IP checks as managed features.",
           evidenceIds: ["iap-overview", "iap-access-levels"],
         },
         {
@@ -379,7 +385,7 @@ export const practiceExamTwoSecureSection = {
       kind: "single",
       section: "secure",
       objective: "3.1 Designing for security: 3.1.h securing software supply chain",
-      prompt: "A software company builds container images in Cloud Build and pushes them to Artifact Registry, where automatic scanning reports vulnerabilities after each push. Twice last month, images with critical vulnerabilities were deployed before anyone read the scan results. The security team wants every build to fail if its image contains a critical vulnerability, before the image ever reaches Artifact Registry, without slowing the developers' other steps. What should you do?",
+      prompt: "A software company builds container images in Cloud Build and pushes them to Artifact Registry, where automatic scanning reports vulnerabilities after each push. Twice last month, images with critical vulnerabilities were deployed before anyone read the scan results. The security team wants every build to fail if its image contains a critical vulnerability, before the image ever reaches Artifact Registry, without adding a manual review step. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -429,8 +435,8 @@ export const practiceExamTwoSecureSection = {
       section: "secure",
       objective: "3.1 Designing for security: 3.1.i securing AI",
       caseStudyId: "altostrat-media",
-      prompt: "Altostrat Media tuned a Gemini model on Agent Platform with transcripts and metadata that it keeps in Cloud Storage and BigQuery, and it serves the tuned model from an Agent Platform endpoint. The security team worries that someone with stolen credentials could call the model from outside Altostrat's networks or copy the training data to a project that Altostrat does not control. The team wants the model and the data reachable only from Altostrat's own projects and networks. What should you do?",
-      verifiedOn: "2026-10-02",
+      prompt: "Altostrat Media's summarization service runs in an AI project and sends transcripts and metadata from Cloud Storage and BigQuery in two data projects to a Gemini model through the Agent Platform API. The security team worries that someone with stolen credentials could call the model through the AI project from outside Altostrat's networks or copy the transcripts to a project that Altostrat does not control. The team wants the AI project and the data reachable only from Altostrat's own projects and networks. What should you do?",
+      verifiedOn: "2026-10-07",
       evidence: [
         {
           ...altostratCaseStudy,
@@ -444,6 +450,12 @@ export const practiceExamTwoSecureSection = {
           claim: "The Gemini Enterprise Agent Platform API (aiplatform.googleapis.com) is fully supported by VPC Service Controls, and the product can be used normally inside service perimeters.",
         },
         {
+          id: "agent-platform-vpc-sc",
+          title: "VPC Service Controls with Gemini Enterprise Agent Platform",
+          url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/machine-learning/general/vpc-service-controls",
+          claim: "VPC Service Controls can help mitigate the risk of data exfiltration from Agent Platform, and when a perimeter includes Agent Platform in its protected services, all public internet access to the Agent Platform instance is blocked.",
+        },
+        {
           id: "model-armor",
           title: "Model Armor overview",
           url: "https://docs.cloud.google.com/model-armor/overview",
@@ -454,13 +466,13 @@ export const practiceExamTwoSecureSection = {
         {
           id: "a",
           text: "Create a VPC Service Controls perimeter around Altostrat's AI and data projects, and restrict the Agent Platform, Cloud Storage, and BigQuery APIs in it.",
-          feedback: "Correct. The perimeter protects the data of the services that it restricts, so the model and the training data can't be reached from unauthorized networks with stolen credentials or copied to resources outside it.",
-          evidenceIds: ["vpc-service-controls", "supported-products", "case-study"],
+          feedback: "Correct. The perimeter protects the services that it restricts, so stolen credentials can't call the model through the AI project or reach the transcripts from unauthorized networks, and the data can't be copied outside it.",
+          evidenceIds: ["vpc-service-controls", "supported-products", "agent-platform-vpc-sc", "case-study"],
         },
         {
           id: "b",
-          text: "Screen every prompt and response of the tuned model with Model Armor, so that the model cannot return training data to callers outside the company.",
-          feedback: "Incorrect. Model Armor screens prompts and responses for risks such as prompt injection, but it does not block callers on outside networks or copies of the training data to other projects.",
+          text: "Screen every prompt and response of the Gemini model with Model Armor, so that the model cannot return transcripts to callers outside the company.",
+          feedback: "Incorrect. Model Armor screens prompts and responses for risks such as prompt injection, but it does not block callers on outside networks or copies of the transcripts to other projects.",
           evidenceIds: ["model-armor"],
         },
         {
@@ -472,7 +484,7 @@ export const practiceExamTwoSecureSection = {
         {
           id: "d",
           text: "Create a VPC Service Controls perimeter around Altostrat's AI project only, and restrict the Agent Platform API in it.",
-          feedback: "Incorrect. A perimeter around only the AI project leaves Cloud Storage and BigQuery in the data projects unprotected, so the training data can still be copied to a project outside Altostrat's control.",
+          feedback: "Incorrect. A perimeter around only the AI project leaves Cloud Storage and BigQuery in the data projects unprotected, so the transcripts can still be copied to a project outside Altostrat's control.",
           evidenceIds: ["vpc-service-controls", "case-study"],
         },
       ],
@@ -483,7 +495,7 @@ export const practiceExamTwoSecureSection = {
       kind: "single",
       section: "secure",
       objective: "3.2 Designing for compliance: 3.2.c industry certifications",
-      prompt: "A health-tech startup runs its whole platform on Google Cloud and is preparing for its first SOC 2 Type II audit. The auditors ask for evidence that the data centers and underlying infrastructure meet SOC 2 controls, and for evidence of the startup's own controls over access to its projects and data. The startup wants to satisfy both requests without asking Google for anything beyond what Google already publishes. What should you do?",
+      prompt: "A health-tech startup runs its whole platform on Google Cloud and is preparing for its first SOC 2 Type II audit. The auditors ask for evidence that the data centers and underlying infrastructure meet SOC 2 controls, and for evidence of the startup's own controls over access to its projects and data. The startup wants to satisfy both requests without asking Google to fill in questionnaires or run custom assessments. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -539,8 +551,8 @@ export const practiceExamTwoSecureSection = {
       section: "secure",
       objective: "3.2 Designing for compliance: 3.2.a legislation and regulation",
       caseStudyId: "knightmotives-automotive",
-      prompt: "KnightMotives Automotive is building a platform for driving data from its vehicles in the European Union. Under EU data protection rules, the data must stay in EU regions, and any support case that could expose the data must be handled by Google personnel located in the EU. KnightMotives wants these controls enforced on the projects that hold the data instead of relying on manual reviews. What should you do?",
-      verifiedOn: "2026-10-02",
+      prompt: "KnightMotives Automotive is building a platform for driving data from its vehicles in the European Union. To meet its EU data protection obligations, KnightMotives requires that the data stay in EU regions and that any support case that could expose the data be handled by Google personnel located in the EU. It has Premium Cloud Customer Care and wants these controls enforced on the projects that hold the data instead of relying on manual reviews. What should you do?",
+      verifiedOn: "2026-10-07",
       evidence: [
         {
           ...knightMotivesCaseStudy,
@@ -556,7 +568,7 @@ export const practiceExamTwoSecureSection = {
           id: "eu-boundary-support",
           title: "EU Data Boundary and Support",
           url: "https://docs.cloud.google.com/assured-workloads/docs/control-packages/eu-data-boundary-support",
-          claim: "The EU Data Boundary and Support control package sets data location controls for EU-only regions, and its support cases are routed to EU personnel located in the EU.",
+          claim: "The EU Data Boundary and Support control package sets data location controls for EU-only regions, and its support cases are routed to EU personnel located in the EU. Technical support for these workloads is available with Enhanced or Premium Cloud Customer Care.",
         },
         {
           id: "eu-boundary",
@@ -636,7 +648,7 @@ export const practiceExamTwoSecureSection = {
         },
         {
           id: "b",
-          text: "Send each card number to a tokenization service in an isolated payment project at sign-up, and store only the returned token in the trip database and in analytics.",
+          text: "Have the rider app send each card number directly to a tokenization service in an isolated payment project, and store only the returned token in the trip database and in analytics.",
           feedback: "Correct. Each token is meaningless except for looking up the card number in the isolated tokenization service, so the trip service and analytics no longer hold card numbers, and charges and refunds go through that service.",
           evidenceIds: ["tokenization", "pci-dss"],
         },
