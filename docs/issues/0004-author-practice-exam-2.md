@@ -46,12 +46,12 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
 |---|---|---|---|---|---|---|---|---|---|
 | pca-p2-design-01 | single | 1.1.a | T1 | no | KnightMotives Automotive | BigQuery sharing listings that license curated datasets to partners without copies | a | D5, D5, D4 | L2, L4 |
 | pca-p2-design-02 | single | 1.1.b | T11 | yes | none | Location requirement that selects the eu multi-region endpoint for Gemini | c | D5, D4, D7 | L1, L2 |
-| pca-p2-design-03 | single | 1.1.c | T6 | no | none | Recovery tiers set by the business impact of each system | b | D2, D3, D4 | L1, L2 |
+| pca-p2-design-03 | single | 1.1.c | T6 | no | none | Recovery tiers set by the business impact of each system | b | D2, D3, D2 | L1, L2 |
 | pca-p2-design-04 | single | 1.1.h | T2 | no | KnightMotives Automotive | Spanner multi-region configuration for consistent global build-to-order reservations | d | D4, D3, D1 | L1, L2 |
 | pca-p2-design-05 | single | 1.2.a | T1 | no | none | Well-Architected sustainability pillar: low-carbon region within the residency limits | a | D5, D3, D6 | L2, L3 |
-| pca-p2-design-06 | single | 1.2.c | T2 | no | none | Managed instance group autoscaling that can shrink outside the peak | c | D7, D1, D2 | L2, L4 |
+| pca-p2-design-06 | single | 1.2.c | T1 | no | none | Managed instance group autoscaling that can shrink outside the peak | c | D7, D1, D2 | L2, L4 |
 | pca-p2-design-07 | single | 1.2.d | T2 | no | none | Memorystore for Redis Cluster shards for write and memory growth | b | D3, D7, D1 | L2, L4 |
-| pca-p2-design-08 | single | 1.3.a | T5 | no | Altostrat Media | Google Distributed Cloud software on premises with GKE fleet management | d | D1, D4, D3 | L2, L4 |
+| pca-p2-design-08 | single | 1.3.a | T2 | no | Altostrat Media | Google Distributed Cloud software on premises with GKE fleet management | d | D1, D4, D3 | L2, L4 |
 | pca-p2-design-09 | single | 1.3.d | T2 | no | KnightMotives Automotive | Dataflow streaming with event-time windows that allow late data | a | D7, D3, D1 | L2, L4 |
 | pca-p2-design-10 | single | 1.3.g | T9 | no | none | Custom machine type that avoids paying for unused vCPUs | c | D2, D3, D7 | L2, L7 |
 | pca-p2-design-11 | single | 1.3.b | T11 | yes | Altostrat Media | Gemini multimodal summarization of audio and video | b | D7, D1, D6 | L2, L4 |
@@ -150,3 +150,10 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
   - secure-10 contrasts the EU Data Boundary and the EU Data Boundary and Support control packages, which differ in who handles support cases.
   - secure-11 uses Google's tokenization service with Cloud KMS rather than Sensitive Data Protection, so that it does not repeat Practice Exam 1's secure-10.
   - The correct option is strictly the longest in 8 of 35 single-choice questions so far.
+- 2026-10-07: Applied the fresh-session review of the `design` section. All 15 keys were confirmed.
+  - design-08 now keeps the on-premises workflows until a later migration phase, as the case study says, and asks only that the team not build and patch its own Kubernetes distribution.
+  - design-14 explains the overlap with the documented rule that Google Cloud does not create a dynamic route for a prefix that matches a subnet route.
+  - design-09 asks for statistics within seconds after each window ends, which the default trigger can meet. design-07 cites the page that documents adding shards.
+  - design-01, design-04, and design-08 reword evidence claims that used a former product name or case-study wording, and design-03 replaces two distractors that resembled Practice Exam 1's analyze-01.
+  - design-12 and design-14 now describe a food distributor and a parcel delivery company, so that they do not repeat KnightMotives facts outside a case-study question.
+  - The questions whose sources changed (design-01, design-02, design-07, design-08, and design-14) were verified again on 2026-10-07.

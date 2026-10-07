@@ -30,7 +30,7 @@ export const practiceExamTwoDesignSection = {
       objective: "1.1 Designing a cloud solution infrastructure that meets business requirements: 1.1.a business use cases and product strategy",
       caseStudyId: "knightmotives-automotive",
       prompt: "KnightMotives Automotive wants to earn revenue from its corporate data to help pay for new AI investments, but the data sits in separate systems. Insurers and city planners want to license curated datasets about road conditions and driving patterns, and they analyze data in BigQuery. KnightMotives must give each partner only the datasets in its contract, stop access when a contract ends, and see how each partner uses the data, without making copies of the data for partners. What should you do?",
-      verifiedOn: "2026-10-02",
+      verifiedOn: "2026-10-07",
       evidence: [
         {
           ...knightMotivesCaseStudy,
@@ -40,21 +40,27 @@ export const practiceExamTwoDesignSection = {
           id: "bigquery-sharing",
           title: "Introduction to BigQuery sharing",
           url: "https://docs.cloud.google.com/bigquery/docs/analytics-hub-introduction",
-          claim: "BigQuery sharing (formerly Analytics Hub) lets you share data across organizational boundaries without replicating it. Listings deliver data to authorized subscribers and can be monetized, publishers can manage subscriptions and view usage metrics, and subscribing creates a linked dataset in the subscriber's project. A public listing is shared with all Google Cloud users.",
+          claim: "BigQuery sharing lets you share data across organizational boundaries without replicating it. Listings deliver data to authorized subscribers and can be monetized, publishers can manage subscriptions and view usage metrics, and subscribing creates a linked dataset in the subscriber's project. A public listing is shared with all Google Cloud users.",
+        },
+        {
+          id: "manage-subscriptions",
+          title: "Manage subscriptions",
+          url: "https://docs.cloud.google.com/bigquery/docs/analytics-hub-manage-subscriptions",
+          claim: "As a BigQuery sharing publisher, you can monitor who has access to your listings and revoke subscriptions; after you revoke a subscription, the subscriber can no longer query the linked dataset.",
         },
         {
           id: "basic-roles",
           title: "Roles overview",
           url: "https://docs.cloud.google.com/iam/docs/roles-overview",
-          claim: "Basic roles are highly permissive roles that give broad access to Google Cloud resources.",
+          claim: "Viewer (roles/viewer) is a legacy basic role, and basic roles are highly permissive roles that give broad access to Google Cloud resources.",
         },
       ],
       choices: [
         {
           id: "a",
           text: "Publish the curated datasets as listings in a BigQuery sharing exchange, review usage for each subscription, and let each partner subscribe only to its licensed listings.",
-          feedback: "Correct. BigQuery sharing delivers listings to authorized subscribers without replicating data, publishers manage subscriptions and see usage metrics, and listings can be monetized.",
-          evidenceIds: ["case-study", "bigquery-sharing"],
+          feedback: "Correct. BigQuery sharing delivers listings to authorized subscribers without replicating data, publishers see usage metrics and can revoke a subscription when a contract ends, and listings can be monetized.",
+          evidenceIds: ["case-study", "bigquery-sharing", "manage-subscriptions"],
         },
         {
           id: "b",
@@ -64,8 +70,8 @@ export const practiceExamTwoDesignSection = {
         },
         {
           id: "c",
-          text: "Grant each partner's analysts a basic Viewer role on the project that holds the corporate data warehouse, and remove the role when the contract ends.",
-          feedback: "Incorrect. A basic role on the project gives broad access to all of the corporate data, not only to the datasets in each partner's contract.",
+          text: "Grant each partner's analysts the Viewer role (roles/viewer) on the project that holds the corporate data warehouse, and remove the role when the contract ends.",
+          feedback: "Incorrect. The Viewer role is a legacy basic role that gives broad access across the project, including all of the corporate data, not only the datasets in each partner's contract.",
           evidenceIds: ["basic-roles", "case-study"],
         },
         {
@@ -83,7 +89,7 @@ export const practiceExamTwoDesignSection = {
       section: "design",
       objective: "1.1 Designing a cloud solution infrastructure that meets business requirements: 1.1.b identifying functional and non-functional requirements",
       prompt: "A European bank is adding an assistant that uses a Gemini model on Agent Platform to summarize customer emails for its service agents. The functional requirement is a summary of each email within a few seconds. The regulator requires that machine learning processing of customer data stay within the European Union. The bank also wants high availability, but its compliance team has ruled that the location requirement takes precedence over availability. Which solution should you design?",
-      verifiedOn: "2026-10-02",
+      verifiedOn: "2026-10-07",
       evidence: [
         {
           id: "data-residency",
@@ -101,7 +107,7 @@ export const practiceExamTwoDesignSection = {
           id: "restrict-locations",
           title: "Restrict resource locations",
           url: "https://docs.cloud.google.com/organization-policy/restrict-locations",
-          claim: "The resource locations constraint defines the allowed locations where resources for supported services can be created, and it does not affect global resources or resources that don't support selecting a location.",
+          claim: "The resource locations constraint controls only where resources are created, and some Google Cloud services might not store or process a resource's data in the location where the resource was created.",
         },
       ],
       choices: [
@@ -147,17 +153,11 @@ export const practiceExamTwoDesignSection = {
           url: "https://docs.cloud.google.com/architecture/dr-scenarios-for-applications",
           claim: "A warm pattern keeps RTO and RPO values as small as possible without the effort and expense of a fully highly available configuration, while a cold pattern keeps only minimal resources in the recovery environment, and different parts of one business can need hot, warm, and cold patterns.",
         },
-        {
-          id: "regions-zones",
-          title: "Regions and zones",
-          url: "https://docs.cloud.google.com/compute/docs/regions-zones",
-          claim: "To deploy fault-tolerant applications that have high availability, Google recommends deploying applications across multiple zones and multiple regions.",
-        },
       ],
       choices: [
         {
           id: "a",
-          text: "Run all three systems as active-active deployments in two regions, so that every system recovers within minutes from any outage.",
+          text: "Run all three systems as active-active deployments in two regions, so that each system keeps serving users from the other region if one region fails.",
           feedback: "Incorrect. Smaller recovery objectives cost more, and the archive and reporting systems tolerate a day of downtime, so active-active for them pays for protection that the business does not need.",
           evidenceIds: ["dr-planning"],
         },
@@ -175,9 +175,9 @@ export const practiceExamTwoDesignSection = {
         },
         {
           id: "d",
-          text: "Give claims intake a warm standby with continuous replication in another zone of the same region, keep regular backups of the archive, and plan to rebuild reporting from infrastructure as code.",
-          feedback: "Incorrect. A standby in another zone of the same region is lost with that region, so claims intake would not be back within 15 minutes after a regional loss, which is why Google recommends multiple regions for fault tolerance.",
-          evidenceIds: ["regions-zones", "dr-planning"],
+          text: "Give claims intake a warm standby with continuous replication in a second region, and give the archive and the reporting system the same kind of warm standby in that region.",
+          feedback: "Incorrect. A warm standby keeps resources running for the archive and reporting systems although they can be unavailable for a day, so the plan pays for protection that their business impact does not require.",
+          evidenceIds: ["dr-planning", "dr-patterns"],
         },
       ],
       correctChoiceId: "b",
@@ -188,12 +188,12 @@ export const practiceExamTwoDesignSection = {
       section: "design",
       objective: "1.1 Designing a cloud solution infrastructure that meets business requirements: 1.1.h design decision trade-offs",
       caseStudyId: "knightmotives-automotive",
-      prompt: "KnightMotives Automotive is rebuilding its build-to-order system so that dealers in Europe, North America, and Asia can reserve production slots for customer orders. Dealers in every region write reservations at the same time, a slot must never be reserved twice, and the system must keep accepting reservations if one region fails. The business accepts a higher database cost to guarantee correct reservations. Which database design should you choose?",
+      prompt: "KnightMotives Automotive is rebuilding its build-to-order system so that dealers in Europe, North America, and Asia can reserve production slots for customer orders. Dealers in every region write reservations at the same time, a slot must never be reserved twice, and the system must keep accepting reservations if one region fails. The business accepts a higher database cost to guarantee correct reservations. Which solution should you design?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
           ...knightMotivesCaseStudy,
-          claim: "KnightMotives wants a better build-to-order model with transparency for dealers and customers, and its online ordering system is unreliable.",
+          claim: "KnightMotives wants its build-to-order process to give dealers and customers clear visibility, and its online ordering system is unreliable.",
         },
         {
           id: "spanner-consistency",
@@ -273,7 +273,7 @@ export const practiceExamTwoDesignSection = {
         {
           id: "c",
           text: "Keep the jobs in the region closest to the company's headquarters, and buy carbon offsets each year to balance the emissions of the workload.",
-          feedback: "Incorrect. The pillar recommends data-driven region selection by the Low CO2 indicator and carbon-free energy, which offsets bought later do not replace.",
+          feedback: "Incorrect. Choosing the region by its distance from headquarters ignores the pillar's recommendation to select regions by the Low CO2 indicator and the carbon-free energy metric.",
           evidenceIds: ["low-carbon-regions"],
         },
         {
@@ -340,13 +340,19 @@ export const practiceExamTwoDesignSection = {
       section: "design",
       objective: "1.2 Designing a cloud solution infrastructure that meets technical requirements: 1.2.d scalability to meet growth requirements",
       prompt: "A mobile game keeps live leaderboards and player session data in a single Memorystore for Redis instance. Marketing expects the number of daily players to grow tenfold within a year, and load tests show that the instance will run out of write throughput and memory long before then. The game needs sub-millisecond reads and writes, and the team wants a managed service that it can scale out as the player base grows. Which solution should you design?",
-      verifiedOn: "2026-10-02",
+      verifiedOn: "2026-10-07",
       evidence: [
         {
           id: "redis-cluster",
           title: "Memorystore for Redis Cluster overview",
           url: "https://docs.cloud.google.com/memorystore/docs/cluster/memorystore-for-redis-cluster-overview",
           claim: "A Memorystore for Redis Cluster instance is composed of a set of shards, each containing a subset of the keyspace, and replicas provide high availability and additional read throughput.",
+        },
+        {
+          id: "redis-scaling",
+          title: "About scaling cluster capacity",
+          url: "https://docs.cloud.google.com/memorystore/docs/cluster/about-scaling-instance-capacity",
+          claim: "A cluster's capacity is determined by its number of shards, and to scale a cluster out, you add shards to it.",
         },
         {
           id: "cloud-sql",
@@ -360,19 +366,19 @@ export const practiceExamTwoDesignSection = {
           id: "a",
           text: "Move the leaderboards and session data to a single Cloud SQL instance with the largest machine type, so that the database absorbs the growth.",
           feedback: "Incorrect. A single instance with a larger machine type scales up, not out, so its capacity stops at the largest machine type, while Redis Cluster adds shards as the player base grows.",
-          evidenceIds: ["cloud-sql", "redis-cluster"],
+          evidenceIds: ["cloud-sql", "redis-scaling"],
         },
         {
           id: "b",
           text: "Move the data to Memorystore for Redis Cluster, and add shards as the player base grows so that each shard holds part of the keyspace.",
           feedback: "Correct. Redis Cluster splits the keyspace across shards, so adding shards scales writes and memory out as players grow, while keeping an in-memory managed service.",
-          evidenceIds: ["redis-cluster"],
+          evidenceIds: ["redis-cluster", "redis-scaling"],
         },
         {
           id: "c",
           text: "Move the data to Memorystore for Redis Cluster, and add replicas to each shard as the player base grows so that replicas serve more reads.",
           feedback: "Incorrect. Replicas add read throughput and availability, but the number of shards stays the same, so write throughput and memory still run out as the load tests show.",
-          evidenceIds: ["redis-cluster"],
+          evidenceIds: ["redis-cluster", "redis-scaling"],
         },
         {
           id: "d",
@@ -389,12 +395,12 @@ export const practiceExamTwoDesignSection = {
       section: "design",
       objective: "1.3 Designing network, storage, and compute resources: 1.3.a integration with on-premises and multicloud environments",
       caseStudyId: "altostrat-media",
-      prompt: "Altostrat Media runs its content platform on GKE and keeps several ingestion and archival workflows on VMware servers in its own data center, where they will stay for at least two more years. Altostrat wants scalable Kubernetes environments in both places, one central place to manage and apply consistent policies to all of its clusters, and no separate Kubernetes distribution for its team to build, patch, and upgrade on premises. Which solution should you design?",
-      verifiedOn: "2026-10-02",
+      prompt: "Altostrat Media runs its content platform on GKE and keeps several ingestion and archival workflows on VMware servers in its own data center, where they will remain until a later migration phase. Altostrat wants scalable Kubernetes environments in both places, one central place to manage and apply consistent policies to all of its clusters, and no Kubernetes distribution of its own for its team to build and patch on premises. Which solution should you design?",
+      verifiedOn: "2026-10-07",
       evidence: [
         {
           ...altostratCaseStudy,
-          claim: "Altostrat runs its platform on GKE, keeps some legacy workflows such as ingestion and archival on premises, and needs scalable, performant Kubernetes environments on premises and in the cloud with centralized management.",
+          claim: "Altostrat runs its content platform on GKE, keeps legacy ingestion and archival systems in its data center until a planned move to Google Cloud, needs Kubernetes that scales and performs well both there and in Google Cloud, and wants one central platform to manage its container deployments.",
         },
         {
           id: "gdc-vmware",
@@ -410,34 +416,34 @@ export const practiceExamTwoDesignSection = {
         },
         {
           id: "attached-clusters",
-          title: "GKE attached clusters documentation",
-          url: "https://docs.cloud.google.com/kubernetes-engine/multi-cloud/docs/attached",
-          claim: "With GKE attached clusters, you can manage any standard, CNCF-compliant Kubernetes installation, including clusters already in production.",
+          title: "GKE attached clusters overview",
+          url: "https://docs.cloud.google.com/kubernetes-engine/multi-cloud/docs/attached/generic/concepts/overview",
+          claim: "GKE attached clusters lets you register, or attach, Kubernetes clusters that you've created yourself to the Google Kubernetes Engine management environment, which gives access to tools such as connect gateway, fleets, and Config Sync.",
         },
       ],
       choices: [
         {
           id: "a",
           text: "Install an upstream Kubernetes distribution on the VMware servers, and register those clusters and the GKE clusters in one fleet for central management.",
-          feedback: "Incorrect. Attached clusters can join the fleet for central management, but the team would still build, patch, and upgrade its own Kubernetes distribution on premises, which Altostrat wants to avoid.",
+          feedback: "Incorrect. Attached clusters are clusters that the team creates itself, so it would still build and patch its own Kubernetes distribution on premises, which Altostrat wants to avoid, even though the clusters can join the fleet.",
           evidenceIds: ["attached-clusters", "gdc-vmware"],
         },
         {
           id: "b",
           text: "Move the ingestion and archival workflows to GKE in Google Cloud now, and shut down the VMware servers in the data center.",
-          feedback: "Incorrect. The workflows must stay on premises for at least two more years, so moving them now breaks a stated constraint.",
+          feedback: "Incorrect. The workflows stay on premises until a later migration phase, so moving them to Google Cloud now breaks a stated constraint.",
           evidenceIds: ["case-study"],
         },
         {
           id: "c",
           text: "Run the on-premises workloads in VMs on the VMware servers without Kubernetes, and keep Kubernetes only in Google Cloud.",
-          feedback: "Incorrect. Altostrat needs Kubernetes environments both on premises and in the cloud, so leaving the data center without Kubernetes misses that requirement.",
+          feedback: "Incorrect. Altostrat needs Kubernetes in its own data center as well as in Google Cloud, so running the on-premises workflows in VMs without Kubernetes misses that requirement.",
           evidenceIds: ["case-study"],
         },
         {
           id: "d",
           text: "Run Google Distributed Cloud software on the VMware servers, and register its clusters and the GKE clusters in one fleet for central management.",
-          feedback: "Correct. Google Distributed Cloud runs GKE-based clusters that Google Cloud helps create and upgrade on premises, and one fleet lets Altostrat manage and apply consistent policies to clusters in both places.",
+          feedback: "Correct. Google Distributed Cloud supplies a GKE-based Kubernetes package with which the team creates and upgrades clusters on premises instead of building its own, and one fleet lets Altostrat manage and apply consistent policies to clusters in both places.",
           evidenceIds: ["case-study", "gdc-vmware", "fleets"],
         },
       ],
@@ -449,7 +455,7 @@ export const practiceExamTwoDesignSection = {
       section: "design",
       objective: "1.3 Designing network, storage, and compute resources: 1.3.d choosing data processing solutions",
       caseStudyId: "knightmotives-automotive",
-      prompt: "KnightMotives Automotive vehicles will send driving telemetry events to Google Cloud. Vehicles in rural areas lose connectivity and later send batches of older events when they reconnect. KnightMotives needs per-vehicle statistics over 5-minute windows of event time within seconds of arrival, with late events still counted, written to BigQuery for its data products, on managed services that scale with the vehicle fleet. Which data processing design should you choose?",
+      prompt: "KnightMotives Automotive vehicles will send driving telemetry events to Google Cloud. Vehicles in rural areas lose connectivity and later send batches of older events when they reconnect. KnightMotives needs per-vehicle statistics for each 5-minute window of event time within seconds after the window ends, with late events still counted, written to BigQuery for its data products, on managed services that scale with the vehicle fleet. Which solution should you design?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -485,13 +491,13 @@ export const practiceExamTwoDesignSection = {
         {
           id: "c",
           text: "Load the events into Cloud Storage files, and run a Managed Service for Apache Spark cluster every hour that computes the statistics and loads them into BigQuery.",
-          feedback: "Incorrect. An hourly batch on clusters that the team creates delivers statistics up to an hour late, not within seconds of arrival.",
+          feedback: "Incorrect. An hourly batch on clusters that the team creates delivers statistics up to an hour late, not within seconds after each window ends.",
           evidenceIds: ["spark-clusters"],
         },
         {
           id: "d",
           text: "Send each event to a Cloud Run service that recomputes the vehicle's statistics in a Cloud SQL table and copies the table to BigQuery every few minutes.",
-          feedback: "Incorrect. Copying the table to BigQuery every few minutes delivers statistics minutes late, not within seconds, and event-time windows and late data would need custom code, which Dataflow provides.",
+          feedback: "Incorrect. Copying the table to BigQuery every few minutes delivers statistics minutes late, not within seconds after each window ends, and event-time windows and late data would need custom code, which Dataflow provides.",
           evidenceIds: ["streaming-pipelines"],
         },
       ],
@@ -611,7 +617,7 @@ export const practiceExamTwoDesignSection = {
       kind: "single",
       section: "design",
       objective: "1.4 Creating a migration plan: 1.4.a integrating solutions with existing systems",
-      prompt: "A manufacturer is building new supply chain applications on Google Cloud that must launch this year, but its inventory data stays on an on-premises mainframe that will be replaced within three years. The mainframe team can expose inventory transactions as internal APIs, and it worries that the new applications will overload the mainframe. The architects require that replacing the mainframe later must not force changes to the new applications, and that the applications read current inventory, not daily snapshots. What should you do?",
+      prompt: "A food distributor is building new supply chain applications on Google Cloud that must launch this year, but its inventory data stays on an on-premises mainframe that will be replaced within three years. The mainframe team can expose inventory transactions as internal APIs, and it worries that the new applications will overload the mainframe. The architects require that replacing the mainframe later must not force changes to the new applications, and that the applications read current inventory, not daily snapshots. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -715,14 +721,14 @@ export const practiceExamTwoDesignSection = {
       kind: "single",
       section: "design",
       objective: "1.4 Creating a migration plan: 1.4.c migration methodologies, workload testing, network planning, and dependency planning",
-      prompt: "A manufacturer connected its first plant to a VPC network with HA VPN as a migration test, and Cloud Router learns the plant's routes through BGP. VMs in the VPC network can reach most plant systems, but not the plant's controllers in 10.20.0.0/16. A VPC subnet that the team created earlier for test workloads also uses 10.20.0.0/16. Five more plants with their own addresses will connect next month. You need to find the cause and plan the next connections. What should you do?",
-      verifiedOn: "2026-10-02",
+      prompt: "A parcel delivery company connected its first sorting hub to a VPC network with HA VPN as a migration test, and Cloud Router learns the hub's routes through BGP. VMs in the VPC network can reach most hub systems, but not the hub's conveyor controllers in 10.20.0.0/16. A VPC subnet that the team created earlier for test workloads also uses 10.20.0.0/16. Five more hubs with their own addresses will connect next month. You need to find the cause and plan the next connections. What should you do?",
+      verifiedOn: "2026-10-07",
       evidence: [
         {
           id: "routes",
           title: "Routes",
           url: "https://docs.cloud.google.com/vpc/docs/routes",
-          claim: "Subnet routes are evaluated after policy-based routes but before custom routes, which include the dynamic routes that Cloud Router learns.",
+          claim: "Subnet routes are evaluated before custom routes, which include dynamic routes. Unless a subnet uses hybrid subnet routing, Google Cloud doesn't create a dynamic route when a Cloud Router receives a prefix that exactly matches or fits within the destination of an existing subnet route.",
         },
         {
           id: "cloud-vpn",
@@ -730,31 +736,37 @@ export const practiceExamTwoDesignSection = {
           url: "https://docs.cloud.google.com/network-connectivity/docs/vpn/concepts/overview",
           claim: "Cloud VPN connects a peer network to a VPC network through IPsec VPN connections.",
         },
+        {
+          id: "cloud-ngfw",
+          title: "Cloud NGFW overview",
+          url: "https://docs.cloud.google.com/firewall/docs/about-firewalls",
+          claim: "Cloud NGFW applies firewall rules to VM instances, VM-based resources, and supported load balancers in a VPC network to allow traffic, deny traffic, or send traffic to inspection.",
+        },
       ],
       choices: [
         {
           id: "a",
-          text: "Treat the capacity of the HA VPN tunnels as the cause, add more tunnels, and check the address ranges of the five plants against all VPC subnets before connecting them.",
-          feedback: "Incorrect. Most plant systems are reachable over the same tunnels, so capacity is not the cause, and the VPC subnet route for 10.20.0.0/16 still keeps that traffic inside the VPC network.",
+          text: "Treat the capacity of the HA VPN tunnels as the cause, add more tunnels, and check the address ranges of the five hubs against all VPC subnets before connecting them.",
+          feedback: "Incorrect. Most hub systems are reachable over the same tunnels, so capacity is not the cause, and the VPC subnet route for 10.20.0.0/16 still keeps that traffic inside the VPC network.",
           evidenceIds: ["routes", "cloud-vpn"],
         },
         {
           id: "b",
           text: "Give the BGP routes that Cloud Router learns for 10.20.0.0/16 a higher priority, so that they win over the VPC subnet route.",
-          feedback: "Incorrect. Subnet routes are evaluated before custom routes, including dynamic routes, so a route priority does not send the traffic to the plant.",
+          feedback: "Incorrect. Google Cloud does not create a dynamic route for a learned prefix that matches a subnet route, and subnet routes are evaluated before custom routes, so no route priority sends the traffic to the hub.",
           evidenceIds: ["routes"],
         },
         {
           id: "c",
-          text: "Treat the overlapping 10.20.0.0/16 subnet as the cause, renumber it, and check the address ranges of the five plants against all VPC subnets before connecting them.",
-          feedback: "Correct. The VPC subnet route for 10.20.0.0/16 is evaluated before the learned plant route, so the traffic never leaves the VPC, and checking the ranges first prevents the same conflict at the next plants.",
+          text: "Treat the overlapping 10.20.0.0/16 subnet as the cause, renumber it, and check the address ranges of the five hubs against all VPC subnets before connecting them.",
+          feedback: "Correct. Google Cloud does not create a dynamic route for a learned prefix that matches an existing subnet route, so traffic for 10.20.0.0/16 stays in the VPC network, and checking the ranges first prevents the same conflict at the next hubs.",
           evidenceIds: ["routes"],
         },
         {
           id: "d",
-          text: "Add a firewall rule in the VPC network that allows all traffic to and from 10.20.0.0/16, and keep the current subnet plan for the next plants.",
-          feedback: "Incorrect. A firewall rule cannot change which route is selected, and the subnet route sends traffic for 10.20.0.0/16 inside the VPC network.",
-          evidenceIds: ["routes"],
+          text: "Add a firewall rule in the VPC network that allows all traffic to and from 10.20.0.0/16, and keep the current subnet plan for the next hubs.",
+          feedback: "Incorrect. The subnet route sends traffic for 10.20.0.0/16 inside the VPC network, and a firewall rule only allows, denies, or inspects that traffic without changing where it is routed.",
+          evidenceIds: ["routes", "cloud-ngfw"],
         },
       ],
       correctChoiceId: "c",
