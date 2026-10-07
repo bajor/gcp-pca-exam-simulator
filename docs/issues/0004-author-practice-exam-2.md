@@ -64,10 +64,10 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p2-provision-01 | single | 2.1.b | T5 | no | KnightMotives Automotive | Cross-Cloud Interconnect between Google Cloud and Microsoft Azure | c | D5, D2, D7 | L2, L4 |
-| pca-p2-provision-02 | single | 2.1.a | T5 | no | Altostrat Media | Partner Interconnect where no Dedicated Interconnect colocation facility is reachable | a | D3, D5, D7 | L2, L4 |
+| pca-p2-provision-01 | single | 2.1.b | T5 | no | KnightMotives Automotive | Cross-Cloud Interconnect between Google Cloud and Microsoft Azure | c | D5, D2, D3 | L2, L4 |
+| pca-p2-provision-02 | single | 2.1.a | T5 | no | Altostrat Media | Partner Interconnect where no Dedicated Interconnect colocation facility is reachable | a | D3, D5, D3 | L2, L4 |
 | pca-p2-provision-03 | multiple | 2.1.c | T7 | no | none | Cloud Armor rate-based ban and the preconfigured SQL injection rule (choose two) | b, d | D7, D3, D7 | L2, L4 |
-| pca-p2-provision-04 | single | 2.2.a | T9 | no | Altostrat Media | Autoclass for a media library with unpredictable access | d | D7, D2, D7 | L2, L4 |
+| pca-p2-provision-04 | single | 2.2.a | T9 | no | Altostrat Media | Autoclass for a media library with unpredictable access | d | D7, D2, D1 | L2, L4 |
 | pca-p2-provision-05 | single | 2.2.b | T9 | no | none | BigQuery Enterprise reservation with a committed baseline and autoscaling | b | D2, D6, D7 | L2, L4 |
 | pca-p2-provision-06 | single | 2.2.c | T7 | no | none | BigQuery row-level access policies instead of copies or a view for each customer | a | D5, D7, D2 | L2, L4 |
 | pca-p2-provision-07 | single | 2.3.a | T6 | no | none | Regional managed instance group with application-based autohealing | c | D4, D1, D7 | L2, L4 |

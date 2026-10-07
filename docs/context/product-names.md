@@ -32,7 +32,7 @@ Sources: the Agent Platform name-change page [4], the exam guide [2], and the do
 | Vertex AI Search for commerce, Retail API | AI Commerce Search | The documentation title [7] reads "AI Commerce Search in Gemini Enterprise for Customer Experience", and the name-change page [4] writes "on" instead of "in". The Cymbal Retail case study calls the capability "Discovery AI". |
 | Vertex AI Agent Engine | Agent Runtime | |
 | Vertex AI Workbench, Colab Enterprise | Agent Platform Workbench, Colab Enterprise | |
-| NotebookLM Enterprise | NotebookLM, the guide's name in objective 2.5 | The documentation title is Gemini Notebook Enterprise, and IAM roles keep the NotebookLM name [8]. |
+| NotebookLM Enterprise | NotebookLM, the guide's name in objective 2.5 | The documentation title is Gemini Notebook Enterprise, the documentation calls the personal product Gemini Notebook, and IAM roles keep the NotebookLM name [8]. |
 
 Gemini, Gemini Enterprise, AI Hypercomputer, Model Armor, Document AI, the Cloud Vision API, Cloud Translation, Speech-to-Text, Text-to-Speech, and Dialogflow CX keep their names.
 
