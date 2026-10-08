@@ -92,7 +92,7 @@ A product on this list may appear as context or as a distractor whose feedback s
 
 ## Verification
 
-Sources were fetched on 2026-10-01. Re-check this page before authoring each new question set, because Google can rename or retire more products at any time.
+Sources were fetched on 2026-10-01, except [33], which was fetched on 2026-10-02. Re-check this page before authoring each new question set, because Google can rename or retire more products at any time.
 
 # References
 
