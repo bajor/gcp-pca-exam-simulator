@@ -110,13 +110,13 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p2-implement-01 | single | 5.1.a | T10 | no | none | Cloud Deploy canary deployment with verification | c | D2, D7, D8 | L2, L4 |
-| pca-p2-implement-02 | single | 5.1.b | T1 | no | KnightMotives Automotive | Apigee API products with OAuth for dealer systems | a | D5, D1, D3 | L2, L4 |
-| pca-p2-implement-03 | single | 5.1.c | T6 | no | none | Integration tests in a production-like environment for a schema change | d | D6, D5, D3 | L2, L6 |
-| pca-p2-implement-04 | single | 5.1.d | T3 | no | none | Migrate to Virtual Machines for on-premises VMware servers | b | D3, D1, D7 | L2, L4 |
-| pca-p2-implement-05 | single | 5.2.a | T10 | no | none | Cloud Shell Editor for browser-based development with no local installs | a | D1, D3, D2 | L2, L4 |
-| pca-p2-implement-06 | single | 5.2.b | T10 | no | none | gcloud storage commands for a scripted bulk copy | d | D3, D7, D1 | L2, L4 |
-| pca-p2-implement-07 | multiple | 5.2.f | T10 | no | none | Cloud Client Libraries instead of hand-written REST calls (choose two) | b, c | D1, D3, D5 | L2, L4 |
+| pca-p2-implement-01 | single | 5.1.a | T10 | no | none | Cloud Deploy canary with automated deployment verification | c | D2, D7, D8 | L2, L4 |
+| pca-p2-implement-02 | single | 5.1.b | T1 | no | KnightMotives Automotive | Apigee SpikeArrest policy that protects a fragile backend from bursts | a | D7, D2, D6 | L2, L4 |
+| pca-p2-implement-03 | single | 5.1.c | T6 | no | none | Container structure tests in CI for each built image | d | D6, D3, D8 | L3, L4 |
+| pca-p2-implement-04 | single | 5.1.d | T3 | no | none | Migrate to Virtual Machines with continuous replication and test clones | b | D3, D1, D7 | L3, L4 |
+| pca-p2-implement-05 | single | 5.2.a | T10 | no | none | Cloud Shell Editor for browser-based work without installs or a budget | a | D2, D1, D3 | L2, L4 |
+| pca-p2-implement-06 | single | 5.2.b | T10 | no | none | gcloud storage cp and bq load in a nightly script | d | D7, D7, D1 | L2, L4 |
+| pca-p2-implement-07 | multiple | 5.2.f | T11 | yes | none | Google Gen AI SDK and a response schema instead of hand-written REST and parsing (choose two) | b, c | D1, D7, D2 | L3, L4 |
 
 ### Plan: operate
 
@@ -164,3 +164,8 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
   - After the fresh-session review, analyze-03 tests Cloud Deploy targets for fleet-registered on-premises clusters without a production approval, so that it does not repeat Practice Exam 1's analyze-03, and its stem names Kubernetes clusters so that it does not reveal design-08's answer.
   - analyze-01's option a uses predefined roles, because legacy basic roles cannot take IAM conditions, and analyze-05's option d restores instant snapshots in place, because a disk created from an instant snapshot keeps the source disk's location.
   - The correct option is strictly the longest in 10 of 43 single-choice questions so far.
+- 2026-10-07: Authored the `implement` section (author `claude-opus-5.5-p2-implement-20261007`).
+  - implement-03 tests container structure tests instead of a production-like test environment, so that it does not repeat the staging contrast of Practice Exam 1's implement-04.
+  - implement-02 tests Apigee SpikeArrest instead of API products and keys, which Practice Exam 1's implement-01 tests.
+  - implement-07 tests the Google Gen AI SDK with a response schema. It adds a seventh AI-decisive question, so the set now has one question above the minimum. Practice Exam 1's implement-07 tested a Pub/Sub client library with Application Default Credentials.
+  - The correct option is strictly the longest in 11 of 49 single-choice questions so far.
