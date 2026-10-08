@@ -23,7 +23,7 @@ const crossCloudInterconnect = {
   id: "cross-cloud-interconnect",
   title: "Cross-Cloud Interconnect overview",
   url: "https://docs.cloud.google.com/network-connectivity/docs/interconnect/concepts/cci-overview",
-  claim: "Cross-Cloud Interconnect establishes high-bandwidth dedicated connectivity between Google Cloud and another cloud service provider, such as Microsoft Azure or AWS, through a dedicated physical connection between the Google network and the other provider's network, at 10 Gbps, 100 Gbps, or 400 Gbps.",
+  claim: "Cross-Cloud Interconnect establishes high-bandwidth dedicated connectivity between Google Cloud and another cloud service provider, such as Microsoft Azure or AWS, through a dedicated physical connection between the Google network and the other provider's network. Connections to Microsoft Azure are available at 10 Gbps or 100 Gbps, and you pay for ports and attachments in both clouds.",
 } as const;
 
 const instanceGroups = {
@@ -44,7 +44,7 @@ export const practiceExamTwoProvisionSection = {
       objective: "2.1 Configuring network topologies: 2.1.b extending to a multicloud environment",
       caseStudyId: "knightmotives-automotive",
       prompt: "KnightMotives Automotive runs several applications, including its vehicle telemetry intake, on Microsoft Azure and is building new data products on Google Cloud. Each night, about 40 TB of telemetry must move from Azure to BigQuery. The security team requires that this traffic stay off the public internet, and KnightMotives wants at least 10 Gbps of dedicated capacity between the two clouds without routing the traffic through its own data centers. What should you do?",
-      verifiedOn: "2026-10-02",
+      verifiedOn: "2026-10-07",
       evidence: [
         {
           ...knightMotivesCaseStudy,
@@ -53,10 +53,10 @@ export const practiceExamTwoProvisionSection = {
         crossCloudInterconnect,
         haVpn,
         {
-          id: "vpc-peering",
-          title: "VPC Network Peering",
-          url: "https://docs.cloud.google.com/vpc/docs/vpc-peering",
-          claim: "VPC Network Peering connects two Virtual Private Cloud (VPC) networks so that resources in each network can communicate with each other.",
+          id: "blob-transfer",
+          title: "Introduction to Blob Storage data transfers",
+          url: "https://docs.cloud.google.com/bigquery/docs/blob-storage-transfer-intro",
+          claim: "The BigQuery Data Transfer Service for Azure Blob Storage lets you automatically schedule and manage recurring load jobs from Azure Blob Storage and Azure Data Lake Storage Gen2 into BigQuery.",
         },
       ],
       choices: [
@@ -74,15 +74,15 @@ export const practiceExamTwoProvisionSection = {
         },
         {
           id: "c",
-          text: "Order a pair of Cross-Cloud Interconnect connections between Google Cloud and Azure, and attach them to the VPC network through Cloud Router with BGP sessions.",
-          feedback: "Correct. Cross-Cloud Interconnect provides dedicated physical connections of 10 Gbps or more between Google's network and Azure, so the telemetry stays off the public internet and away from KnightMotives' data centers.",
+          text: "Order a pair of Cross-Cloud Interconnect connections to Azure with matching Azure ports, and attach them to the VPC network through Cloud Router with BGP sessions.",
+          feedback: "Correct. Cross-Cloud Interconnect provides dedicated physical connections of 10 Gbps or 100 Gbps between Google's network and Azure, with ports in both clouds, so the telemetry stays off the public internet and away from KnightMotives' data centers.",
           evidenceIds: ["cross-cloud-interconnect", "case-study"],
         },
         {
           id: "d",
-          text: "Configure VPC Network Peering between the VPC network and the Azure virtual network, so that the telemetry flows directly between the two clouds.",
-          feedback: "Incorrect. VPC Network Peering connects two VPC networks, so it cannot connect a VPC network to an Azure virtual network.",
-          evidenceIds: ["vpc-peering"],
+          text: "Land the telemetry in Azure Blob Storage, and schedule a BigQuery Data Transfer Service transfer that loads it into BigQuery each night.",
+          feedback: "Incorrect. The transfer service only runs scheduled load jobs from Azure Blob Storage into BigQuery, so it provides none of the 10 Gbps of dedicated capacity between the two clouds that KnightMotives wants.",
+          evidenceIds: ["blob-transfer"],
         },
       ],
       correctChoiceId: "c",
@@ -93,8 +93,8 @@ export const practiceExamTwoProvisionSection = {
       section: "provision",
       objective: "2.1 Configuring network topologies: 2.1.a extending to on-premises environments",
       caseStudyId: "altostrat-media",
-      prompt: "Altostrat Media ingests new recordings at an on-premises facility and uploads them to Cloud Storage over the internet, which is slow and unpredictable. Altostrat wants a private connection of about 5 Gbps between the facility and its VPC network that does not traverse the public internet. The facility's city has no Dedicated Interconnect colocation facility, but two service providers that already connect to Google's network serve the building. What should you do?",
-      verifiedOn: "2026-10-02",
+      prompt: "Altostrat Media ingests new recordings at an on-premises facility and uploads them to Cloud Storage over the internet, which is slow and unpredictable. Altostrat wants a private connection of about 5 Gbps between the facility and its VPC network that does not traverse the public internet. The facility's network can't reach a Dedicated Interconnect colocation facility, but two service providers that already connect to Google's network serve the building. What should you do?",
+      verifiedOn: "2026-10-07",
       evidence: [
         {
           ...altostratCaseStudy,
@@ -116,10 +116,15 @@ export const practiceExamTwoProvisionSection = {
           id: "dedicated-interconnect",
           title: "Dedicated Interconnect overview",
           url: "https://docs.cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview",
-          claim: "Dedicated Interconnect provides direct physical connections between an on-premises network and Google's network, and the network must physically meet Google's network in a colocation facility.",
+          claim: "Dedicated Interconnect provides direct physical connections between an on-premises network and Google's network, and the network must physically meet Google's network in a colocation facility, although the connection can be extended to a router outside the facility.",
         },
         haVpn,
-        crossCloudInterconnect,
+        {
+          id: "transfer-appliance",
+          title: "Transfer Appliance",
+          url: "https://docs.cloud.google.com/transfer-appliance/docs/4.0/overview",
+          claim: "Transfer Appliance is a high-capacity storage device that lets you transfer and securely ship your data to a Google upload facility, where Google uploads the data to Cloud Storage.",
+        },
       ],
       choices: [
         {
@@ -131,7 +136,7 @@ export const practiceExamTwoProvisionSection = {
         {
           id: "b",
           text: "Order Dedicated Interconnect for the facility, with connections in two edge availability domains, and connect them to Cloud Router.",
-          feedback: "Incorrect. Dedicated Interconnect requires the network to physically meet Google's network in a colocation facility, which the facility's city does not have.",
+          feedback: "Incorrect. Dedicated Interconnect requires the network to physically meet Google's network in a colocation facility, and the facility's network can't reach one.",
           evidenceIds: ["dedicated-interconnect"],
         },
         {
@@ -142,9 +147,9 @@ export const practiceExamTwoProvisionSection = {
         },
         {
           id: "d",
-          text: "Order Cross-Cloud Interconnect between the facility and Google Cloud, and connect the new connections to Cloud Router in the VPC network.",
-          feedback: "Incorrect. Cross-Cloud Interconnect connects Google Cloud to another cloud service provider, not to an on-premises facility.",
-          evidenceIds: ["cross-cloud-interconnect"],
+          text: "Order Transfer Appliance devices, copy each week's new recordings onto them at the facility, and ship them to Google for upload to Cloud Storage.",
+          feedback: "Incorrect. Transfer Appliance ships data on a storage device to a Google upload facility, so it gives the facility no private network connection to its VPC network.",
+          evidenceIds: ["transfer-appliance"],
         },
       ],
       correctChoiceId: "a",
@@ -155,7 +160,7 @@ export const practiceExamTwoProvisionSection = {
       requiredSelections: 2,
       section: "provision",
       objective: "2.1 Configuring network topologies: 2.1.c security protection",
-      prompt: "An online ticket marketplace serves its web application through a global external Application Load Balancer with managed instance group backends. During popular on-sale events, bots on thousands of IP addresses send bursts of login attempts that overload the backends, and the security team also sees SQL injection attempts against the search page. The team wants to stop both threats at the edge, before the requests enter the VPC network, without changing application code. What should you do? Choose two.",
+      prompt: "An online ticket marketplace serves its web application through a global external Application Load Balancer with managed instance group backends. During popular on-sale events, bots on thousands of IP addresses each send hundreds of login attempts per minute, which overload the backends, and the security team also sees SQL injection attempts against the search page. The team wants to stop both threats at Google's edge, before they reach the backends, without changing application code. What should you do? Choose two.",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -180,7 +185,7 @@ export const practiceExamTwoProvisionSection = {
           id: "vpc-firewall",
           title: "VPC firewall rules",
           url: "https://docs.cloud.google.com/firewall/docs/firewalls",
-          claim: "VPC firewall rules allow or deny connections to or from VMs in a VPC network based on the traffic's protocol, destination ports, sources, and destinations.",
+          claim: "Firewall rules allow or deny connections to or from VMs in a VPC network based on the traffic's protocol, destination ports, sources, and destinations.",
         },
         {
           id: "lb-firewall",
@@ -198,8 +203,8 @@ export const practiceExamTwoProvisionSection = {
       choices: [
         {
           id: "a",
-          text: "Create VPC firewall rules that deny the bots' IP address ranges, and update the rules each time the security team finds new addresses.",
-          feedback: "Incorrect. Behind this load balancer, connections reach the backends from Google Front End proxies, and VPC firewall rules filter connections inside the VPC network by address and port, so they neither stop the bots at the edge nor inspect requests for SQL injection.",
+          text: "Create firewall rules in the VPC network that deny the bots' IP address ranges, and update the rules each time the security team finds new addresses.",
+          feedback: "Incorrect. Behind this load balancer, connections reach the backends from Google Front End proxies, and firewall rules filter connections inside the VPC network by address and port, so they neither stop the bots at the edge nor inspect requests for SQL injection.",
           evidenceIds: ["vpc-firewall", "lb-firewall"],
         },
         {
@@ -216,13 +221,13 @@ export const practiceExamTwoProvisionSection = {
         },
         {
           id: "d",
-          text: "Add the Cloud Armor preconfigured WAF rule for SQL injection to the security policy that is attached to the load balancer's backend service.",
+          text: "Add the Cloud Armor preconfigured WAF rule for SQL injection to a security policy that is attached to the load balancer's backend service.",
           feedback: "Correct. The preconfigured SQL injection rule matches SQL injection signatures in requests, and Cloud Armor blocks the matching requests at the edge without application changes.",
           evidenceIds: ["waf-rules", "armor-overview"],
         },
         {
           id: "e",
-          text: "Add the Cloud Armor preconfigured WAF rule for cross-site scripting to the security policy that is attached to the load balancer's backend service.",
+          text: "Add the Cloud Armor preconfigured WAF rule for cross-site scripting to a security policy that is attached to the load balancer's backend service.",
           feedback: "Incorrect. The cross-site scripting rule matches XSS signatures, not the SQL injection attempts against the search page, which need the SQL injection rule.",
           evidenceIds: ["waf-rules"],
         },
@@ -235,8 +240,8 @@ export const practiceExamTwoProvisionSection = {
       section: "provision",
       objective: "2.2 Configuring individual storage systems: 2.2.a data storage allocation",
       caseStudyId: "altostrat-media",
-      prompt: "Altostrat Media keeps its growing media library in a Cloud Storage bucket that uses Standard storage. Most files are rarely opened after their first weeks, but old documentaries and interviews can become popular again without warning, and they must then play immediately. Altostrat wants to cut storage costs without paying extra fees to read an old file when it becomes popular again, and without maintaining rules that depend on file age. What should you do?",
-      verifiedOn: "2026-10-02",
+      prompt: "Altostrat Media keeps its growing media library in a Cloud Storage bucket that uses Standard storage. Most files are rarely opened after their first weeks, but old documentaries and interviews can become popular again without warning, and they must then play immediately. Altostrat wants to cut storage costs without paying retrieval fees when an old file becomes popular again, and without maintaining rules that depend on file age. What should you do?",
+      verifiedOn: "2026-10-07",
       evidence: [
         {
           ...altostratCaseStudy,
@@ -260,6 +265,18 @@ export const practiceExamTwoProvisionSection = {
           url: "https://docs.cloud.google.com/storage/docs/storage-classes",
           claim: "Nearline storage has costs for data access and a 30-day minimum storage duration, and Coldline storage has higher costs for data access and a 90-day minimum storage duration.",
         },
+        {
+          id: "storage-pricing",
+          title: "Storage pricing",
+          url: "https://cloud.google.com/storage/pricing",
+          claim: "A retrieval fee applies when you read, copy, move, or rewrite object data or metadata that is stored using Nearline storage, Coldline storage, or Archive storage, and retrieval fees do not apply when an object exists in a bucket that has Autoclass enabled.",
+        },
+        {
+          id: "change-class",
+          title: "Change object storage classes",
+          url: "https://docs.cloud.google.com/storage/docs/changing-storage-classes",
+          claim: "You can change the storage class of an object within a bucket by rewriting the object.",
+        },
       ],
       choices: [
         {
@@ -276,9 +293,9 @@ export const practiceExamTwoProvisionSection = {
         },
         {
           id: "c",
-          text: "Add lifecycle rules that move each file to colder storage classes when it is not accessed and back to Standard storage when it is.",
-          feedback: "Incorrect. Lifecycle rules use conditions such as age, and their SetStorageClass action supports only transitions to colder classes, so they cannot move a file back to Standard storage when it is read.",
-          evidenceIds: ["lifecycle"],
+          text: "Add lifecycle rules that move each file to colder storage classes as it ages, and rewrite each file back to Standard storage when it is read again.",
+          feedback: "Incorrect. The lifecycle rules depend on file age, which Altostrat wants to avoid, and reading or rewriting a file stored in a colder class incurs a retrieval fee.",
+          evidenceIds: ["lifecycle", "storage-pricing", "change-class"],
         },
         {
           id: "d",
@@ -294,7 +311,7 @@ export const practiceExamTwoProvisionSection = {
       kind: "single",
       section: "provision",
       objective: "2.2 Configuring individual storage systems: 2.2.b data processing and compute provisioning",
-      prompt: "A logistics company runs all of its BigQuery queries with on-demand pricing. Scheduled reports keep about 400 slots busy throughout each business day, and analysts add unpredictable bursts that sometimes need up to 1,600 slots. The monthly bill varies widely, and finance wants a predictable cost for the steady reporting workload while the analysts' bursts still complete. The company does not want to pay for burst capacity while it sits idle. What should you do?",
+      prompt: "A logistics company runs all of its BigQuery queries with on-demand pricing. Scheduled reports keep about 400 slots busy throughout each business day, and analysts add unpredictable bursts that sometimes raise total demand to 1,600 slots. The monthly bill varies widely, and finance wants a predictable cost for the steady reporting workload while the analysts' bursts still complete. The company does not want to pay for burst capacity while it sits idle. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -332,7 +349,7 @@ export const practiceExamTwoProvisionSection = {
         {
           id: "c",
           text: "Keep on-demand pricing, and set project-level and user-level custom quotas that cap how much data the queries can scan each day.",
-          feedback: "Incorrect. On-demand billing stays variable, and quotas are hard caps that would stop the analysts' bursts from completing.",
+          feedback: "Incorrect. On-demand billing stays variable, and quotas are hard caps that can stop the analysts' bursts from completing.",
           evidenceIds: ["workload-management"],
         },
         {
@@ -350,7 +367,7 @@ export const practiceExamTwoProvisionSection = {
       section: "provision",
       objective: "2.2 Configuring individual storage systems: 2.2.c security and access management",
       prompt: "A SaaS company stores the shipment records of all its customers in one BigQuery table with a customer_id column. Each customer's analysts sign in with accounts that belong to one Google group per customer, and every customer uses the same dashboard, which queries the table directly. Today the company copies each customer's rows to a separate dataset every night. The company wants each customer to see only its own rows in that dashboard, without copies or a separate table or view for each customer. What should you do?",
-      verifiedOn: "2026-10-02",
+      verifiedOn: "2026-10-07",
       evidence: [
         {
           id: "row-level-security",
@@ -376,13 +393,19 @@ export const practiceExamTwoProvisionSection = {
           url: "https://docs.cloud.google.com/bigquery/docs/authorized-views",
           claim: "An authorized view shares a subset of the data in a dataset with specific users and groups, who can query the view but can't access the source dataset directly.",
         },
+        {
+          id: "manage-row-level",
+          title: "Use row-level security",
+          url: "https://docs.cloud.google.com/bigquery/docs/managing-row-level-security",
+          claim: "A user must first have access to a BigQuery table to be able to query it, even if they are on the grantee list of a row access policy on that table, and querying it requires the bigquery.tables.getData permission.",
+        },
       ],
       choices: [
         {
           id: "a",
           text: "Create a row-level access policy for each customer that filters on its customer_id, and grant each customer's group read access to the shipment table.",
-          feedback: "Correct. Row-level access policies filter the rows that each group can see in the table, so every customer uses the same dashboard on one table and sees only its own rows, without copies or extra views.",
-          evidenceIds: ["row-level-security"],
+          feedback: "Correct. Row-level access policies filter the rows that each group can see, so every customer uses the same dashboard on one table and sees only its own rows, without copies or extra views. Grantees also need read access to the table before they can query it.",
+          evidenceIds: ["row-level-security", "manage-row-level"],
         },
         {
           id: "b",
@@ -411,7 +434,7 @@ export const practiceExamTwoProvisionSection = {
       section: "provision",
       objective: "2.3 Configuring compute systems: 2.3.a compute resource provisioning",
       prompt: "A payments company runs a stateless API on six Compute Engine VMs that an engineer created by hand in a single zone. Last quarter, a zonal outage stopped the API for two hours, and twice an API process hung while its VM kept running, so requests failed until someone restarted the VM. The company wants the API to keep serving during a zonal outage and wants hung VMs replaced automatically, without writing monitoring scripts. What should you do?",
-      verifiedOn: "2026-10-02",
+      verifiedOn: "2026-10-07",
       evidence: [
         {
           id: "regional-migs",
@@ -423,7 +446,7 @@ export const practiceExamTwoProvisionSection = {
           id: "autohealing",
           title: "Set up an application-based health check and autohealing",
           url: "https://docs.cloud.google.com/compute/docs/instance-groups/autohealing-instances-in-migs",
-          claim: "An application-based health check verifies that the application on a VM responds as expected. If the application isn't responding, the managed instance group marks the VM as unhealthy and repairs it, which is called autohealing.",
+          claim: "An application-based health check verifies that the application on a VM responds as expected. If the application isn't responding, the managed instance group marks the VM as unhealthy and repairs it, which is called autohealing. A firewall rule must let the health check probes reach the VMs.",
         },
         instanceGroups,
       ],
@@ -443,7 +466,7 @@ export const practiceExamTwoProvisionSection = {
         {
           id: "c",
           text: "Create an instance template, run the API in a regional managed instance group across three zones, and set up autohealing with an application-based health check.",
-          feedback: "Correct. A regional managed instance group spreads the VMs across zones, which protects against a zonal failure, and an application-based health check lets the group repair VMs whose application stops responding.",
+          feedback: "Correct. A regional managed instance group spreads the VMs across zones, which protects against a zonal failure, and an application-based health check lets the group repair VMs whose application stops responding. The setup includes a firewall rule that lets the health check probes reach the VMs.",
           evidenceIds: ["regional-migs", "autohealing"],
         },
         {
@@ -460,7 +483,7 @@ export const practiceExamTwoProvisionSection = {
       kind: "single",
       section: "provision",
       objective: "2.3 Configuring compute systems: 2.3.b compute volatility configuration",
-      prompt: "An engineering firm runs crash simulations on Compute Engine. Each simulation has one coordinator VM that schedules the work and collects the results, and 200 worker VMs that each process part of the model and save a checkpoint every 10 minutes, so that a replacement worker can resume from the last checkpoint. The coordinator keeps its state in memory and cannot resume if it stops. The firm wants to cut compute costs as far as possible without putting a simulation's completion at risk. What should you do?",
+      prompt: "An engineering firm runs a few crash simulations each month on Compute Engine, at irregular times. Each simulation has one coordinator VM that schedules the work and collects the results, and 200 worker VMs that each process part of the model and save a checkpoint every 10 minutes, so that a replacement worker can resume from the last checkpoint. The coordinator keeps its state in memory and cannot resume if it stops. The firm wants to cut compute costs as far as possible without putting a simulation's completion at risk. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -481,7 +504,7 @@ export const practiceExamTwoProvisionSection = {
         {
           id: "a",
           text: "Run the coordinator and all 200 workers on standard VMs, and buy resource-based committed use discounts for the workers' machine type.",
-          feedback: "Incorrect. Commitments suit predictable, steady usage, while Spot VMs offer discounts of up to 91% for fault-tolerant work such as the checkpointed workers, so standard VMs for every worker cost more.",
+          feedback: "Incorrect. Commitments suit predictable, steady usage, which a few simulations a month at irregular times are not, while Spot VMs offer discounts of up to 91% for fault-tolerant work such as the checkpointed workers.",
           evidenceIds: ["committed-use", "spot"],
         },
         {
@@ -492,7 +515,7 @@ export const practiceExamTwoProvisionSection = {
         },
         {
           id: "c",
-          text: "Run the coordinator on a Spot VM to save money, and run the 200 workers on standard VMs so that no worker ever loses its progress.",
+          text: "Run the coordinator on a Spot VM to save money, and run the 200 workers on standard VMs so that preemption cannot interrupt the workers.",
           feedback: "Incorrect. The coordinator is the part that cannot tolerate preemption, while the workers resume from checkpoints, so this placement risks the simulation and saves little.",
           evidenceIds: ["spot"],
         },
@@ -510,7 +533,7 @@ export const practiceExamTwoProvisionSection = {
       kind: "single",
       section: "provision",
       objective: "2.3 Configuring compute systems: 2.3.f serverless computing",
-      prompt: "A bank's internal approval API runs on Cloud Run. It receives a few requests per minute during business hours and almost none at night. Users report that the first approval each morning, and some after quiet periods, take about 9 seconds, while other requests take under 300 milliseconds. Logs show that each slow request started a new container instance, which loads a large rules file at startup. The bank wants no business-hours request to wait for an instance to start. What should you do?",
+      prompt: "A bank's internal approval API runs on Cloud Run. It receives a few requests per minute during business hours and almost none at night. Users report that the first approval each morning, and some after quiet periods, take about 9 seconds, while other requests take under 300 milliseconds. The container loads a large rules file each time it starts. The bank wants business-hours approvals after quiet periods to respond as quickly as the other requests. What should you do?",
       verifiedOn: "2026-10-02",
       evidence: [
         {
@@ -626,7 +649,7 @@ export const practiceExamTwoProvisionSection = {
       section: "provision",
       objective: "2.5 Configuring prebuilt solutions or APIs with Agent Platform: 2.5.b integrating Gemini Enterprise features",
       prompt: "An elevator maintenance company has 900 field technicians who search about 120 PDF service manuals and bulletins for repair procedures. The company wants technicians to ask questions in natural language and get answers based only on those documents, and the documents must stay in the company's Google Cloud project. No developers are available, so the company wants a managed product instead of a custom application. What should you do?",
-      verifiedOn: "2026-10-02",
+      verifiedOn: "2026-10-07",
       evidence: [
         {
           id: "notebooklm",
@@ -651,13 +674,13 @@ export const practiceExamTwoProvisionSection = {
         {
           id: "c",
           text: "Set up NotebookLM in the company's Google Cloud project, and create notebooks that use the manuals and bulletins as sources for the technicians.",
-          feedback: "Correct. NotebookLM answers questions from the PDFs added to a notebook as sources, and its enterprise version keeps the data in the company's Google Cloud project without custom development.",
+          feedback: "Correct. NotebookLM, documented as Gemini Notebook Enterprise, answers questions from the PDFs added to a notebook as sources and keeps the data in the company's Google Cloud project, without custom development.",
           evidenceIds: ["notebooklm"],
         },
         {
           id: "d",
           text: "Have each technician use the personal version of NotebookLM, and create notebooks that use the manuals and bulletins as sources for the technicians.",
-          feedback: "Incorrect. Users of the personal version of NotebookLM can't specify where data resides, while the enterprise version keeps the data in the company's Google Cloud project.",
+          feedback: "Incorrect. Users of the personal version, documented as Gemini Notebook, can't specify where data resides, while NotebookLM set up in the company's project keeps the data in that Google Cloud project.",
           evidenceIds: ["notebooklm"],
         },
       ],
