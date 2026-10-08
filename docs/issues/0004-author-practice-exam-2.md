@@ -88,7 +88,7 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
 | pca-p2-secure-06 | single | 3.1.g | T7 | no | none | Identity-Aware Proxy with an IP-based access level for a partner web portal | b | D5, D1, D4 | L2, L4 |
 | pca-p2-secure-07 | single | 3.1.h | T7 | no | none | On-Demand Scanning step that fails the build before images are pushed | d | D6, D3, D8 | L2, L4 |
 | pca-p2-secure-08 | single | 3.1.i | T11 | yes | Altostrat Media | VPC Service Controls perimeter around the AI and data projects | a | D7, D3, D4 | L2, L4 |
-| pca-p2-secure-09 | single | 3.2.c | T8 | no | none | Google's SOC 2 report plus the startup's own control evidence under shared responsibility | c | D6, D7, D3 | L2, L4 |
+| pca-p2-secure-09 | single | 3.2.c | T8 | no | none | Google's SOC 2 report plus the startup's own control evidence under shared responsibility | c | D6, D3, D3 | L2, L4 |
 | pca-p2-secure-10 | single | 3.2.a | T8 | no | KnightMotives Automotive | Assured Workloads EU Data Boundary and Support control package | d | D3, D7, D3 | L2, L4 |
 | pca-p2-secure-11 | single | 3.2.b | T8 | no | none | Tokenization in an isolated payment project that takes systems out of PCI DSS scope | b | D7, D6, D7 | L2, L4 |
 
@@ -148,7 +148,7 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
   - secure-03 tests public access prevention with a project-level exception instead of domain-restricted sharing, because Google now offers three methods for domain-restricted sharing whose inheritance rules differ.
   - secure-05 states that the key material must stay in Germany, because BigQuery accepts a global key through the bq tool and SQL, so a key's location alone would not rule out a distractor.
   - secure-10 contrasts the EU Data Boundary and the EU Data Boundary and Support control packages, which differ in who handles support cases.
-  - secure-11 uses Google's tokenization service with Cloud KMS rather than Sensitive Data Protection, so that it does not repeat Practice Exam 1's secure-10.
+  - secure-11 uses a tokenization service built as in Google's PCI DSS tokenization guide, with Cloud KMS, rather than Sensitive Data Protection, so that it does not repeat Practice Exam 1's secure-10.
   - The correct option is strictly the longest in 8 of 35 single-choice questions so far.
 - 2026-10-07: Applied the fresh-session review of the `design` section. All 15 keys were confirmed.
   - design-08 now keeps the on-premises workflows until a later migration phase, as the case study says, and asks only that the team not build and patch its own Kubernetes distribution.
