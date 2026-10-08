@@ -3,5 +3,5 @@ import { practiceExamOneDraftQuestionSets } from "./drafts";
 
 export const practiceExamOneCandidateQuestionSets = assembleCandidateQuestionSets(
   practiceExamOneDraftQuestionSets,
-  ["professional-cloud-architect-v6-1-practice-1"],
+  ["professional-cloud-architect-v6-1-practice-1", "professional-cloud-architect-v6-1-practice-1-v2"],
 );

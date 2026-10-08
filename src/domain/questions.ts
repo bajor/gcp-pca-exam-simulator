@@ -276,6 +276,41 @@ export function assembleCandidateQuestionSets(
   return candidates;
 }
 
+export interface QuestionRevision {
+  readonly prompt: string;
+  readonly verifiedOn: BaseQuestion["verifiedOn"];
+  readonly feedback: Partial<Readonly<Record<ChoiceId, string>>>;
+}
+
+// Builds the next version of a section with one question revised. Corrections use it instead of editing
+// a module that a reviewed candidate uses, because review records are bound to that content.
+export function reviseQuestionInSection<S extends ExamSection>(
+  section: QuestionSection<S>,
+  author: string,
+  questionId: string,
+  revision: QuestionRevision,
+): QuestionSection<S> {
+  if (!section.questions.some((question) => question.id === questionId)) {
+    throw new Error(`${questionId}: the ${section.section} section has no such question.`);
+  }
+  return {
+    ...section,
+    author,
+    questions: section.questions.map((question) =>
+      question.id === questionId ? reviseQuestion(question, revision) : question,
+    ),
+  };
+}
+
+function reviseQuestion<Q extends Question>(question: Q, revision: QuestionRevision): Q {
+  // Mapping a fixed-length choice tuple keeps its length, which the tuple type cannot express through map.
+  const choices = question.choices.map((choice) => {
+    const feedback = revision.feedback[choice.id];
+    return feedback === undefined ? choice : { ...choice, feedback };
+  }) as unknown as Q["choices"];
+  return { ...question, prompt: revision.prompt, verifiedOn: revision.verifiedOn, choices };
+}
+
 export function validateQuestionSets(sets: readonly QuestionSet[]): string[] {
   const errors = sets.flatMap((set) => validateQuestionSet(set).map((error) => `${set.id}: ${error}`));
   const setIds = new Set<string>();
