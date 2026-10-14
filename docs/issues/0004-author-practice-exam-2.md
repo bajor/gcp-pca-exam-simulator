@@ -122,13 +122,13 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p2-operate-01 | single | 6.1.a | T10 | no | Altostrat Media | Alert-triggered automation through a Pub/Sub channel and Cloud Run that removes toil | c | D6, D2, D8 | L3, L4 |
+| pca-p2-operate-01 | single | 6.1.a | T10 | no | Altostrat Media | Alert-triggered automation through a Pub/Sub channel and Cloud Run that removes toil | c | D7, D2, D6 | L2, L4 |
 | pca-p2-operate-02 | single | 6.2.b | T4 | no | none | Cloud Profiler to find CPU hot spots in production | a | D6, D6, D3 | L3, L4 |
 | pca-p2-operate-03 | single | 6.2.a | T10 | no | none | Aggregated sink to a central log bucket with Observability Analytics | b | D1, D7, D7 | L2, L4 |
 | pca-p2-operate-04 | single | 6.3.a | T10 | no | none | Blue-green node pool upgrade with a soak time for a quick rollback | d | D7, D2, D6 | L2, L4 |
-| pca-p2-operate-05 | single | 6.4.a | T4 | yes | none | Point the service to the replacement Gemini model after a retirement date | b | D6, D8, D3 | L3, L4 |
+| pca-p2-operate-05 | single | 6.4.a | T4 | yes | none | Point the service to the replacement Gemini model after a retirement date | b | D6, D6, D3 | L3, L4 |
 | pca-p2-operate-06 | single | 6.5.a | T6 | no | none | Cloud Deploy deployment failure rate and frequency as release quality measures | a | D7, D6, D3 | L2, L4 |
-| pca-p2-operate-07 | single | 6.6.a | T7 | no | none | Penetration testing of the company's own projects under the Acceptable Use Policy | c | D6, D5, D3 | L1, L3 |
+| pca-p2-operate-07 | single | 6.6.a | T7 | no | none | Penetration testing of the company's own projects under the Acceptable Use Policy | c | D6, D5, D3 | L3, L4 |
 
 ### Progress
 
@@ -177,3 +177,12 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
   - Full draft: 60 questions, 4 choose-two questions, correct letters a 15, b 14, c 14, d 13, and the correct option strictly the longest in 13 of 56 single-choice questions. 49 questions have a near-miss pair, and the median reading load is 174 words.
   - Altostrat Media and KnightMotives Automotive have 8 questions each, in 5 sections each. AI is decisive in 7 questions, and every consideration is used at most once.
   - Question types: T1 5, T2 4, T3 3, T4 5, T5 2, T6 6, T7 10, T8 3, T9 5, T10 9, T11 6, T12 2. Every type minimum is met.
+- 2026-10-14: Applied the fresh-session review of the `operate` section. Six keys were confirmed; operate-06's key could not be carried out as written and was corrected.
+  - operate-06 now records the Cloud Deploy metrics each month, starting before the changes, because the metrics cover only a rolling 30 days. The changes are now planned for next month instead of last quarter.
+  - operate-01's choice a now reads the alert emails with a Cloud Run service, a near-miss of the key that fails Google's recommendation to use webhook or Pub/Sub channels for automation. Before this change, only the key automated anything.
+  - operate-04's choice a now downgrades the node pool, because a node pool can't be rolled back after a successful upgrade.
+  - operate-05 states the 45-day notice only for shorter-term models, as the model lifecycle page does, and its scenario is now an online bookstore, so that it is further from Practice Exam 1's operate-05.
+  - operate-07's feedback d now follows the shared responsibility page's split of application-level controls.
+  - `docs/context/product-names.md` reference [34] now cites the page whose URL keeps the former name Log Analytics.
+  - operate-01, -04, -05, -06, and -07 were verified again on 2026-10-14.
+  - The correct option is now strictly the longest in 12 of 56 single-choice questions, and 50 questions have a near-miss pair.

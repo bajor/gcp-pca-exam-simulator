@@ -100,7 +100,7 @@ A product on this list may appear as context or as a distractor whose feedback s
 
 ## Verification
 
-Sources were fetched on 2026-10-01, except [33], which was fetched on 2026-10-02, and [34], which was fetched on 2026-10-07. Re-check this page before authoring each new question set, because Google can rename or retire more products at any time.
+Sources were fetched on 2026-10-01, except [33], which was fetched on 2026-10-02, and [34], which was fetched on 2026-10-14. Re-check this page before authoring each new question set, because Google can rename or retire more products at any time.
 
 # References
 
@@ -170,4 +170,4 @@ Sources were fetched on 2026-10-01, except [33], which was fetched on 2026-10-02
 
 [33] GOOGLE CLOUD. **Introduction to BigQuery sharing**. Available at: <https://docs.cloud.google.com/bigquery/docs/analytics-hub-introduction>. Accessed on: 2026-10-02.
 
-[34] GOOGLE CLOUD. **Query and analyze logs with Observability Analytics**. Available at: <https://docs.cloud.google.com/logging/docs/analyze/query-and-view>. Accessed on: 2026-10-07.
+[34] GOOGLE CLOUD. **Analyze logs using Logs Explorer and Observability Analytics**. Available at: <https://docs.cloud.google.com/logging/docs/log-analytics>. Accessed on: 2026-10-14.

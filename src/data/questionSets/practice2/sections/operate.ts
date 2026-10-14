@@ -16,8 +16,8 @@ export const practiceExamTwoOperateSection = {
       section: "operate",
       objective: "6.1 Understanding the principles and recommendations of the operational excellence pillar of the Google Cloud Well-Architected Framework: 6.1.a understanding the principles and recommendations of the operational excellence pillar of the Google Cloud Well-Architected Framework",
       caseStudyId: "altostrat-media",
-      prompt: "Altostrat Media's operations team receives dozens of alerts each week for transcoding workers that hang on a corrupted file. Each time, an on-call engineer follows the same three steps from a wiki page: restart the worker, move the file to a quarantine bucket, and requeue the job. These steps take engineers away from improving the reliability of workflows in Google Cloud and on premises. Altostrat wants to remove this manual work, as the operational excellence pillar recommends, and involve an engineer only when the steps fail. What should you do?",
-      verifiedOn: "2026-10-07",
+      prompt: "Altostrat Media's operations team receives dozens of Cloud Monitoring alert emails each week for transcoding tasks that stall on a corrupted file. Each time, an on-call engineer follows the same three steps from a wiki page: stop the stalled task, move the file to a quarantine bucket, and requeue the job. These steps take engineers away from improving the reliability of workflows in Google Cloud and on premises. Altostrat wants to remove this manual work, as the operational excellence pillar recommends, involve an engineer only when the steps fail, and follow Google's recommendation for automation that acts on alerts. What should you do?",
+      verifiedOn: "2026-10-14",
       evidence: [
         {
           ...altostratCaseStudy,
@@ -33,7 +33,7 @@ export const practiceExamTwoOperateSection = {
           id: "notification-channels",
           title: "Create and manage notification channels",
           url: "https://docs.cloud.google.com/monitoring/support/notification-options",
-          claim: "If you plan to use automation tools to read, reroute, transform, or otherwise act on notifications, use the webhook or Pub/Sub notification channels.",
+          claim: "If you plan to use automation tools to read, reroute, transform, or otherwise act on notifications, use the webhook or Pub/Sub notification channels. Google doesn't recommend other channel types with automation tools, because their notification format is subject to change.",
         },
         {
           id: "pubsub-trigger",
@@ -45,13 +45,13 @@ export const practiceExamTwoOperateSection = {
       choices: [
         {
           id: "a",
-          text: "Rewrite the wiki page as a shorter checklist, and train every on-call engineer to complete the three steps faster when the alert fires.",
-          feedback: "Incorrect. A shorter checklist still leaves an engineer doing the same manual steps for every alert, while automation eliminates that toil.",
-          evidenceIds: ["oe-pillar"],
+          text: "Keep the email notification channel, and have a Cloud Run service read each alert email, perform the three steps, and page an engineer only if a step fails.",
+          feedback: "Incorrect. Google recommends the webhook or Pub/Sub channels for automation that acts on notifications and does not recommend other channel types, such as email, because their notification format is subject to change.",
+          evidenceIds: ["notification-channels"],
         },
         {
           id: "b",
-          text: "Hire a second on-call engineer for each shift, so that one engineer handles the hanging workers while the other improves reliability.",
+          text: "Hire a second on-call engineer for each shift, so that one engineer handles the stalled tasks while the other improves reliability.",
           feedback: "Incorrect. A second engineer still performs the same manual steps for every alert, which adds cost without removing the toil that automation eliminates.",
           evidenceIds: ["oe-pillar"],
         },
@@ -63,7 +63,7 @@ export const practiceExamTwoOperateSection = {
         },
         {
           id: "d",
-          text: "Turn off the alerting policy for hanging workers, and have an engineer check the transcoding queue for stuck jobs once a day.",
+          text: "Turn off the alerting policy for stalled tasks, and have an engineer check the transcoding queue for stuck jobs once a day.",
           feedback: "Incorrect. A daily check by hand is still manual work and leaves jobs stuck for hours, while automation acts on each alert as it fires.",
           evidenceIds: ["oe-pillar"],
         },
@@ -186,13 +186,13 @@ export const practiceExamTwoOperateSection = {
       section: "operate",
       objective: "6.3 Deployment and release management: 6.3.a deployment and release management",
       prompt: "A bank runs its payment-processing workloads on a GKE Standard node pool of 30 nodes. The next GKE version changes the node configuration, and the team is not sure that every workload tolerates the change. The bank wants to validate the workloads on upgraded nodes, to roll back to the original nodes quickly if a workload fails, and to keep its current cluster. A temporary doubling of node cost during the upgrade is acceptable. What should you do?",
-      verifiedOn: "2026-10-07",
+      verifiedOn: "2026-10-14",
       evidence: [
         {
           id: "node-upgrades",
           title: "Node upgrade strategies",
           url: "https://docs.cloud.google.com/kubernetes-engine/docs/concepts/node-pool-upgrade-strategies",
-          claim: "With blue-green upgrades, GKE creates new nodes with the new configuration before evicting workloads from the original nodes, keeps the original nodes for rolling back until the soak time is met, and uses double the resources during the upgrade. Surge upgrades replace nodes in a rolling window, and you can't roll back a node pool after it has been successfully upgraded.",
+          claim: "With blue-green upgrades, GKE creates new nodes with the new configuration before evicting workloads from the original nodes, keeps the original nodes for rolling back until the soak time is met, and uses double the resources during the upgrade. Surge upgrades create a new node before deleting each existing node, and after a node pool has been successfully upgraded, you can't roll it back but can downgrade it.",
         },
         {
           id: "maintenance-exclusions",
@@ -204,8 +204,8 @@ export const practiceExamTwoOperateSection = {
       choices: [
         {
           id: "a",
-          text: "Use the surge upgrade strategy for the node pool with a maximum surge of 3, and roll the nodes back if a workload fails after the upgrade completes.",
-          feedback: "Incorrect. A node pool can't be rolled back after a surge upgrade completes successfully, so a failure found afterward needs a downgrade instead of a quick rollback.",
+          text: "Use the surge upgrade strategy for the node pool with a maximum surge of 3, and downgrade the node pool to the previous version if a workload fails afterward.",
+          feedback: "Incorrect. A surge upgrade deletes each original node after creating its replacement, and a completed upgrade can't be rolled back, so the bank can only downgrade instead of returning quickly to the original nodes.",
           evidenceIds: ["node-upgrades"],
         },
         {
@@ -234,14 +234,14 @@ export const practiceExamTwoOperateSection = {
       kind: "single",
       section: "operate",
       objective: "6.4 Assisting with the support of deployed solutions: 6.4.a assisting with the support of deployed solutions",
-      prompt: "On Monday morning, a travel agency's itinerary assistant on Cloud Run began failing every request to Gemini on Agent Platform, although nobody had changed its code or configuration since Friday. The service calls the same Gemini model ID that it has used for over a year, and the team has not followed Google's model announcements since launch. The team needs the assistant working again today and wants to avoid a repeat of this outage. What should you do?",
-      verifiedOn: "2026-10-07",
+      prompt: "On Monday morning, an online bookstore's order-status assistant on Cloud Run began failing every request to Gemini on Agent Platform, although nobody had changed its code or configuration since Friday. The service calls the same Gemini model ID that it has used for over a year, and the team has not followed Google's model announcements since launch. The team needs the assistant working again today and wants to avoid a repeat of this outage. What should you do?",
+      verifiedOn: "2026-10-14",
       evidence: [
         {
           id: "model-lifecycle",
           title: "Model versions and lifecycle",
           url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-versions",
-          claim: "Google lists each model's retirement date and replacement model, and it posts a retirement date at least 45 days ahead so that customers can migrate. To quickly resolve the errors caused by models reaching their retirement dates, update the application to point to the recommended upgrades.",
+          claim: "Google lists each model's retirement date and replacement model, and listed retirement dates won't be moved earlier; for shorter-term models, it posts a fixed retirement date that gives at least 45 days to migrate. To quickly resolve the errors caused by models reaching their retirement dates, update the application to point to the recommended upgrades.",
         },
         {
           id: "provisioned-throughput",
@@ -254,13 +254,13 @@ export const practiceExamTwoOperateSection = {
         {
           id: "a",
           text: "Increase the client's retry count and backoff, because errors that start without a code change usually come from temporary capacity limits.",
-          feedback: "Incorrect. Retries cannot help when the model has reached its retirement date, and Google posts retirement dates at least 45 days ahead so that customers can migrate.",
+          feedback: "Incorrect. Retries cannot help when the model has reached its retirement date, which Google lists in advance together with a replacement model.",
           evidenceIds: ["model-lifecycle"],
         },
         {
           id: "b",
           text: "Check the model's retirement date, point the service to the recommended replacement model, and track announced retirement dates so that future migrations start during the notice period.",
-          feedback: "Correct. Pointing the application to the recommended upgrade resolves the errors caused by a model reaching its retirement date, and following the posted dates gives at least 45 days to migrate next time.",
+          feedback: "Correct. Pointing the application to the recommended upgrade resolves the errors caused by a model reaching its retirement date, and tracking the retirement dates that Google lists lets the team migrate before the next one.",
           evidenceIds: ["model-lifecycle"],
         },
         {
@@ -283,14 +283,14 @@ export const practiceExamTwoOperateSection = {
       kind: "single",
       section: "operate",
       objective: "6.5 Evaluating quality control measures: 6.5.a evaluating quality control measures",
-      prompt: "A fintech company releases its payments API to production through a Cloud Deploy delivery pipeline several times a week. Last quarter, it added an integration test stage and a code review rule to improve release quality. Leadership now asks whether releases have become more reliable without slowing delivery, and it wants an objective answer from data that the company already collects, reviewed each month. What should you do?",
-      verifiedOn: "2026-10-07",
+      prompt: "A fintech company releases its payments API to production through a Cloud Deploy delivery pipeline several times a week. Next month, it will add an integration test stage and a code review rule to improve release quality. Leadership wants to learn whether the changes make releases more reliable without slowing delivery, and it wants an objective answer from data that the company already collects, reviewed each month. What should you do?",
+      verifiedOn: "2026-10-14",
       evidence: [
         {
           id: "deploy-metrics",
           title: "Viewing metrics in Cloud Deploy",
           url: "https://docs.cloud.google.com/deploy/docs/metrics",
-          claim: "For each delivery pipeline, Cloud Deploy shows deployment metrics for the production target over a rolling 30 days, including deployment frequency, which counts successful deployments per day, and deployment failure rate, which counts failures as a percentage of all deployment attempts.",
+          claim: "For each delivery pipeline, Cloud Deploy shows deployment metrics for the production target over a rolling 30 days, including deployment frequency, which shows how often the pipeline successfully deploys to the production target per day, and deployment failure rate, which counts failures as a percentage of all deployment attempts.",
         },
         {
           id: "continuous-improvement",
@@ -302,14 +302,14 @@ export const practiceExamTwoOperateSection = {
       choices: [
         {
           id: "a",
-          text: "Review the Cloud Deploy metrics for the production target each month, and compare the deployment failure rate and deployment frequency before and after the changes.",
-          feedback: "Correct. Cloud Deploy reports deployment frequency and deployment failure rate for the production target, so the company can see whether releases fail less often without slowing down.",
+          text: "Record the Cloud Deploy metrics for the production target each month, starting before the changes, and compare the deployment failure rate and deployment frequency over time.",
+          feedback: "Correct. Cloud Deploy reports deployment frequency and deployment failure rate for the production target over a rolling 30 days, so monthly records that start before the changes show whether releases fail less often without slowing down.",
           evidenceIds: ["deploy-metrics", "continuous-improvement"],
         },
         {
           id: "b",
-          text: "Review the Cloud Deploy metrics for the production target each month, and compare only the deployment frequency before and after the changes.",
-          feedback: "Incorrect. Deployment frequency counts successful deployments but not failed ones, so it cannot show whether releases have become more reliable.",
+          text: "Record the Cloud Deploy metrics for the production target each month, starting before the changes, and compare only the deployment frequency over time.",
+          feedback: "Incorrect. Deployment frequency shows how often the pipeline deploys successfully but not how often deployments fail, so it cannot show whether releases have become more reliable.",
           evidenceIds: ["deploy-metrics"],
         },
         {
@@ -332,8 +332,8 @@ export const practiceExamTwoOperateSection = {
       kind: "single",
       section: "operate",
       objective: "6.6 Ensuring the reliability of solutions in production: 6.6.a ensuring the reliability of solutions in production",
-      prompt: "A ticketing company has hired a security firm to run a penetration test against its web application and APIs on Google Cloud before a major on-sale event. The test includes automated scanning and attempts to exploit the application, and it must start next Monday. The security lead wants to know what the company owes Google before the test, does not want to wait for approvals that are not required, and must not affect other Google Cloud customers. What should you do?",
-      verifiedOn: "2026-10-07",
+      prompt: "A ticketing company has hired a security firm to run a penetration test against its web application and APIs on Google Cloud before a major on-sale event. The test includes automated scanning and attempts to exploit the application, and it must start next Monday. The security lead wants to know what Google requires of the company before the test, does not want to wait for approvals that are not required, and must not affect other Google Cloud customers. What should you do?",
+      verifiedOn: "2026-10-14",
       evidence: [
         {
           id: "security-faq",
@@ -345,7 +345,7 @@ export const practiceExamTwoOperateSection = {
           id: "shared-responsibility",
           title: "Shared responsibilities and shared fate on Google Cloud",
           url: "https://docs.cloud.google.com/architecture/framework/security/shared-responsibility-shared-fate",
-          claim: "The cloud provider always remains responsible for the underlying network and infrastructure, and customers always remain responsible for their access policies and data.",
+          claim: "The cloud provider always remains responsible for the underlying network and infrastructure, and customers always remain responsible for their access policies and data. Customers share responsibility with Google for application-level controls and IAM management.",
         },
       ],
       choices: [
@@ -370,7 +370,7 @@ export const practiceExamTwoOperateSection = {
         {
           id: "d",
           text: "Skip the penetration test, because Google's platform controls and its compliance reports already cover the security of the application.",
-          feedback: "Incorrect. Under the shared responsibility model, customers remain responsible for their own applications, access policies, and data, so Google's controls do not cover the application's security.",
+          feedback: "Incorrect. Under the shared responsibility model, customers always remain responsible for their access policies and data and share responsibility for application-level controls, so Google's controls alone do not cover the application.",
           evidenceIds: ["shared-responsibility"],
         },
       ],
