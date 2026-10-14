@@ -17,7 +17,7 @@ const bqReference = {
   id: "bq-reference",
   title: "bq command-line tool reference",
   url: "https://docs.cloud.google.com/bigquery/docs/reference/bq-cli-reference",
-  claim: "The bq load command loads data into a table, for example from a CSV file in Cloud Storage, and the bq cp command creates a copy of a table, a table clone, or a table snapshot. You can use the bq command-line tool from a local installation of the Google Cloud CLI.",
+  claim: "The bq load command loads data into a table, for example from a CSV file in Cloud Storage, and the bq cp command creates a copy of a table, a table clone, or a table snapshot. To use the bq tool locally, you install and configure the gcloud CLI, and bq commands use the service account credentials that you set through the gcloud CLI.",
 } as const;
 
 export const practiceExamTwoImplementSection = {
@@ -300,7 +300,7 @@ export const practiceExamTwoImplementSection = {
           id: "gcloud-auth",
           title: "Authenticate for the gcloud CLI",
           url: "https://docs.cloud.google.com/sdk/docs/authenticate",
-          claim: "All gcloud CLI commands need to authenticate to Google Cloud APIs. After you authorize the gcloud CLI, it stores the credentials and uses them to authenticate automatically for subsequent commands.",
+          claim: "All gcloud CLI commands need to authenticate to Google Cloud APIs. Workloads that run outside of Google Cloud can authenticate with a credential file that an environment variable or a gcloud CLI property specifies for automatic authentication.",
         },
         {
           id: "gcloud-compute-scp",
@@ -331,7 +331,7 @@ export const practiceExamTwoImplementSection = {
         {
           id: "d",
           text: "Upload the files with gcloud storage cp, and then load them into the table with bq load.",
-          feedback: "Correct. gcloud storage cp and bq load come with the Google Cloud CLI and authenticate with its stored credentials, and they upload the files to Cloud Storage and load the CSV data into the table.",
+          feedback: "Correct. gcloud storage cp and bq load come with the Google Cloud CLI and use the credentials configured for it, and they upload the files to Cloud Storage and load the CSV data into the table.",
           evidenceIds: ["gcloud-storage-cp", "bq-reference", "gcloud-auth"],
         },
       ],
