@@ -1,10 +1,20 @@
 import type { ExamCatalogEntry } from "../../domain/catalog";
+import type { QuestionSet } from "../../domain/questions";
+import { candidateQuestionSets } from "./registry";
+
+// Publishes only a registered candidate; `make verify-sources` checks that it has an exact acceptance record.
+function acceptedCandidate(id: string): QuestionSet {
+  const questionSet = candidateQuestionSets.find((candidate) => candidate.id === id);
+  if (questionSet === undefined) {
+    throw new Error(`${id}: the accepted candidate is not registered.`);
+  }
+  return questionSet;
+}
 
 export const examCatalog: readonly ExamCatalogEntry[] = [
   {
-    availability: "coming-soon",
-    id: "professional-cloud-architect-v6-1-practice-1",
-    title: "Professional Cloud Architect Practice Exam 1",
+    availability: "available",
+    questionSet: acceptedCandidate("professional-cloud-architect-v6-1-practice-1-v2"),
   },
   {
     availability: "coming-soon",

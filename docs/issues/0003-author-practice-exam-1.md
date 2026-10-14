@@ -2,7 +2,7 @@
 type: Issue
 title: Author Practice Exam 1
 description: Plan, author, review, and publish the first original 60-question PCA practice set, with the EHR Healthcare and Cymbal Retail case studies.
-status: in-progress
+status: complete
 labels: [content]
 blocked_by: []
 tracker: "One pull request per section, then candidate review and publication"
@@ -174,3 +174,6 @@ Near-miss pairs (lever L2) and the longest-option limit are checked per section 
   - Version 2, `professional-cloud-architect-v6-1-practice-1-v2`, is registered as a second candidate. Version 1 stays registered and unchanged, because the rejection record is bound to it.
   - The new modules `designV2.ts` and `operateV2.ts` derive from the version 1 modules with `reviseQuestionInSection` and change only the two rejected questions.
   - design-13 now also requires a plan that rests on observed connections, without new tools. operate-04 now also limits the release to one extra Pod at a time and rules out replacing Pods by hand.
+- 2026-10-14: The independent acceptance review (PR #33) accepted version 2 with all 60 questions and no exceptions. The record is bound to SHA-256 `e5f540dc9bc93109aa66bfaf022e42cb8442b454c751c52c97d13884618c87d6`.
+  - The runtime catalog in `src/data/questionSets/index.ts` now lists Practice Exam 1 as available. It looks up the accepted candidate `professional-cloud-architect-v6-1-practice-1-v2` and throws an error if the candidate is not registered.
+  - The reviewer observed that two AI Commerce Search pages cited by provision-11 now redirect to `gemini-enterprise-cx/ai-commerce-search/` paths with unchanged content. A later content version should cite the new URLs.
