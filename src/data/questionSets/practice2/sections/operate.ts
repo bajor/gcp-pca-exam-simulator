@@ -1,0 +1,380 @@
+import type { QuestionSection } from "../../../../domain/questions";
+
+const altostratCaseStudy = {
+  id: "case-study",
+  title: "Altostrat Media Case Study",
+  url: "https://services.google.com/fh/files/misc/v6.1_pca_altostrat_media_case_study_english.pdf",
+} as const;
+
+export const practiceExamTwoOperateSection = {
+  section: "operate",
+  author: "claude-opus-5.5-p2-operate-20261007",
+  questions: [
+    {
+      id: "pca-p2-operate-01",
+      kind: "single",
+      section: "operate",
+      objective: "6.1 Understanding the principles and recommendations of the operational excellence pillar of the Google Cloud Well-Architected Framework: 6.1.a understanding the principles and recommendations of the operational excellence pillar of the Google Cloud Well-Architected Framework",
+      caseStudyId: "altostrat-media",
+      prompt: "Altostrat Media's operations team receives dozens of Cloud Monitoring alert emails each week for transcoding tasks that stall on a corrupted file. Each time, an on-call engineer follows the same three steps from a wiki page: stop the stalled task, move the file to a quarantine bucket, and requeue the job. These steps take engineers away from improving the reliability of workflows in Google Cloud and on premises. Altostrat wants to remove this manual work, as the operational excellence pillar recommends, involve an engineer only when the steps fail, and follow Google's recommendation for automation that acts on alerts. What should you do?",
+      verifiedOn: "2026-10-14",
+      evidence: [
+        {
+          ...altostratCaseStudy,
+          claim: "Altostrat wants faster and more reliable operational workflows in both Google Cloud and its own data center, and its alerts arrive mainly by email.",
+        },
+        {
+          id: "oe-pillar",
+          title: "Well-Architected Framework: Operational excellence pillar",
+          url: "https://docs.cloud.google.com/architecture/framework/operational-excellence",
+          claim: "To achieve operational excellence, embrace automation, orchestration, and data-driven insights. Automation helps to eliminate toil.",
+        },
+        {
+          id: "notification-channels",
+          title: "Create and manage notification channels",
+          url: "https://docs.cloud.google.com/monitoring/support/notification-options",
+          claim: "If you plan to use automation tools to read, reroute, transform, or otherwise act on notifications, use the webhook or Pub/Sub notification channels. Google doesn't recommend other channel types with automation tools, because their notification format is subject to change.",
+        },
+        {
+          id: "pubsub-trigger",
+          title: "Create triggers from Pub/Sub events",
+          url: "https://docs.cloud.google.com/run/docs/triggering/pubsub-triggers",
+          claim: "With a Pub/Sub trigger, a Cloud Run service is called whenever a message is published to the specified topic.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Keep the email notification channel, and have a Cloud Run service read each alert email, perform the three steps, and page an engineer only if a step fails.",
+          feedback: "Incorrect. Google recommends the webhook or Pub/Sub channels for automation that acts on notifications and does not recommend other channel types, such as email, because their notification format is subject to change.",
+          evidenceIds: ["notification-channels"],
+        },
+        {
+          id: "b",
+          text: "Hire a second on-call engineer for each shift, so that one engineer handles the stalled tasks while the other improves reliability.",
+          feedback: "Incorrect. A second engineer still performs the same manual steps for every alert, which adds cost without removing the toil that automation eliminates.",
+          evidenceIds: ["oe-pillar"],
+        },
+        {
+          id: "c",
+          text: "Send the alert to a Pub/Sub notification channel that triggers a Cloud Run service, which performs the three steps and pages an engineer only if a step fails.",
+          feedback: "Correct. Pub/Sub channels suit automation that acts on notifications, the trigger calls the Cloud Run service for each alert, and automating the repeatable steps eliminates toil while failures still reach an engineer.",
+          evidenceIds: ["notification-channels", "pubsub-trigger", "oe-pillar", "case-study"],
+        },
+        {
+          id: "d",
+          text: "Turn off the alerting policy for stalled tasks, and have an engineer check the transcoding queue for stuck jobs once a day.",
+          feedback: "Incorrect. A daily check by hand is still manual work and leaves jobs stuck for hours, while automation acts on each alert as it fires.",
+          evidenceIds: ["oe-pillar"],
+        },
+      ],
+      correctChoiceId: "c",
+    },
+    {
+      id: "pca-p2-operate-02",
+      kind: "single",
+      section: "operate",
+      objective: "6.2 Familiarity with Google Cloud Observability solutions: 6.2.b profiling and benchmarking",
+      prompt: "After last week's release, a logistics company's Java service on GKE uses three times as much CPU as before, and its node pool has doubled in size. Latency and error rates are unchanged, and the team cannot reproduce the increase in its staging environment, which receives only synthetic traffic. The team wants to find which functions consume the extra CPU in production while adding little load to the running service. What should you do?",
+      verifiedOn: "2026-10-07",
+      evidence: [
+        {
+          id: "cloud-profiler",
+          title: "Cloud Profiler overview",
+          url: "https://docs.cloud.google.com/profiler/docs/about-profiler",
+          claim: "Cloud Profiler is a statistical, low-overhead profiler that continuously gathers CPU usage and memory-allocation information from production applications. Measuring performance in test environments usually fails to replicate the pressures on a production system.",
+        },
+        {
+          id: "cloud-trace",
+          title: "Cloud Trace overview",
+          url: "https://docs.cloud.google.com/trace/docs/overview",
+          claim: "Cloud Trace is a distributed tracing system that tracks request latency across services and pinpoints which downstream dependencies cause delays.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Enable Cloud Profiler for the service in production, and analyze its CPU profiles to find the functions that consume the most CPU since the release.",
+          feedback: "Correct. Cloud Profiler continuously gathers CPU usage from the production service with low overhead, so it shows which functions consume the CPU under the real workload.",
+          evidenceIds: ["cloud-profiler"],
+        },
+        {
+          id: "b",
+          text: "Instrument the service with OpenTelemetry and Cloud Trace, and look for the requests whose latency increased the most after the release.",
+          feedback: "Incorrect. Latency is unchanged, and Cloud Trace measures request latency across services rather than the CPU that each function consumes.",
+          evidenceIds: ["cloud-trace", "cloud-profiler"],
+        },
+        {
+          id: "c",
+          text: "Turn on debug-level logging for every function in production, and count how often each function writes a log entry during peak hours.",
+          feedback: "Incorrect. Log counts show how often functions run, not how much CPU they consume, while Cloud Profiler measures CPU use per function with low overhead.",
+          evidenceIds: ["cloud-profiler"],
+        },
+        {
+          id: "d",
+          text: "Run a load test against staging with ten times the usual synthetic traffic, and profile the service there with a local profiling tool for an hour.",
+          feedback: "Incorrect. Test environments usually fail to replicate the pressures on a production system, and the team already could not reproduce the increase in staging.",
+          evidenceIds: ["cloud-profiler"],
+        },
+      ],
+      correctChoiceId: "a",
+    },
+    {
+      id: "pca-p2-operate-03",
+      kind: "single",
+      section: "operate",
+      objective: "6.2 Familiarity with Google Cloud Observability solutions: 6.2.a monitoring and logging",
+      prompt: "A retailer's operations team investigates incidents across 30 projects in one folder, and each investigation means searching logs project by project in the Logs Explorer. The team wants all application and platform logs in one place for one year, and it wants to group and aggregate them with SQL, for example counting errors by service and hour, without building its own log pipeline or exporting logs to another system. What should you do?",
+      verifiedOn: "2026-10-07",
+      evidence: [
+        {
+          id: "aggregated-sinks",
+          title: "Collate and route organization- and folder-level logs to supported destinations",
+          url: "https://docs.cloud.google.com/logging/docs/export/aggregated_sinks",
+          claim: "Aggregated sinks combine and route logs from the resources in an organization or folder to a centralized location.",
+        },
+        {
+          id: "log-buckets",
+          title: "Configure log buckets",
+          url: "https://docs.cloud.google.com/logging/docs/buckets",
+          claim: "You can configure custom retention periods for log buckets.",
+        },
+        {
+          id: "observability-analytics",
+          title: "Query and analyze logs with Observability Analytics",
+          url: "https://docs.cloud.google.com/logging/docs/analyze/query-and-view",
+          claim: "Observability Analytics provides a SQL-based query interface for log data, for example to count the log entries with a field that matches a pattern, and you enable it by upgrading a log bucket to use analytics.",
+        },
+        {
+          id: "log-based-metrics",
+          title: "Log-based metrics overview",
+          url: "https://docs.cloud.google.com/logging/docs/logs-based-metrics",
+          claim: "Log-based metrics are Cloud Monitoring metrics derived from the content of log entries, for example to count the entries that contain a particular message.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Run a self-managed Elasticsearch cluster on Compute Engine, and stream every project's logs to it through a Pub/Sub sink and a log shipper.",
+          feedback: "Incorrect. A self-managed cluster and log shipper are the log pipeline that the team does not want to build, while an aggregated sink and Observability Analytics are managed.",
+          evidenceIds: ["aggregated-sinks", "observability-analytics"],
+        },
+        {
+          id: "b",
+          text: "Create an aggregated sink on the folder that routes the projects' logs to a central log bucket with 1-year retention, and upgrade the bucket to use Observability Analytics.",
+          feedback: "Correct. An aggregated sink routes the folder's logs to one central bucket, custom retention keeps them for a year, and Observability Analytics lets the team group and aggregate them with SQL.",
+          evidenceIds: ["aggregated-sinks", "log-buckets", "observability-analytics"],
+        },
+        {
+          id: "c",
+          text: "Create a log-based metric for errors in each project, and chart the metrics on a Cloud Monitoring dashboard grouped by service.",
+          feedback: "Incorrect. Log-based metrics count matching entries in each project, but they don't put the logs in one place or let the team query them with SQL.",
+          evidenceIds: ["log-based-metrics"],
+        },
+        {
+          id: "d",
+          text: "Create an aggregated sink on the folder that routes the projects' logs to a BigQuery dataset, and query the exported logs there with scheduled SQL queries every hour.",
+          feedback: "Incorrect. Routing the logs to a BigQuery dataset exports them to another system, which the team wants to avoid, while Observability Analytics runs SQL on the log bucket itself.",
+          evidenceIds: ["aggregated-sinks", "observability-analytics"],
+        },
+      ],
+      correctChoiceId: "b",
+    },
+    {
+      id: "pca-p2-operate-04",
+      kind: "single",
+      section: "operate",
+      objective: "6.3 Deployment and release management: 6.3.a deployment and release management",
+      prompt: "A bank runs its payment-processing workloads on a GKE Standard node pool of 30 nodes. The next GKE version changes the node configuration, and the team is not sure that every workload tolerates the change. The bank wants to validate the workloads on upgraded nodes, to roll back to the original nodes quickly if a workload fails, and to keep its current cluster. A temporary doubling of node cost during the upgrade is acceptable. What should you do?",
+      verifiedOn: "2026-10-14",
+      evidence: [
+        {
+          id: "node-upgrades",
+          title: "Node upgrade strategies",
+          url: "https://docs.cloud.google.com/kubernetes-engine/docs/concepts/node-pool-upgrade-strategies",
+          claim: "With blue-green upgrades, GKE creates new nodes with the new configuration before evicting workloads from the original nodes, keeps the original nodes for rolling back until the soak time is met, and uses double the resources during the upgrade. Surge upgrades create a new node before deleting each existing node, and after a node pool has been successfully upgraded, you can't roll it back but can downgrade it.",
+        },
+        {
+          id: "maintenance-exclusions",
+          title: "Maintenance windows and exclusions",
+          url: "https://docs.cloud.google.com/kubernetes-engine/docs/concepts/maintenance-windows-and-exclusions",
+          claim: "Maintenance windows and exclusions control when automatic maintenance, such as cluster and node upgrades, can and can't occur.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Use the surge upgrade strategy for the node pool with a maximum surge of 3, and downgrade the node pool to the previous version if a workload fails afterward.",
+          feedback: "Incorrect. A surge upgrade deletes each original node after creating its replacement, and a completed upgrade can't be rolled back, so the bank can only downgrade instead of returning quickly to the original nodes.",
+          evidenceIds: ["node-upgrades"],
+        },
+        {
+          id: "b",
+          text: "Create a second cluster on the new GKE version, move every workload to it, and delete the original cluster after a week of testing.",
+          feedback: "Incorrect. A second cluster replaces the current cluster that the bank wants to keep, while a blue-green upgrade validates the workloads within the existing node pool.",
+          evidenceIds: ["node-upgrades"],
+        },
+        {
+          id: "c",
+          text: "Add a maintenance exclusion that blocks node upgrades, so that the workloads keep running on the original node configuration.",
+          feedback: "Incorrect. A maintenance exclusion only controls when upgrades can occur, so the workloads are never validated on the new node configuration.",
+          evidenceIds: ["maintenance-exclusions"],
+        },
+        {
+          id: "d",
+          text: "Use the blue-green upgrade strategy for the node pool with a soak time, and roll the nodes back if a workload fails before the soak time ends.",
+          feedback: "Correct. A blue-green upgrade creates the new nodes before evicting workloads and keeps the original nodes for rolling back until the soak time ends, at the cost of double resources during the upgrade.",
+          evidenceIds: ["node-upgrades"],
+        },
+      ],
+      correctChoiceId: "d",
+    },
+    {
+      id: "pca-p2-operate-05",
+      kind: "single",
+      section: "operate",
+      objective: "6.4 Assisting with the support of deployed solutions: 6.4.a assisting with the support of deployed solutions",
+      prompt: "On Monday morning, an online bookstore's order-status assistant on Cloud Run began failing every request to Gemini on Agent Platform, although nobody had changed its code or configuration since Friday. The service calls the same Gemini model ID that it has used for over a year, and the team has not followed Google's model announcements since launch. The team needs the assistant working again today and wants to avoid a repeat of this outage. What should you do?",
+      verifiedOn: "2026-10-14",
+      evidence: [
+        {
+          id: "model-lifecycle",
+          title: "Model versions and lifecycle",
+          url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-versions",
+          claim: "Google lists each model's retirement date and replacement model, and listed retirement dates won't be moved earlier; for shorter-term models, it posts a fixed retirement date that gives at least 45 days to migrate. To quickly resolve the errors caused by models reaching their retirement dates, update the application to point to the recommended upgrades.",
+        },
+        {
+          id: "provisioned-throughput",
+          title: "Provisioned Throughput overview",
+          url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/provisioned-throughput",
+          claim: "Provisioned Throughput is a fixed-term subscription that reserves throughput for supported generative AI models.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Increase the client's retry count and backoff, because errors that start without a code change usually come from temporary capacity limits.",
+          feedback: "Incorrect. Retries cannot help when the model has reached its retirement date, which Google lists in advance together with a replacement model.",
+          evidenceIds: ["model-lifecycle"],
+        },
+        {
+          id: "b",
+          text: "Check the model's retirement date, point the service to the recommended replacement model, and track announced retirement dates so that future migrations start during the notice period.",
+          feedback: "Correct. Pointing the application to the recommended upgrade resolves the errors caused by a model reaching its retirement date, and tracking the retirement dates that Google lists lets the team migrate before the next one.",
+          evidenceIds: ["model-lifecycle"],
+        },
+        {
+          id: "c",
+          text: "Roll back the Cloud Run service to a revision from last month, because the errors began after the weekend's automatic platform updates.",
+          feedback: "Incorrect. An older revision calls the same model ID, so it fails in the same way once that model has reached its retirement date.",
+          evidenceIds: ["model-lifecycle"],
+        },
+        {
+          id: "d",
+          text: "Purchase Provisioned Throughput for the model ID that the service calls, so that its requests run on reserved capacity instead of shared capacity.",
+          feedback: "Incorrect. Provisioned Throughput reserves capacity for supported models, while these errors come from the model reaching its retirement date, which the recommended replacement model resolves.",
+          evidenceIds: ["provisioned-throughput", "model-lifecycle"],
+        },
+      ],
+      correctChoiceId: "b",
+    },
+    {
+      id: "pca-p2-operate-06",
+      kind: "single",
+      section: "operate",
+      objective: "6.5 Evaluating quality control measures: 6.5.a evaluating quality control measures",
+      prompt: "A fintech company releases its payments API to production through a Cloud Deploy delivery pipeline several times a week. Next month, it will add an integration test stage and a code review rule to improve release quality. Leadership wants to learn whether the changes make releases more reliable without slowing delivery, and it wants an objective answer from data that the company already collects, reviewed each month. What should you do?",
+      verifiedOn: "2026-10-14",
+      evidence: [
+        {
+          id: "deploy-metrics",
+          title: "Viewing metrics in Cloud Deploy",
+          url: "https://docs.cloud.google.com/deploy/docs/metrics",
+          claim: "For each delivery pipeline, Cloud Deploy shows deployment metrics for the production target over a rolling 30 days, including deployment frequency, which shows how often the pipeline successfully deploys to the production target per day, and deployment failure rate, which counts failures as a percentage of all deployment attempts.",
+        },
+        {
+          id: "continuous-improvement",
+          title: "Continuously improve and innovate",
+          url: "https://docs.cloud.google.com/architecture/framework/operational-excellence/continuously-improve-and-innovate",
+          claim: "KPIs and metrics let an organization take a data-driven approach to cloud operations, and you should review the metrics regularly to measure progress.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "Record the Cloud Deploy metrics for the production target each month, starting before the changes, and compare the deployment failure rate and deployment frequency over time.",
+          feedback: "Correct. Cloud Deploy reports deployment frequency and deployment failure rate for the production target over a rolling 30 days, so monthly records that start before the changes show whether releases fail less often without slowing down.",
+          evidenceIds: ["deploy-metrics", "continuous-improvement"],
+        },
+        {
+          id: "b",
+          text: "Record the Cloud Deploy metrics for the production target each month, starting before the changes, and compare only the deployment frequency over time.",
+          feedback: "Incorrect. Deployment frequency shows how often the pipeline deploys successfully but not how often deployments fail, so it cannot show whether releases have become more reliable.",
+          evidenceIds: ["deploy-metrics"],
+        },
+        {
+          id: "c",
+          text: "Compare the unit test code coverage of each release before and after the changes, and report the coverage percentage to leadership at the end of each month.",
+          feedback: "Incorrect. Code coverage describes the tests rather than how releases perform in production, which the deployment failure rate measures.",
+          evidenceIds: ["deploy-metrics"],
+        },
+        {
+          id: "d",
+          text: "Ask the developers in a monthly survey whether they think releases have become more reliable, and report the average answer to leadership.",
+          feedback: "Incorrect. Opinions from a survey are not the objective data that leadership asked for, while metrics support a data-driven review of operations.",
+          evidenceIds: ["continuous-improvement"],
+        },
+      ],
+      correctChoiceId: "a",
+    },
+    {
+      id: "pca-p2-operate-07",
+      kind: "single",
+      section: "operate",
+      objective: "6.6 Ensuring the reliability of solutions in production: 6.6.a ensuring the reliability of solutions in production",
+      prompt: "A ticketing company has hired a security firm to run a penetration test against its web application and APIs on Google Cloud before a major on-sale event. The test includes automated scanning and attempts to exploit the application, and it must start next Monday. The security lead wants to know what Google requires of the company before the test, does not want to wait for approvals that are not required, and must not affect other Google Cloud customers. What should you do?",
+      verifiedOn: "2026-10-14",
+      evidence: [
+        {
+          id: "security-faq",
+          title: "Cloud Security FAQ",
+          url: "https://support.google.com/cloud/answer/6262505",
+          claim: "If you plan to evaluate the security of your Google Cloud infrastructure with penetration testing, you are not required to contact Google, but you must abide by the Acceptable Use Policy and Terms of Service and ensure that your tests affect only your projects and not other customers' applications.",
+        },
+        {
+          id: "shared-responsibility",
+          title: "Shared responsibilities and shared fate on Google Cloud",
+          url: "https://docs.cloud.google.com/architecture/framework/security/shared-responsibility-shared-fate",
+          claim: "The cloud provider always remains responsible for the underlying network and infrastructure, and customers always remain responsible for their access policies and data. Customers share responsibility with Google for application-level controls and IAM management.",
+        },
+      ],
+      choices: [
+        {
+          id: "a",
+          text: "File a request with Google Cloud Customer Care for permission, and start the penetration test only after Google sends written approval.",
+          feedback: "Incorrect. Google does not require customers to contact it before penetration testing their own projects, so waiting for an approval only delays the test.",
+          evidenceIds: ["security-faq"],
+        },
+        {
+          id: "b",
+          text: "Have the firm also test Google's shared infrastructure, such as the load balancers' front ends, to confirm that the platform itself is secure.",
+          feedback: "Incorrect. Tests must affect only the company's own projects and not other customers' applications, so testing Google's shared infrastructure is not allowed.",
+          evidenceIds: ["security-faq"],
+        },
+        {
+          id: "c",
+          text: "Let the firm test only the company's own projects, without notifying Google, and follow the Acceptable Use Policy and the Terms of Service.",
+          feedback: "Correct. Customers don't need to contact Google before penetration testing their own Google Cloud infrastructure, as long as they follow the Acceptable Use Policy and Terms of Service and affect only their own projects.",
+          evidenceIds: ["security-faq"],
+        },
+        {
+          id: "d",
+          text: "Skip the penetration test, because Google's platform controls and its compliance reports already cover the security of the application.",
+          feedback: "Incorrect. Under the shared responsibility model, customers always remain responsible for their access policies and data and share responsibility for application-level controls, so Google's controls alone do not cover the application.",
+          evidenceIds: ["shared-responsibility"],
+        },
+      ],
+      correctChoiceId: "c",
+    },
+  ],
+} satisfies QuestionSection<"operate">;
