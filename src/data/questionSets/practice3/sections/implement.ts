@@ -326,7 +326,7 @@ export const practiceExamThreeImplementSection = {
         },
         {
           id: "b",
-          text: "Create a Cloud Build trigger that runs terraform apply from the Git repository, with the state in a Cloud Storage bucket that the team manages.",
+          text: "Create a Cloud Build trigger for each environment from the Git repository, and run terraform apply with the state in a team-managed Cloud Storage bucket.",
           feedback: "Incorrect. A Cloud Build trigger and a state bucket are the build pipeline and state storage that EHR does not want to maintain.",
           evidenceIds: ["terraform-state", "infrastructure-manager"],
         },

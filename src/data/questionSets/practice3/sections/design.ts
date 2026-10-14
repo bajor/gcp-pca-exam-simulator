@@ -477,7 +477,7 @@ export const practiceExamThreeDesignSection = {
         },
         {
           id: "c",
-          text: "Send the reviews as online requests from a Cloud Run job with many parallel tasks, so that all of the reviews finish within a few hours.",
+          text: "Submit the reviews as online requests from a Cloud Run job with many parallel tasks that read the BigQuery table and write the classifications to another table.",
           feedback: "Incorrect. Parallel online requests are still real-time inference at the full rate, while batch inference is offered at a 50% discount.",
           evidenceIds: ["batch-inference"],
         },
@@ -581,7 +581,7 @@ export const practiceExamThreeDesignSection = {
         },
         {
           id: "b",
-          text: "Create a Managed Service for Apache Spark cluster sized for the nightly peak, keep it running, and submit each job to the cluster.",
+          text: "Submit each job as a Managed Service for Apache Spark cluster job, on a cluster that is sized for the nightly peak and kept running.",
           feedback: "Incorrect. A cluster deployment runs on the company's Compute Engine infrastructure and charges for cluster uptime, so the team still sizes the cluster and pays while it is idle.",
           evidenceIds: ["spark-compare"],
         },
