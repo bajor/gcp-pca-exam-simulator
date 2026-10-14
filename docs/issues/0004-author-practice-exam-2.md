@@ -13,7 +13,7 @@ timestamp: 2026-10-02T00:00:00Z
 
 Implement [PRD 0002](/prd/0002-practice-exam-question-sets.md) for Practice Exam 2 by following the authoring skill `.claude/skills/pca-question-authoring/SKILL.md`, the [question style guide](/authoring/question-style-guide.md), and the [objective coverage matrix](/authoring/coverage-matrix.md).
 
-- Set identifier: `professional-cloud-architect-v6-1-practice-2`, version 1.
+- Set identifier: `professional-cloud-architect-v6-1-practice-2`, version 1, followed by `professional-cloud-architect-v6-1-practice-2-v2`, version 2, after the independent review rejected one question.
 - Authors: `claude-opus-5.5-p2-<section>-<YYYYMMDD>`, one identifier per section, dated on the day its section is written.
 - Case studies: Altostrat Media and KnightMotives Automotive, as the coverage matrix assigns.
 - Guide check: on 2026-10-02 the certification page linked the current guide, which is byte-identical to the copy checked on 2026-10-01, with the same six sections, weights, and four case studies.
@@ -198,3 +198,7 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
   - Measurements: 60 questions, 4 choose-two questions, correct letters a 15, b 14, c 14, d 13, and the correct option strictly the longest in 12 of 56 single-choice questions. 50 questions have a near-miss pair, and the median reading load is 174 words.
   - Altostrat Media and KnightMotives Automotive have 8 questions each, in 5 sections each. AI is decisive in 7 questions, and every consideration is used at most once.
   - Question types from the plan rows: T1 5, T2 4, T3 3, T4 5, T5 2, T6 5, T7 10, T8 3, T9 5, T10 10, T11 6, T12 2. T3, T4, and T6 are exactly at their minimums.
+- 2026-10-14: The independent acceptance review rejected version 1. 59 of 60 questions passed, and provision-09 was returned because its stem stated one explicit constraint.
+  - Version 2, `professional-cloud-architect-v6-1-practice-2-v2`, is registered as a second candidate. Version 1 stays registered and unchanged, because the rejection record is bound to it.
+  - The new module `provisionV2.ts` derives from the version 1 module with `reviseQuestionInSection` and changes only provision-09 (author `claude-opus-5.5-p2-provision-v2-20261014`).
+  - provision-09 now also states that the code and the rules file can't change this quarter, and that the bank accepts the cost of one idle instance but not of more instances than the traffic needs. Its choice b, c, and d feedback names these constraints. It stays type T4, and its sources were verified again on 2026-10-14.
