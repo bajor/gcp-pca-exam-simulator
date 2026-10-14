@@ -80,17 +80,17 @@ The other 52 questions use considerations that earlier sets already cover, with 
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p3-secure-01 | single | 3.1.a | T7 | no | none | IAM deny policy that blocks deletions except by a break-glass group | c | D4, D7, D5 | L2, L4 |
-| pca-p3-secure-02 | single | 3.1.b | T7 | no | none | Organization policy conditioned on a tag that production projects carry | a | D4, D1, D7 | L2, L4 |
-| pca-p3-secure-03 | single | 3.1.c | T7 | no | none | Confidential VMs that keep data encrypted while in use | d | D7, D3, D2 | L2, L4 |
-| pca-p3-secure-04 | multiple | 3.1.d | T7 | no | KnightMotives Automotive | Privileged Access Manager entitlement with an approver, and removal of standing grants (choose two) | b, e | D5, D4, D6 | L2, L4 |
-| pca-p3-secure-05 | single | 3.1.e | T7 | no | none | Data Access audit logs that record reads of Cloud Storage objects | b | D6, D7, D2 | L2, L4 |
-| pca-p3-secure-06 | single | 3.1.g | T7 | no | none | Service account impersonation for local Terraform runs without keys | c | D5, D5, D4 | L2, L4 |
+| pca-p3-secure-01 | single | 3.1.a | T7 | no | none | IAM deny policy that blocks deletions except by a break-glass group | c | D4, D7, D7 | L2, L4 |
+| pca-p3-secure-02 | single | 3.1.b | T7 | no | none | Organization policy conditioned on a tag that production projects carry | a | D4, D1, D2 | L3, L4 |
+| pca-p3-secure-03 | single | 3.1.c | T7 | no | none | Confidential VMs that keep data encrypted while in use | d | D7, D7, D3 | L3, L4 |
+| pca-p3-secure-04 | multiple | 3.1.d | T7 | no | KnightMotives Automotive | Privileged Access Manager entitlement with an approver, and removal of standing grants (choose two) | b, e | D6, D7, D5 | L1, L4 |
+| pca-p3-secure-05 | single | 3.1.e | T7 | no | none | Data Access audit logs that record reads of Cloud Storage objects | b | D7, D6, D1 | L3, L4 |
+| pca-p3-secure-06 | single | 3.1.g | T7 | no | none | Service account impersonation for local Terraform runs without keys | c | D5, D4, D5 | L1, L4 |
 | pca-p3-secure-07 | single | 3.1.h | T7 | no | none | Artifact Registry remote repository as the only source of public packages | a | D1, D6, D7 | L3, L4 |
 | pca-p3-secure-08 | single | 3.1.i | T11 | yes | none | Organization policy that limits Model Garden models to an approved list | d | D6, D4, D1 | L2, L4 |
-| pca-p3-secure-09 | single | 3.2.a | T8 | no | KnightMotives Automotive | Cloud External Key Manager keys held outside Google | b | D7, D5, D2 | L2, L4 |
-| pca-p3-secure-10 | single | 3.2.b | T8 | no | none | Sensitive Data Protection discovery profiles across BigQuery | c | D1, D6, D2 | L3, L4 |
-| pca-p3-secure-11 | multiple | 3.2.d | T8 | no | EHR Healthcare | Access Transparency logs and Access Approval requests (choose two) | c, d | D6, D7, D5 | L2, L4 |
+| pca-p3-secure-09 | single | 3.2.a | T8 | no | KnightMotives Automotive | Cloud External Key Manager keys held outside Google | b | D7, D7, D7 | L3, L4 |
+| pca-p3-secure-10 | single | 3.2.b | T8 | no | none | Sensitive Data Protection discovery profiles across BigQuery | c | D1, D7, D2 | L3, L4 |
+| pca-p3-secure-11 | multiple | 3.2.d | T8 | no | EHR Healthcare | Access Approval for Google personnel access, and Access Transparency logs kept for seven years (choose two) | c, d | D6, D6, D4 | L2, L4 |
 
 ### Plan: analyze
 
@@ -156,3 +156,10 @@ Section authors may change a planned row before writing its section. Each change
   - design-01's callback wait sets a timeout above ten days, because the default timeout is 12 hours. design-02 no longer says the build-to-order system must stay as it is, which conflicted with the case study, and design-05 cites the Filestore overview for transparent failover.
   - design-04 uses the current name Data Studio, and design-11's BigQuery feedback cites Bigtable's documented role for single-keyed, low-latency data.
   - Notes for later sections from the review: secure-04 must use a single-approver entitlement, because multi-level and multi-party approvals in Privileged Access Manager are Preview; secure-09 must make key custody the problem, so that it stays apart from Practice Exam 2's secure-10; and secure-08 must cite the final URL of the Model Garden access page.
+- 2026-10-14: Authored the `secure` section (author `claude-opus-5.5-p3-secure-20261014`).
+  - The mechanisms and levers of secure-01 to -06 and -09 to -11 now describe the options as written.
+  - secure-04 uses a single required approver, because multi-level and multi-party approvals in Privileged Access Manager are Preview.
+  - secure-09 makes key custody the problem: the keys must be held outside Google Cloud, which Cloud EKM provides. The EU Data Boundary is a distractor that controls only where data is stored, so the question stays apart from Practice Exam 2's secure-10.
+  - secure-11 pairs Access Approval with routing Access Transparency logs to a bucket with seven-year retention, because Access Transparency is now a default control for every organization and enabling it can't be an answer.
+  - secure-03 does not claim that Confidential VMs need no code changes, because the cited pages don't state it.
+  - Measurements after three sections: the correct option is strictly the longest in 3 of 33 single-choice questions, 14 questions have a near-miss pair, and the letters are a 9, b 8, c 9, d 7. No field shares a run of more than 4 words with a case study.
