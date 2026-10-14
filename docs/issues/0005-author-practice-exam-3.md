@@ -65,15 +65,15 @@ The other 52 questions use considerations that earlier sets already cover, with 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
 | pca-p3-provision-01 | single | 2.1.a | T5 | no | EHR Healthcare | MACsec for Cloud Interconnect to encrypt the Dedicated Interconnect connections at line rate | b | D7, D3, D6 | L3, L4 |
-| pca-p3-provision-02 | single | 2.1.b | T9 | no | none | HA VPN to AWS for a small encrypted link that is needed within days | d | D2, D5, D3 | L1, L2 |
+| pca-p3-provision-02 | single | 2.1.b | T9 | no | none | HA VPN to AWS for a small encrypted link that is needed within a week | d | D2, D5, D3 | L1, L2 |
 | pca-p3-provision-03 | single | 2.1.d | T5 | no | none | Cross-region internal Application Load Balancer for internal clients with regional failover | a | D4, D5, D7 | L2, L4 |
-| pca-p3-provision-04 | single | 2.2.d | T2 | no | none | Cloud SQL cross-region read replica near readers on another continent | c | D7, D2, D4 | L3, L4 |
+| pca-p3-provision-04 | single | 2.2.d | T2 | no | none | Cloud SQL cross-region read replica near readers on another continent | c | D4, D2, D4 | L2, L3 |
 | pca-p3-provision-05 | single | 2.2.g | T6 | no | none | Cloud Storage soft delete to recover objects that a faulty job deleted | b | D7, D2, D7 | L3, L4 |
 | pca-p3-provision-06 | single | 2.2.f | T9 | no | none | Hyperdisk Balanced, whose capacity and performance change independently as data grows | a | D2, D3, D7 | L1, L4 |
 | pca-p3-provision-07 | single | 2.3.c | T4 | no | none | Cloud NAT for private GKE nodes that must pull public images | d | D5, D6, D7 | L3, L4 |
 | pca-p3-provision-08 | single | 2.3.d | T10 | no | EHR Healthcare | Config Sync from one Git repository across the fleet's clusters | c | D1, D6, D6 | L3, L4 |
 | pca-p3-provision-09 | single | 2.3.e | T9 | no | none | Spot Pods on GKE Autopilot for fault-tolerant batch work | b | D4, D2, D1 | L1, L4 |
-| pca-p3-provision-10 | single | 2.4.b | T11 | yes | KnightMotives Automotive | Agent Platform Feature Store serving BigQuery feature data online | a | D1, D3, D7 | L3, L4 |
+| pca-p3-provision-10 | single | 2.4.b | T11 | yes | KnightMotives Automotive | Agent Platform Feature Store serving BigQuery feature data with Bigtable online serving | a | D1, D3, D7 | L3, L4 |
 | pca-p3-provision-11 | single | 2.5.c | T11 | yes | none | Open model from Model Garden deployed to an Agent Platform endpoint | c | D3, D1, D2 | L1, L2 |
 
 ### Plan: secure
@@ -163,3 +163,8 @@ Section authors may change a planned row before writing its section. Each change
   - secure-11 pairs Access Approval with routing Access Transparency logs to a bucket with seven-year retention, because Access Transparency is now a default control for every organization and enabling it can't be an answer.
   - secure-03 does not claim that Confidential VMs need no code changes, because the cited pages don't state it.
   - Measurements after three sections: the correct option is strictly the longest in 3 of 33 single-choice questions, 14 questions have a near-miss pair, and the letters are a 9, b 8, c 9, d 7. No field shares a run of more than 4 words with a case study.
+- 2026-10-14: Applied the fresh-session review of the `provision` section after #37 merged. All 11 keys were confirmed; provision-04 and provision-08 needed changes for every distractor to be possible and every key to be unique.
+  - provision-04's choice a is now a read replica in a second zone of us-central1, because the standby of a high-availability configuration cannot serve read queries, so the earlier option was impossible.
+  - provision-08 now requires that manual changes be reverted continuously, which a nightly script does not do.
+  - provision-10's key serves features with Bigtable online serving, because Optimized online serving is deprecated, and its feedback states that Feature Store refreshes its feature views from BigQuery itself.
+  - provision-01 no longer claims line-rate encryption and cites the Cloud Interconnect overview for VPN traffic over the internet. provision-02, -05, and -07 feedback now states only what the sources support, and provision-11 cites the Agent Platform locations page for Frankfurt.

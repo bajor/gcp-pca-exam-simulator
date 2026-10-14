@@ -22,7 +22,7 @@ export const practiceExamThreeProvisionSection = {
       section: "provision",
       objective: "2.1 Configuring network topologies: 2.1.a extending to on-premises environments",
       caseStudyId: "ehr-healthcare",
-      prompt: "EHR Healthcare connects its remaining on-premises systems to Google Cloud over two 100-Gbps Dedicated Interconnect connections. A new compliance review requires encryption of the traffic on the circuits between EHR's routers and Google's edge, and EHR's requirement for a secure, high-performance connection still applies. The network team wants encryption at the full speed of the circuits without IPsec tunnels or VPN gateways to deploy, and its on-premises routers support the IEEE 802.1AE standard. What should you do?",
+      prompt: "EHR Healthcare connects its remaining on-premises systems to Google Cloud over two 100-Gbps Dedicated Interconnect connections. A new compliance review requires encryption of the traffic on the circuits between EHR's routers and Google's edge, and EHR's requirement for a secure, high-performance connection still applies. The network team wants this encryption without IPsec tunnels or VPN gateways to deploy, and its on-premises routers support the IEEE 802.1AE standard. What should you do?",
       verifiedOn: "2026-10-14",
       evidence: [
         {
@@ -39,19 +39,13 @@ export const practiceExamThreeProvisionSection = {
           id: "interconnect-overview",
           title: "Cloud Interconnect overview",
           url: "https://docs.cloud.google.com/network-connectivity/docs/interconnect/concepts/overview",
-          claim: "Cloud Interconnect doesn't encrypt traffic by default. You can apply IPsec encryption to Cloud Interconnect traffic by deploying HA VPN over Cloud Interconnect.",
+          claim: "Cloud Interconnect doesn't encrypt traffic by default. You can apply IPsec encryption to Cloud Interconnect traffic by deploying HA VPN over Cloud Interconnect. Cloud VPN used on its own sets up IPsec tunnels that encrypt data, and the encrypted traffic traverses the public internet.",
         },
         {
           id: "ha-vpn-interconnect",
           title: "HA VPN over Cloud Interconnect overview",
           url: "https://docs.cloud.google.com/network-connectivity/docs/interconnect/concepts/ha-vpn-interconnect",
           claim: "To use HA VPN over Cloud Interconnect, you deploy HA VPN tunnels over your VLAN attachments.",
-        },
-        {
-          id: "vpn-overview",
-          title: "Cloud VPN overview",
-          url: "https://docs.cloud.google.com/network-connectivity/docs/vpn/concepts/overview",
-          claim: "Cloud VPN IPsec tunnels encrypt data, and the encrypted traffic traverses the public internet.",
         },
       ],
       choices: [
@@ -71,7 +65,7 @@ export const practiceExamThreeProvisionSection = {
           id: "c",
           text: "Replace the Dedicated Interconnect connections with HA VPN tunnels over the internet, which encrypt all of the traffic between the two sites with IPsec.",
           feedback: "Incorrect. VPN tunnels carry the traffic over the public internet instead of the high-performance Dedicated Interconnect circuits, and they are the tunnels that the team does not want.",
-          evidenceIds: ["vpn-overview", "case-study"],
+          evidenceIds: ["interconnect-overview", "case-study"],
         },
         {
           id: "d",
@@ -94,7 +88,7 @@ export const practiceExamThreeProvisionSection = {
           id: "ha-vpn-aws",
           title: "Create HA VPN connections between Google Cloud and AWS",
           url: "https://docs.cloud.google.com/network-connectivity/docs/vpn/tutorials/create-ha-vpn-connections-google-cloud-aws",
-          claim: "HA VPN connects a VPC network to environments such as AWS through an IPsec VPN connection between private networks, and it provides an SLA of 99.99% service availability when configured based on Google best practices.",
+          claim: "HA VPN connects a VPC network to environments such as AWS through an IPsec VPN connection, for direct communication between VPC networks across the two cloud platforms, and it provides an SLA of 99.99% service availability when configured based on Google best practices.",
         },
         {
           id: "vpn-overview",
@@ -131,7 +125,7 @@ export const practiceExamThreeProvisionSection = {
         {
           id: "d",
           text: "Create an HA VPN gateway with tunnels to the partner's AWS virtual private gateway in the topology that Google documents for a 99.99% SLA.",
-          feedback: "Correct. HA VPN connects the private networks of Google Cloud and AWS through IPsec, can be set up quickly, and provides a 99.99% SLA when configured according to Google's best practices.",
+          feedback: "Correct. HA VPN connects the VPC networks of Google Cloud and AWS through IPsec tunnels between gateways that you create in each cloud, and it provides a 99.99% SLA when configured according to Google's best practices.",
           evidenceIds: ["ha-vpn-aws", "vpn-overview"],
         },
       ],
@@ -204,13 +198,7 @@ export const practiceExamThreeProvisionSection = {
           id: "sql-replication",
           title: "About replication in Cloud SQL",
           url: "https://docs.cloud.google.com/sql/docs/mysql/replication",
-          claim: "Cross-region replication creates a read replica in a different region from the primary instance, and cross-region replicas improve read performance by making replicas available closer to your application's region.",
-        },
-        {
-          id: "sql-ha",
-          title: "About high availability",
-          url: "https://docs.cloud.google.com/sql/docs/mysql/high-availability",
-          claim: "A Cloud SQL instance configured for high availability has a primary instance and a standby instance in two zones of one region, and the standby instance cannot be used for read queries.",
+          claim: "Cross-region replication creates a read replica in a different region from the primary instance, the same way as you create an in-region replica, and cross-region replicas improve read performance by making replicas available closer to your application's region.",
         },
         {
           id: "spanner-multi-region",
@@ -222,9 +210,9 @@ export const practiceExamThreeProvisionSection = {
       choices: [
         {
           id: "a",
-          text: "Enable high availability on the primary instance, and send the European read queries to the standby instance in a second zone.",
-          feedback: "Incorrect. The standby instance of a high-availability configuration cannot be used for read queries, and it stays in the same region as the primary.",
-          evidenceIds: ["sql-ha"],
+          text: "Create a read replica in a second zone of us-central1, and send the European web servers' read queries to the replica.",
+          feedback: "Incorrect. A replica in us-central1 leaves every European read query crossing the ocean to the same region, while a cross-region replica closer to the European web servers improves read performance.",
+          evidenceIds: ["sql-replication"],
         },
         {
           id: "b",
@@ -302,7 +290,7 @@ export const practiceExamThreeProvisionSection = {
         {
           id: "d",
           text: "Set a 30-day retention policy on the bucket, so that no image can be deleted or replaced until it is 30 days old.",
-          feedback: "Incorrect. A retention policy blocks deletion until each object is older than the retention period, so the job could no longer delete images when customers cancel their orders.",
+          feedback: "Incorrect. A retention policy only blocks deletion until each object is older than the retention period, so images older than 30 days are deleted with no recoverable copy, and younger images can't be removed when orders are canceled.",
           evidenceIds: ["bucket-lock"],
         },
       ],
@@ -418,7 +406,7 @@ export const practiceExamThreeProvisionSection = {
         {
           id: "c",
           text: "Add a firewall rule that allows egress from the cluster's nodes to the public registry's IP addresses on TCP port 443, with a higher priority than other rules.",
-          feedback: "Incorrect. The implied allow egress rule already permits this traffic, while nodes without external addresses need Cloud NAT to reach the internet; Private Google Access reaches only Google APIs and services.",
+          feedback: "Incorrect. An egress allow rule gives nodes without external addresses no path to the internet, which they need Cloud NAT for, and Private Google Access reaches only Google APIs and services.",
           evidenceIds: ["firewall-rules", "private-google-access", "cloud-nat"],
         },
         {
@@ -436,7 +424,7 @@ export const practiceExamThreeProvisionSection = {
       section: "provision",
       objective: "2.3 Configuring compute systems: 2.3.d infrastructure orchestration, resource configuration, and patch management",
       caseStudyId: "ehr-healthcare",
-      prompt: "EHR Healthcare runs its customer-facing applications on many GKE clusters across several environments, and teams change settings such as namespaces, resource quotas, and network policies by hand. Several outages came from clusters whose settings had drifted from the approved configuration. EHR wants every cluster to apply the same approved settings from one Git repository, to revert manual changes automatically, and to put every change through review in that repository. What should you do?",
+      prompt: "EHR Healthcare runs its customer-facing applications on many GKE clusters across several environments, and teams change settings such as namespaces, resource quotas, and network policies by hand. Several outages came from clusters whose settings had drifted from the approved configuration. EHR wants every cluster to apply the same approved settings from one Git repository, to revert manual changes continuously and automatically, and to put every change through review in that repository. What should you do?",
       verifiedOn: "2026-10-14",
       evidence: [
         {
@@ -460,7 +448,7 @@ export const practiceExamThreeProvisionSection = {
         {
           id: "a",
           text: "Write a script that runs kubectl apply with the approved manifests against every cluster each night from a build server.",
-          feedback: "Incorrect. A nightly script leaves drift in place for up to a day and is custom tooling to maintain, while Config Sync keeps clusters synchronized with the repository and prevents drift.",
+          feedback: "Incorrect. A nightly script reverts drift only once a day and is custom tooling to maintain, while Config Sync continuously keeps every cluster synchronized with the repository.",
           evidenceIds: ["config-sync"],
         },
         {
@@ -550,7 +538,7 @@ export const practiceExamThreeProvisionSection = {
           id: "feature-store",
           title: "About Feature Store on Gemini Enterprise Agent Platform",
           url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/machine-learning/featurestore/latest/overview",
-          claim: "Agent Platform Feature Store lets you manage feature data in BigQuery tables or views and serves the latest feature values directly from BigQuery for online predictions at low latency, through feature views in an online store. Because the feature data stays in BigQuery, it doesn't need a separate offline store, and you can use BigQuery to fetch the data for training.",
+          claim: "Agent Platform Feature Store lets you manage feature data in BigQuery tables or views and serves the latest feature values directly from BigQuery for online predictions at low latency, through feature views in an online store that periodically refresh their data from the BigQuery source; Bigtable online serving is one of its online serving types. Because the feature data stays in BigQuery, it doesn't need a separate offline store, and you can use BigQuery to fetch the data for training.",
         },
         {
           id: "cloud-storage-classes",
@@ -562,8 +550,8 @@ export const practiceExamThreeProvisionSection = {
       choices: [
         {
           id: "a",
-          text: "Register the BigQuery feature tables in Agent Platform Feature Store, and serve the latest values online from a feature view in an online store.",
-          feedback: "Correct. Feature Store serves the latest feature values from BigQuery at low latency for online predictions, and training fetches the same BigQuery data, so no second copy of the features is kept.",
+          text: "Register the BigQuery feature tables in Agent Platform Feature Store, and serve the latest values from a feature view with Bigtable online serving.",
+          feedback: "Correct. Feature Store serves the latest feature values from BigQuery for online predictions and refreshes its feature views from BigQuery itself, so the team maintains no second copy, and training fetches the same BigQuery data.",
           evidenceIds: ["feature-store", "case-study"],
         },
         {
@@ -613,6 +601,12 @@ export const practiceExamThreeProvisionSection = {
           url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-garden/explore-models",
           claim: "Agent Platform handles model deployment and serving for Model Garden models. For open models, you pay for the compute resources used for tuning and for deploying the model to an endpoint.",
         },
+        {
+          id: "ml-locations",
+          title: "Locations for machine learning services",
+          url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/machine-learning/general/locations",
+          claim: "The europe-west3 region in Frankfurt, Germany, offers custom model online inference on Agent Platform.",
+        },
       ],
       choices: [
         {
@@ -631,12 +625,12 @@ export const practiceExamThreeProvisionSection = {
           id: "c",
           text: "Select an open model such as Gemma in Model Garden, tune it on the glossaries, and self-deploy it to one Agent Platform endpoint in Germany.",
           feedback: "Correct. A self-deployed open model runs within the agency's project and VPC network with full control, Gemma can be tuned, and Agent Platform handles the deployment and serving.",
-          evidenceIds: ["self-deployed-models", "gemma", "model-garden"],
+          evidenceIds: ["self-deployed-models", "gemma", "model-garden", "ml-locations"],
         },
         {
           id: "d",
-          text: "Select an open model such as Gemma in Model Garden, tune it on the glossaries, and self-deploy it to Agent Platform endpoints in every region worldwide.",
-          feedback: "Incorrect. Deployed endpoints are charged for the compute resources they use, so endpoints in every region add cost for clients who are all in Germany.",
+          text: "Select an open model such as Gemma in Model Garden, tune it on the glossaries, and self-deploy it to Agent Platform endpoints in regions on four continents.",
+          feedback: "Incorrect. Deployed endpoints are charged for the compute resources they use, so endpoints on four continents add cost for clients who are all in Germany.",
           evidenceIds: ["model-garden"],
         },
       ],
