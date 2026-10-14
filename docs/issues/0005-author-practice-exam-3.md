@@ -97,14 +97,14 @@ The other 52 questions use considerations that earlier sets already cover, with 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
 | pca-p3-analyze-01 | single | 4.1.b | T4 | no | none | Cloud Build private pool that reaches resources on a private network | d | D5, D6, D1 | L3, L4 |
-| pca-p3-analyze-02 | single | 4.1.c | T4 | no | EHR Healthcare | Connectivity Tests to find where packets to an on-premises system are dropped | b | D6, D8, D2 | L3, L6 |
+| pca-p3-analyze-02 | single | 4.1.c | T4 | no | EHR Healthcare | Connectivity Tests to find where packets to an on-premises system are dropped | b | D8, D6, D2 | L3, L6 |
 | pca-p3-analyze-03 | single | 4.1.c | T4 | yes | none | Gemini responses cut off at the output token limit | a | D6, D6, D2 | L3, L4 |
-| pca-p3-analyze-04 | single | 4.1.d | T10 | no | none | Policy Controller constraints in dry-run mode before enforcement | c | D8, D6, D2 | L2, L6 |
-| pca-p3-analyze-05 | single | 4.1.f | T6 | no | none | Dual-region bucket with turbo replication for a 15-minute recovery point | b | D7, D2, D3 | L2, L4 |
-| pca-p3-analyze-06 | single | 4.2.a | T12 | no | none | Involve the stakeholders who can block a decision before the design is fixed | d | D8, D6, D2 | L3, L6 |
+| pca-p3-analyze-04 | single | 4.1.d | T10 | no | none | Policy Controller constraints in dry-run mode before enforcement | c | D8, D6, D2 | L3, L6 |
+| pca-p3-analyze-05 | single | 4.1.f | T6 | no | none | Dual-region bucket with turbo replication for a 15-minute recovery point | b | D7, D3, D7 | L2, L4 |
+| pca-p3-analyze-06 | single | 4.2.a | T12 | no | none | FinOps collaboration in which finance, business, and engineering share cost data tied to business value | d | D8, D6, D2 | L1, L3 |
 | pca-p3-analyze-07 | single | 4.2.c | T11 | yes | none | BigQuery ML for analysts who know SQL but not Python | a | D2, D1, D3 | L1, L3 |
 | pca-p3-analyze-08 | single | 4.2.d | T12 | no | KnightMotives Automotive | Time-boxed proof of concept with success criteria agreed in advance | c | D8, D6, D2 | L3, L6 |
-| pca-p3-analyze-09 | single | 4.2.f | T9 | no | none | Compute flexible committed use discounts for spend spread across machine series | b | D7, D2, D4 | L2, L4 |
+| pca-p3-analyze-09 | single | 4.2.f | T9 | no | none | Compute flexible committed use discounts for spend spread across machine series | b | D7, D2, D3 | L1, L4 |
 
 ### Plan: implement
 
@@ -168,3 +168,9 @@ Section authors may change a planned row before writing its section. Each change
   - provision-08 now requires that manual changes be reverted continuously, which a nightly script does not do.
   - provision-10's key serves features with Bigtable online serving, because Optimized online serving is deprecated, and its feedback states that Feature Store refreshes its feature views from BigQuery itself.
   - provision-01 no longer claims line-rate encryption and cites the Cloud Interconnect overview for VPN traffic over the internet. provision-02, -05, and -07 feedback now states only what the sources support, and provision-11 cites the Agent Platform locations page for Frankfurt.
+- 2026-10-14: Authored the `analyze` section (author `claude-opus-5.5-p3-analyze-20261014`).
+  - analyze-06 tests FinOps collaboration from the Well-Architected cost pillar, in which finance, business, and engineering share cost data tied to business value. It replaces the planned general stakeholder decision, so that the question rests on documented guidance and stays apart from Practice Exam 2's analyze-06, which tested an executive sponsor and a working group.
+  - analyze-08 relies on the migration assessment guidance that proofs of concept validate assumptions against agreed use cases and requirements.
+  - analyze-03 tests the finish reason FINISH_REASON_MAX_TOKENS and the maxOutputTokens setting, and analyze-04 tests the dryrun enforcement action of Policy Controller constraints.
+  - analyze-09's services must not be interrupted, which rules out Spot VMs on documented preemption.
+  - Measurements after four sections, including the provision review: the correct option is strictly the longest in 3 of 42 single-choice questions, 18 questions have a near-miss pair, and the letters are a 11, b 11, c 11, d 9. No field shares a run of more than 4 words with a case study.
