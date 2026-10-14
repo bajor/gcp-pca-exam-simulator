@@ -1,6 +1,7 @@
 import type { DraftQuestionSet, QuestionSet } from "../../domain/questions";
 import { practiceExamOneCandidateQuestionSets } from "./practice1/candidates";
 import { practiceExamOneDraftQuestionSets } from "./practice1/drafts";
+import { practiceExamTwoCandidateQuestionSets } from "./practice2/candidates";
 import { practiceExamTwoDraftQuestionSets } from "./practice2/drafts";
 
 // Each practice exam owns a `practice<number>/` module tree and adds its drafts and candidates here.
@@ -9,4 +10,7 @@ export const draftQuestionSets: readonly DraftQuestionSet[] = [
   ...practiceExamTwoDraftQuestionSets,
 ];
 
-export const candidateQuestionSets: readonly QuestionSet[] = [...practiceExamOneCandidateQuestionSets];
+export const candidateQuestionSets: readonly QuestionSet[] = [
+  ...practiceExamOneCandidateQuestionSets,
+  ...practiceExamTwoCandidateQuestionSets,
+];

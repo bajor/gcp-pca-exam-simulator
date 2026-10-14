@@ -194,3 +194,7 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
   - `docs/context/product-names.md` reference [34] now cites the page whose URL keeps the former name Log Analytics.
   - operate-01, -04, -05, -06, and -07 were verified again on 2026-10-14.
   - The correct option is now strictly the longest in 12 of 56 single-choice questions, and 50 questions have a near-miss pair.
+- 2026-10-14: Registered candidate `professional-cloud-architect-v6-1-practice-2` version 1 in `src/data/questionSets/practice2/candidates.ts` for the independent acceptance review. All six section reviews have been applied.
+  - Measurements: 60 questions, 4 choose-two questions, correct letters a 15, b 14, c 14, d 13, and the correct option strictly the longest in 12 of 56 single-choice questions. 50 questions have a near-miss pair, and the median reading load is 174 words.
+  - Altostrat Media and KnightMotives Automotive have 8 questions each, in 5 sections each. AI is decisive in 7 questions, and every consideration is used at most once.
+  - Question types from the plan rows: T1 5, T2 4, T3 3, T4 5, T5 2, T6 5, T7 10, T8 3, T9 5, T10 10, T11 6, T12 2. T3, T4, and T6 are exactly at their minimums.
