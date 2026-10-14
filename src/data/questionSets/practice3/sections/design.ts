@@ -28,7 +28,7 @@ export const practiceExamThreeDesignSection = {
           id: "workflows-callbacks",
           title: "Wait using callbacks",
           url: "https://docs.cloud.google.com/workflows/docs/creating-callback-endpoints",
-          claim: "Callbacks let a workflow execution wait for another service to make a request to a callback endpoint, and that request resumes the execution. With callbacks, a workflow waits on an event without polling, for example to allow human interaction such as reviewing an order.",
+          claim: "Callbacks let a workflow execution wait for another service to make a request to a callback endpoint, and that request resumes the execution. With callbacks, a workflow waits on an event without polling, for example to allow human interaction such as reviewing an order. The wait's timeout is 12 hours by default, and you can set it to the maximum number of seconds the workflow should wait.",
         },
         {
           id: "workflows-limits",
@@ -58,13 +58,13 @@ export const practiceExamThreeDesignSection = {
       choices: [
         {
           id: "a",
-          text: "Orchestrate the steps with Workflows, and before the approval step create a callback endpoint that the adjuster tool calls with the decision to resume the execution.",
-          feedback: "Correct. A callback lets the execution wait for the adjuster's request without polling and resume as soon as the request arrives, and an execution can run for up to a year, so a ten-day wait fits.",
+          text: "Orchestrate the steps with Workflows, and before the approval step create a callback endpoint, wait on it with a timeout above ten days, and let the adjuster tool call it.",
+          feedback: "Correct. A callback lets the execution wait for the adjuster's request without polling and resume as soon as it arrives, and the wait's timeout can exceed ten days because an execution can run for up to a year.",
           evidenceIds: ["workflows-callbacks", "workflows-limits"],
         },
         {
           id: "b",
-          text: "Orchestrate the steps with Workflows, and before the approval step add a loop that reads the decision table every minute until the decision appears.",
+          text: "Orchestrate the steps with Workflows, and before the approval step add a loop that reads the decision table, sleeps for 60 seconds between reads, and repeats until the adjuster's decision appears.",
           feedback: "Incorrect. Each pass of the polling loop executes more steps, and Workflows charges by the number of steps executed, so costs grow with the wait, and a decision can go unseen for up to a minute.",
           evidenceIds: ["workflows-polling", "workflows-pricing"],
         },
@@ -77,7 +77,7 @@ export const practiceExamThreeDesignSection = {
         {
           id: "d",
           text: "Keep the polling service, move it to a Compute Engine VM with a persistent disk, and store each claim's state on that disk so that restarts lose nothing.",
-          feedback: "Incorrect. A VM is a server that the company must manage, and the service still polls every minute instead of continuing when the decision arrives, as a callback does.",
+          feedback: "Incorrect. The service on a VM still polls every minute instead of continuing when the decision arrives, as a callback does, and the VM is a server that the company does not want to manage.",
           evidenceIds: ["workflows-callbacks"],
         },
       ],
@@ -89,18 +89,24 @@ export const practiceExamThreeDesignSection = {
       section: "design",
       objective: "1.1 Designing a cloud solution infrastructure that meets business requirements: 1.1.f integration patterns with external systems",
       caseStudyId: "knightmotives-automotive",
-      prompt: "KnightMotives Automotive is adopting Salesforce as its CRM so that dealers and staff can see every interaction with a customer, as part of improving how customers build and order vehicles online. Each submitted vehicle order is already published as a message to a Pub/Sub topic, and the matching customer and order records must appear in the CRM within minutes. The build-to-order system must keep working as it does today. KnightMotives already carries heavy technical debt across many separate code bases, so it wants a managed Google Cloud product that handles the CRM connection and its authentication instead of another custom service. What should you do?",
+      prompt: "KnightMotives Automotive is adopting Salesforce as its CRM so that dealers and staff can see every interaction with a customer, as part of improving how customers build and order vehicles online. Each submitted vehicle order is already published as a message to a Pub/Sub topic, and the matching customer and order records must appear in the CRM within minutes. The integration must not require changes to the build-to-order system. KnightMotives is gradually replacing its legacy systems, so it wants a managed Google Cloud product that handles the CRM connection and its authentication instead of another custom service. What should you do?",
       verifiedOn: "2026-10-14",
       evidence: [
         {
           ...knightMotivesCaseStudy,
-          claim: "KnightMotives wants a better online system for building vehicles to order and a CRM that records customer interactions, and its vehicles run on many separate code bases that carry significant technical debt.",
+          claim: "KnightMotives wants a better online system for building vehicles to order and a CRM that records customer interactions, and it plans to modernize or replace its legacy systems gradually.",
         },
         {
           id: "application-integration",
           title: "Application Integration overview",
           url: "https://docs.cloud.google.com/application-integration/docs/overview",
           claim: "Application Integration is an Integration-Platform-as-a-Service solution that connects enterprise applications such as Salesforce and event-driven systems such as Pub/Sub, with prebuilt connectors and out-of-the-box triggers that start the execution of an integration.",
+        },
+        {
+          id: "pubsub-trigger",
+          title: "Cloud Pub/Sub trigger",
+          url: "https://docs.cloud.google.com/application-integration/docs/configure-pubsub-trigger",
+          claim: "The Cloud Pub/Sub trigger runs an integration whenever a publisher writes a message to the chosen topic.",
         },
         {
           id: "integration-connectors",
@@ -119,25 +125,25 @@ export const practiceExamThreeDesignSection = {
         {
           id: "a",
           text: "Write a Cloud Run service that subscribes to the topic, calls the Salesforce API with its own authentication and retry code, and deploy it with the existing pipeline.",
-          feedback: "Incorrect. A custom service with its own authentication and retry code is the kind of new code that KnightMotives wants to avoid, while Application Integration provides prebuilt connectors.",
+          feedback: "Incorrect. A custom service with its own authentication and retry code is the kind of custom service that KnightMotives wants to avoid, while Application Integration provides prebuilt connectors.",
           evidenceIds: ["application-integration", "case-study"],
         },
         {
           id: "b",
           text: "Export each day's orders to a CSV file every night, and have the CRM import the file with its bulk upload feature the next morning.",
-          feedback: "Incorrect. A nightly file reaches the CRM on the next day, not within minutes of each order, while a trigger starts an integration for each order message.",
-          evidenceIds: ["application-integration"],
+          feedback: "Incorrect. A nightly file reaches the CRM on the next day, not within minutes of each order, while a Pub/Sub trigger runs an integration whenever an order message is published.",
+          evidenceIds: ["pubsub-trigger"],
         },
         {
           id: "c",
           text: "Build an integration in Application Integration that a Pub/Sub trigger starts, and use a Salesforce connection from Integration Connectors to create or update the records.",
           feedback: "Correct. Application Integration connects Pub/Sub and Salesforce with prebuilt triggers and connectors, and the Salesforce connection handles authentication and inserts or updates records without a custom service.",
-          evidenceIds: ["application-integration", "integration-connectors", "salesforce-connector", "case-study"],
+          evidenceIds: ["application-integration", "pubsub-trigger", "integration-connectors", "salesforce-connector", "case-study"],
         },
         {
           id: "d",
           text: "Replace the build-to-order website with the CRM's own order entry pages, so that customers enter their orders directly in the CRM.",
-          feedback: "Incorrect. Replacing the build-to-order system changes a system that must keep working as it does today, while an integration connects its existing order messages to the CRM.",
+          feedback: "Incorrect. Replacing the build-to-order website changes the system that the integration must leave unchanged, while an integration connects its existing order messages to the CRM.",
           evidenceIds: ["application-integration", "case-study"],
         },
       ],
@@ -180,7 +186,7 @@ export const practiceExamThreeDesignSection = {
         {
           id: "b",
           text: "Protect each firm's buckets and datasets with a customer-managed key in Cloud KMS dedicated to that firm, and disable its key versions when the firm leaves.",
-          feedback: "Correct. A key dedicated to each firm places a cryptographic boundary around that firm's data, and while the key is disabled, the data it protects can't be accessed, while other firms' keys and data are unaffected.",
+          feedback: "Correct. A key dedicated to each firm places a cryptographic boundary around that firm's data, and while the key is disabled, the data it protects can't be accessed. Other firms' keys and data are unaffected.",
           evidenceIds: ["cmek", "disable-key"],
         },
         {
@@ -221,7 +227,7 @@ export const practiceExamThreeDesignSection = {
       choices: [
         {
           id: "a",
-          text: "Export the metrics of every project to BigQuery each hour, and build usage and performance dashboards in Looker Studio for the operations team.",
+          text: "Export the metrics of every project to BigQuery each hour, and build usage and performance dashboards in Data Studio for the operations team.",
           feedback: "Incorrect. Hourly exports create the metric copies that EHR wants to avoid and delay the data, while a metrics scope lets one project chart and monitor data stored in other projects.",
           evidenceIds: ["metrics-scope", "case-study"],
         },
@@ -266,13 +272,19 @@ export const practiceExamThreeDesignSection = {
           url: "https://docs.cloud.google.com/filestore/docs/backups",
           claim: "A Filestore backup is a copy of a file share from the point in time when the backup is created, and you can use it to restore the file share to a new Filestore instance.",
         },
+        {
+          id: "filestore-overview",
+          title: "Filestore overview",
+          url: "https://docs.cloud.google.com/filestore/docs/overview",
+          claim: "Filestore instances are fully managed file servers. Regional instances provide transparent failover during zone failures, continuing to serve data and accept writes, and NFS data access continues without interruption.",
+        },
       ],
       choices: [
         {
           id: "a",
           text: "Move the files to a Filestore regional instance in the same region, and mount the new share on the render nodes in place of the zonal one.",
-          feedback: "Correct. The regional tier is designed for resilience against zone outages, so the share keeps serving the render nodes over NFS at the same address when a zone fails, and Google operates it.",
-          evidenceIds: ["filestore-tiers"],
+          feedback: "Correct. The regional tier is designed for resilience against zone outages and fails over transparently, so the render nodes keep reading and writing over NFS without a restore or a new address, and Filestore is a fully managed file server.",
+          evidenceIds: ["filestore-tiers", "filestore-overview"],
         },
         {
           id: "b",
@@ -283,14 +295,14 @@ export const practiceExamThreeDesignSection = {
         {
           id: "c",
           text: "Create a second Filestore zonal instance in another zone, and copy changed files to it every 15 minutes with a scheduled rsync job.",
-          feedback: "Incorrect. After a zone failure the render nodes must switch to the second instance's address, and the copy misses recent changes, while a regional instance keeps serving at the same address.",
-          evidenceIds: ["filestore-tiers"],
+          feedback: "Incorrect. After a zone failure the render nodes must switch to the second instance's address, and the copy misses recent changes, while a regional instance fails over transparently and keeps serving data.",
+          evidenceIds: ["filestore-tiers", "filestore-overview"],
         },
         {
           id: "d",
           text: "Run two NFS server VMs in different zones that replicate their disks to each other, and move a floating IP address between them on failure.",
-          feedback: "Incorrect. Self-managed NFS servers and their failover are file servers that the firm has no staff to operate, while the Filestore regional tier provides zone-outage resilience as a managed service.",
-          evidenceIds: ["filestore-tiers"],
+          feedback: "Incorrect. Self-managed NFS servers and their failover are file servers that the firm has no staff to operate, while Filestore regional instances are fully managed and fail over transparently during zone failures.",
+          evidenceIds: ["filestore-tiers", "filestore-overview"],
         },
       ],
       correctChoiceId: "a",
@@ -300,7 +312,7 @@ export const practiceExamThreeDesignSection = {
       kind: "single",
       section: "design",
       objective: "1.2 Designing a cloud solution infrastructure that meets technical requirements: 1.2.e performance and latency",
-      prompt: "A language-learning company serves its API from Cloud Run in us-central1 to users in North America, Europe, and Asia. Users in Europe and Asia report slow responses, and traces show that most of the delay is network round-trip time. Every response is built for the signed-in user from a Firestore multi-region database, so responses can't be shared between users. The company wants lower latency on all three continents, one global URL for its mobile apps, and to keep running on Cloud Run. What should you do?",
+      prompt: "A language-learning company serves its API from Cloud Run in us-central1 to users in North America, Europe, and Asia. Users in Europe and Asia report slow responses, and traces show that most of the delay is network round-trip time. Each response grades the exercise answer that the signed-in user submits and needs no data beyond the request, so responses can't be shared between users. The company wants lower latency on all three continents, one global URL for its mobile apps, and to keep running on Cloud Run. What should you do?",
       verifiedOn: "2026-10-14",
       evidence: [
         {
@@ -313,7 +325,7 @@ export const practiceExamThreeDesignSection = {
           id: "cdn-caching",
           title: "Caching overview",
           url: "https://docs.cloud.google.com/cdn/docs/caching",
-          claim: "Not all HTTP responses are cacheable, and caching static content might not be appropriate if the backend serves private, per-user content, such as dynamic HTML or API responses.",
+          claim: "Not all HTTP responses are cacheable. The CACHE_ALL_STATIC mode caches successful responses with static content, and the FORCE_CACHE_ALL mode might not be appropriate if the backend serves private, per-user content, such as dynamic HTML or API responses.",
         },
         {
           id: "min-instances",
@@ -332,7 +344,7 @@ export const practiceExamThreeDesignSection = {
         {
           id: "b",
           text: "Put the service behind a global external Application Load Balancer, and enable Cloud CDN so that edge caches serve the API responses.",
-          feedback: "Incorrect. Each response is private, per-user content, for which Cloud CDN caching is not appropriate, so the requests still travel to us-central1.",
+          feedback: "Incorrect. Per-user API responses are not static content, and forcing their caching is not appropriate for private, per-user content, so the requests still travel to us-central1.",
           evidenceIds: ["cdn-caching"],
         },
         {
@@ -428,14 +440,14 @@ export const practiceExamThreeDesignSection = {
       kind: "single",
       section: "design",
       objective: "1.3 Designing network, storage, and compute resources: 1.3.b Google Cloud AI and machine learning solutions",
-      prompt: "A market research firm classifies about three million customer reviews each month into its own 40 product-issue categories. A script sends each review to a Gemini model on Agent Platform as an online request. The reviews arrive in a BigQuery table on the first day of each month, and analysts need the results within two days. The firm wants to cut the cost of the classification as far as possible without managing any infrastructure or changing its categories. What should you do?",
+      prompt: "A market research firm classifies about three million customer reviews each month into its own 40 product-issue categories. A script sends each review to a Gemini model on Agent Platform as an online request. The reviews arrive in a BigQuery table on the first day of each month, and analysts need the results within a week. The firm wants to cut the cost of the classification as far as possible without changing its categories. What should you do?",
       verifiedOn: "2026-10-14",
       evidence: [
         {
           id: "batch-inference",
           title: "Batch inference with Gemini",
           url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/capabilities/batch-inference",
-          claim: "Batch inference with Gemini is asynchronous and is offered at a 50% discounted rate compared to real-time inference, which suits large-scale, non-urgent tasks. A single batch job replaces many individual real-time requests, batch jobs can be created with Cloud Storage or BigQuery as the source, and most jobs complete within 24 hours after they start running.",
+          claim: "Batch inference with Gemini is asynchronous and is offered at a 50% discounted rate compared to real-time inference, which suits large-scale, non-urgent tasks. Batch jobs can read from Cloud Storage or BigQuery, a single job may include up to 200,000 requests, a queued job waits up to 72 hours before it expires, and most jobs complete within 24 hours after they start running.",
         },
         {
           id: "provisioned-throughput",
@@ -459,8 +471,8 @@ export const practiceExamThreeDesignSection = {
         },
         {
           id: "b",
-          text: "Submit the reviews as a Gemini batch inference job that reads the BigQuery table and writes the classifications to another table.",
-          feedback: "Correct. Batch inference is offered at a 50% discount compared to real-time inference for large, non-urgent jobs, and most jobs complete within 24 hours after they start, which meets the two-day deadline.",
+          text: "Submit the reviews as Gemini batch inference jobs that read the BigQuery table and write the classifications to another table.",
+          feedback: "Correct. Batch inference costs 50% less than real-time inference for large, non-urgent jobs, and up to 72 hours of queueing plus up to 24 hours of processing fits the one-week deadline.",
           evidenceIds: ["batch-inference"],
         },
         {
@@ -605,7 +617,7 @@ export const practiceExamThreeDesignSection = {
           id: "bigtable-overview",
           title: "Bigtable overview",
           url: "https://docs.cloud.google.com/bigtable/docs/overview",
-          claim: "Bigtable scales to billions of rows and petabytes of data, supports high read and write throughput at low latency, and suits time-series data. For interactive querying in an online analytical processing system, Google suggests BigQuery.",
+          claim: "Bigtable scales to billions of rows and petabytes of data, is ideal for storing large amounts of single-keyed data with low latency, supports high read and write throughput at low latency, and suits time-series data. For interactive querying in an online analytical processing system, Google suggests BigQuery.",
         },
         {
           id: "bigtable-schema",
@@ -624,7 +636,7 @@ export const practiceExamThreeDesignSection = {
         {
           id: "a",
           text: "Store the readings in a BigQuery table that is partitioned by day and clustered by vehicle ID, and have the services query the table.",
-          feedback: "Incorrect. BigQuery suits interactive analytical querying, not serving one vehicle's readings to services within milliseconds.",
+          feedback: "Incorrect. Google suggests BigQuery for interactive analytical querying, while Bigtable is the store for low-latency access to single-keyed data, such as one vehicle's readings within milliseconds.",
           evidenceIds: ["bigtable-overview"],
         },
         {
@@ -654,7 +666,7 @@ export const practiceExamThreeDesignSection = {
       requiredSelections: 2,
       section: "design",
       objective: "1.4 Creating a migration plan: 1.4.a integrating solutions with existing systems",
-      prompt: "An insurer has migrated several applications to Compute Engine in a VPC network that connects to its data center over Cloud Interconnect. The applications must still resolve names in the corp.example.com zone, which the on-premises DNS servers host. On-premises applications must resolve names in gcp.example.com, a Cloud DNS private zone for the migrated applications. The insurer does not want to run DNS servers in Google Cloud or to publish internal names on the internet. What should you do? Choose two.",
+      prompt: "An insurer has migrated several applications to Compute Engine in a VPC network that connects to its data center over Cloud Interconnect. The applications must still resolve the current records in the corp.example.com zone, which the on-premises DNS servers host and update several times a day. On-premises applications must resolve names in gcp.example.com, a Cloud DNS private zone for the migrated applications. The insurer does not want to run DNS servers in Google Cloud or to publish internal names on the internet. What should you do? Choose two.",
       verifiedOn: "2026-10-14",
       evidence: [
         {
@@ -704,7 +716,7 @@ export const practiceExamThreeDesignSection = {
         {
           id: "e",
           text: "Create a Cloud DNS private zone for corp.example.com, and copy the on-premises records into it with a script each night.",
-          feedback: "Incorrect. A nightly copy misses records that change during the day, while a forwarding zone sends each query to the on-premises servers that host the zone.",
+          feedback: "Incorrect. A nightly copy misses the records that the on-premises servers update during the day, while a forwarding zone sends each query to the servers that host the zone.",
           evidenceIds: ["forwarding-zones"],
         },
       ],

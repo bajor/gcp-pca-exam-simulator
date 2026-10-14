@@ -142,3 +142,10 @@ Section authors may change a planned row before writing its section. Each change
   - design-13's third option keeps the scripts on Teradata, because BigQuery federated queries cannot reach Teradata.
   - design-03 disables the leaving firm's key versions instead of destroying them, because destruction is scheduled 30 days ahead by default, while data can't be accessed as soon as its key version is disabled.
   - Measurements: the correct option is strictly the longest in 2 of 13 single-choice questions. 8 questions have a near-miss pair, and the median reading load is 177 words. No field shares a run of more than 4 words with a case study, whether hyphenated words are joined or split.
+- 2026-10-14: Applied the fresh-session review of the `design` section and the plan. 12 keys were confirmed; design-06, design-08, and design-12 needed changes for their keys to be unique and achievable.
+  - design-06's responses now need no data beyond the request, because every Firestore multi-region location is on one continent and would keep a long round trip to the database.
+  - design-08 submits batch inference jobs within a one-week deadline, because a job may include up to 200,000 requests and can wait up to 72 hours in the queue.
+  - design-12 states that the on-premises records change several times a day, so a nightly copy fails a stated requirement.
+  - design-01's callback wait sets a timeout above ten days, because the default timeout is 12 hours. design-02 no longer says the build-to-order system must stay as it is, which conflicted with the case study, and design-05 cites the Filestore overview for transparent failover.
+  - design-04 uses the current name Data Studio, and design-11's BigQuery feedback cites Bigtable's documented role for single-keyed, low-latency data.
+  - Notes for later sections from the review: secure-04 must use a single-approver entitlement, because multi-level and multi-party approvals in Privileged Access Manager are Preview; secure-09 must make key custody the problem, so that it stays apart from Practice Exam 2's secure-10; and secure-08 must cite the final URL of the Model Garden access page.
