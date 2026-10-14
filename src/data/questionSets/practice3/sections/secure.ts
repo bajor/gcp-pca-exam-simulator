@@ -181,7 +181,7 @@ export const practiceExamThreeSecureSection = {
         },
         {
           id: "c",
-          text: "De-identify the genomes with Sensitive Data Protection before the analysis, so that the VMs never hold identifying data.",
+          text: "De-identify the genomes with Sensitive Data Protection before the analysis, so that the VMs hold no identifying data.",
           feedback: "Incorrect. De-identification transforms the data that the analysis needs complete, and the transformed data in memory is still not encrypted.",
           evidenceIds: ["de-identification"],
         },
@@ -391,7 +391,7 @@ export const practiceExamThreeSecureSection = {
         },
         {
           id: "c",
-          text: "Pin every package version in the requirements files, so that the builds always install the same packages from PyPI.",
+          text: "Pin every package version in the requirements files, so that each build installs the same package versions from PyPI.",
           feedback: "Incorrect. Pinned versions still download from PyPI, so they keep no copies in Google Cloud and do not route packages through one place.",
           evidenceIds: ["remote-repositories"],
         },
