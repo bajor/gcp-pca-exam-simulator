@@ -64,17 +64,17 @@ The other 52 questions use considerations that earlier sets already cover, with 
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p3-provision-01 | single | 2.1.a | T5 | no | EHR Healthcare | MACsec for Cloud Interconnect to encrypt the Dedicated Interconnect connections at line rate | b | D7, D3, D2 | L2, L4 |
-| pca-p3-provision-02 | single | 2.1.b | T9 | no | none | HA VPN to AWS for a small encrypted link that is needed within days | d | D2, D3, D5 | L1, L6 |
-| pca-p3-provision-03 | single | 2.1.d | T5 | no | none | Cross-region internal Application Load Balancer for internal clients with regional failover | a | D4, D7, D3 | L2, L4 |
-| pca-p3-provision-04 | single | 2.2.d | T2 | no | none | Cloud SQL cross-region read replica near readers on another continent | c | D2, D7, D4 | L2, L3 |
-| pca-p3-provision-05 | single | 2.2.g | T6 | no | none | Cloud Storage soft delete to recover objects that a faulty job deleted | b | D2, D7, D6 | L2, L4 |
+| pca-p3-provision-01 | single | 2.1.a | T5 | no | EHR Healthcare | MACsec for Cloud Interconnect to encrypt the Dedicated Interconnect connections at line rate | b | D7, D3, D6 | L3, L4 |
+| pca-p3-provision-02 | single | 2.1.b | T9 | no | none | HA VPN to AWS for a small encrypted link that is needed within days | d | D2, D5, D3 | L1, L2 |
+| pca-p3-provision-03 | single | 2.1.d | T5 | no | none | Cross-region internal Application Load Balancer for internal clients with regional failover | a | D4, D5, D7 | L2, L4 |
+| pca-p3-provision-04 | single | 2.2.d | T2 | no | none | Cloud SQL cross-region read replica near readers on another continent | c | D7, D2, D4 | L3, L4 |
+| pca-p3-provision-05 | single | 2.2.g | T6 | no | none | Cloud Storage soft delete to recover objects that a faulty job deleted | b | D7, D2, D7 | L3, L4 |
 | pca-p3-provision-06 | single | 2.2.f | T9 | no | none | Hyperdisk Balanced, whose capacity and performance change independently as data grows | a | D2, D3, D7 | L1, L4 |
 | pca-p3-provision-07 | single | 2.3.c | T4 | no | none | Cloud NAT for private GKE nodes that must pull public images | d | D5, D6, D7 | L3, L4 |
-| pca-p3-provision-08 | single | 2.3.d | T10 | no | EHR Healthcare | Config Sync from one Git repository across the fleet's clusters | c | D1, D6, D2 | L2, L4 |
-| pca-p3-provision-09 | single | 2.3.e | T9 | no | none | Spot Pods on GKE Autopilot for fault-tolerant batch work | b | D2, D3, D7 | L1, L4 |
+| pca-p3-provision-08 | single | 2.3.d | T10 | no | EHR Healthcare | Config Sync from one Git repository across the fleet's clusters | c | D1, D6, D6 | L3, L4 |
+| pca-p3-provision-09 | single | 2.3.e | T9 | no | none | Spot Pods on GKE Autopilot for fault-tolerant batch work | b | D4, D2, D1 | L1, L4 |
 | pca-p3-provision-10 | single | 2.4.b | T11 | yes | KnightMotives Automotive | Agent Platform Feature Store serving BigQuery feature data online | a | D1, D3, D7 | L3, L4 |
-| pca-p3-provision-11 | single | 2.5.c | T11 | yes | none | Open model from Model Garden deployed to an Agent Platform endpoint | c | D3, D1, D5 | L1, L4 |
+| pca-p3-provision-11 | single | 2.5.c | T11 | yes | none | Open model from Model Garden deployed to an Agent Platform endpoint | c | D3, D1, D2 | L1, L2 |
 
 ### Plan: secure
 
@@ -142,6 +142,13 @@ Section authors may change a planned row before writing its section. Each change
   - design-13's third option keeps the scripts on Teradata, because BigQuery federated queries cannot reach Teradata.
   - design-03 disables the leaving firm's key versions instead of destroying them, because destruction is scheduled 30 days ahead by default, while data can't be accessed as soon as its key version is disabled.
   - Measurements: the correct option is strictly the longest in 2 of 13 single-choice questions. 8 questions have a near-miss pair, and the median reading load is 177 words. No field shares a run of more than 4 words with a case study, whether hyphenated words are joined or split.
+- 2026-10-14: Authored the `provision` section (author `claude-opus-5.5-p3-provision-20261014`).
+  - The mechanisms and levers of provision-01 to -05, -08, -09, and -11 now describe the options as written.
+  - provision-02 asks for a 99.99% availability SLA, which HA VPN provides and Classic VPN, at 99.9%, does not. It also notes that Cross-Cloud Interconnect needs one to four weeks of physical provisioning.
+  - provision-05 rules out Object Versioning with the requirement that no one can permanently remove a recoverable copy, because soft delete, unlike noncurrent versions, keeps deleted objects from permanent deletion during its retention duration.
+  - provision-07's option c adds a firewall rule, because the implied allow egress rule already permits the traffic and the missing piece is Cloud NAT.
+  - provision-10 uses the documented name Agent Platform Feature Store, and provision-11 contrasts self-deployed open models with model-as-a-service offerings.
+  - Measurements after two sections: the correct option is strictly the longest in 2 of 24 single-choice questions, 11 questions have a near-miss pair, and the letters are a 7, b 6, c 6, d 5. No field shares a run of more than 4 words with a case study.
 - 2026-10-14: Applied the fresh-session review of the `design` section and the plan. 12 keys were confirmed; design-06, design-08, and design-12 needed changes for their keys to be unique and achievable.
   - design-06's responses now need no data beyond the request, because every Firestore multi-region location is on one continent and would keep a long round trip to the database.
   - design-08 submits batch inference jobs within a one-week deadline, because a job may include up to 200,000 requests and can wait up to 72 hours in the queue.
