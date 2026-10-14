@@ -27,18 +27,18 @@ The plan allocates questions exactly as the coverage matrix requires and keeps t
 |---|---|
 | Correct letters among 56 single-choice questions (11 to 17 each) | a 15, b 14, c 14, d 13 |
 | Choose-two questions (4 to 8) | 4 |
-| AI decisive (6 to 12) | 6 |
+| AI decisive (6 to 12) | 7 |
 | Case-study questions (12 to 18) | 16: Altostrat Media 8 in five sections, KnightMotives Automotive 8 in five sections |
 | T4 troubleshooting (at least 5) | 5 |
 | T6 reliability and recovery (at least 5) | 6 |
 | T7 security and identity (at least 6) | 10 |
 | T9 cost optimization (at least 4) | 5 |
 | T3 migration planning (at least 3) | 3 |
-| T11 AI solution design (at least 4) | 5 |
+| T11 AI solution design (at least 4) | 6 |
 | Considerations of objectives 1.1, 1.5, 2.4, and 2.5 | 1.1.a, 1.1.b, 1.1.c, 1.1.h, 1.5.b, 2.4.c, and 2.5.b, none of which Practice Exam 1 uses |
 | Feasibility check (coverage rule 4), counting Practice Exams 1 and 2 as written | Passes for all 22 objectives. Practice Exam 3 must use 1.1.e, 1.1.f, 1.1.k, 1.1.l, 1.5.a, 2.4.b, and 2.5.c, and must also cover 2.2.f. |
 
-The plan uses every consideration that Practice Exam 1 left unused, except those reserved for Practice Exam 3 above. Near-miss pairs (lever L2) and the longest-option limit are checked per section with `npm run question-set-report`. Kind is `single` or `multiple` (choose-two). AI decisive and T3 are exactly at their minimums, so a revision that changes one of those questions must keep its classification or add another question of the same kind.
+The plan uses every consideration that Practice Exam 1 left unused, except those reserved for Practice Exam 3 above. Near-miss pairs (lever L2) and the longest-option limit are checked per section with `npm run question-set-report`. Kind is `single` or `multiple` (choose-two). T3 and T4 are exactly at their minimums, so a revision that changes one of those questions must keep its type or add another question of the same type.
 
 ### Plan: design
 
@@ -122,13 +122,13 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
 
 | Question ID | Kind | Consideration | Type | AI | Case study | Decisive feature | Correct letters | Distractor mechanisms | Levers |
 |---|---|---|---|---|---|---|---|---|---|
-| pca-p2-operate-01 | single | 6.1.a | T10 | no | Altostrat Media | Automated runbooks that remove manual toil | c | D6, D3, D8 | L2, L3 |
-| pca-p2-operate-02 | single | 6.2.b | T4 | no | none | Cloud Profiler to find CPU hot spots in production | a | D6, D2, D3 | L2, L4 |
-| pca-p2-operate-03 | single | 6.2.a | T10 | no | none | Aggregated logs in a central log bucket with Log Analytics | b | D3, D1, D7 | L2, L4 |
-| pca-p2-operate-04 | single | 6.3.a | T10 | no | none | Blue-green release with traffic switch and instant rollback | d | D8, D3, D7 | L2, L4 |
-| pca-p2-operate-05 | single | 6.4.a | T4 | yes | none | Migrate to the replacement Gemini model before the retirement date | b | D6, D8, D3 | L2, L4 |
-| pca-p2-operate-06 | single | 6.5.a | T6 | no | none | Automated quality gate that blocks a release on failing checks | a | D6, D8, D3 | L2, L4 |
-| pca-p2-operate-07 | single | 6.6.a | T7 | no | none | Penetration testing of the company's own resources under the acceptable use policy | c | D5, D6, D3 | L2, L4 |
+| pca-p2-operate-01 | single | 6.1.a | T10 | no | Altostrat Media | Alert-triggered automation through a Pub/Sub channel and Cloud Run that removes toil | c | D6, D2, D8 | L3, L4 |
+| pca-p2-operate-02 | single | 6.2.b | T4 | no | none | Cloud Profiler to find CPU hot spots in production | a | D6, D6, D3 | L3, L4 |
+| pca-p2-operate-03 | single | 6.2.a | T10 | no | none | Aggregated sink to a central log bucket with Observability Analytics | b | D1, D7, D7 | L2, L4 |
+| pca-p2-operate-04 | single | 6.3.a | T10 | no | none | Blue-green node pool upgrade with a soak time for a quick rollback | d | D7, D2, D6 | L2, L4 |
+| pca-p2-operate-05 | single | 6.4.a | T4 | yes | none | Point the service to the replacement Gemini model after a retirement date | b | D6, D8, D3 | L3, L4 |
+| pca-p2-operate-06 | single | 6.5.a | T6 | no | none | Cloud Deploy deployment failure rate and frequency as release quality measures | a | D7, D6, D3 | L2, L4 |
+| pca-p2-operate-07 | single | 6.6.a | T7 | no | none | Penetration testing of the company's own projects under the Acceptable Use Policy | c | D6, D5, D3 | L1, L3 |
 
 ### Progress
 
@@ -169,3 +169,11 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
   - implement-02 tests Apigee SpikeArrest instead of API products and keys, which Practice Exam 1's implement-01 tests.
   - implement-07 tests the Google Gen AI SDK with a response schema. It adds a seventh AI-decisive question, so the set now has one question above the minimum. Practice Exam 1's implement-07 tested a Pub/Sub client library with Application Default Credentials.
   - The correct option is strictly the longest in 11 of 49 single-choice questions so far.
+- 2026-10-07: Authored the `operate` section (author `claude-opus-5.5-p2-operate-20261007`). The draft now has all 60 questions.
+  - operate-04 tests GKE blue-green node pool upgrades with a soak time, and its distractors are surge upgrades, a second cluster, and a maintenance exclusion.
+  - operate-06 tests the deployment failure rate and frequency that Cloud Deploy reports, so that it does not repeat implement-01.
+  - operate-03 uses the name Observability Analytics, which `docs/context/product-names.md` now records as the current name of Log Analytics.
+  - operate-07 tests penetration testing of the company's own projects under the Acceptable Use Policy, which needs no notice to Google.
+  - Full draft: 60 questions, 4 choose-two questions, correct letters a 15, b 14, c 14, d 13, and the correct option strictly the longest in 13 of 56 single-choice questions. 49 questions have a near-miss pair, and the median reading load is 174 words.
+  - Altostrat Media and KnightMotives Automotive have 8 questions each, in 5 sections each. AI is decisive in 7 questions, and every consideration is used at most once.
+  - Question types: T1 5, T2 4, T3 3, T4 5, T5 2, T6 6, T7 10, T8 3, T9 5, T10 9, T11 6, T12 2. Every type minimum is met.

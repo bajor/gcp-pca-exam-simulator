@@ -75,6 +75,14 @@ Compute Engine, Spot VMs, Cloud Run, Config Sync, Google Cloud VMware Engine, Mi
 
 Cloud Storage, BigQuery, Cloud SQL, AlloyDB for PostgreSQL, Firestore, Memorystore, Filestore, Pub/Sub, Dataflow, Storage Transfer Service, Transfer Appliance, Database Migration Service, and Backup and DR Service keep their names.
 
+## Operations Products
+
+| Former name | Name to use in questions | Source |
+|---|---|---|
+| Log Analytics | Observability Analytics | Documentation title; the page's URL keeps the former name [34] |
+
+Cloud Monitoring, Cloud Logging, Cloud Trace, Cloud Profiler, Cloud Build, and Cloud Deploy keep their names.
+
 ## Products That Must Not Be Decisive
 
 A product on this list may appear as context or as a distractor whose feedback states its status, but no correct answer may depend on it.
@@ -92,7 +100,7 @@ A product on this list may appear as context or as a distractor whose feedback s
 
 ## Verification
 
-Sources were fetched on 2026-10-01, except [33], which was fetched on 2026-10-02. Re-check this page before authoring each new question set, because Google can rename or retire more products at any time.
+Sources were fetched on 2026-10-01, except [33], which was fetched on 2026-10-02, and [34], which was fetched on 2026-10-07. Re-check this page before authoring each new question set, because Google can rename or retire more products at any time.
 
 # References
 
@@ -161,3 +169,5 @@ Sources were fetched on 2026-10-01, except [33], which was fetched on 2026-10-02
 [32] GOOGLE CLOUD BLOG. **Introducing Gemini Enterprise Agent Platform, powering the next wave of agents**. Published 2026-04-22. Available at: <https://cloud.google.com/blog/products/ai-machine-learning/introducing-gemini-enterprise-agent-platform>. Accessed on: 2026-10-01.
 
 [33] GOOGLE CLOUD. **Introduction to BigQuery sharing**. Available at: <https://docs.cloud.google.com/bigquery/docs/analytics-hub-introduction>. Accessed on: 2026-10-02.
+
+[34] GOOGLE CLOUD. **Query and analyze logs with Observability Analytics**. Available at: <https://docs.cloud.google.com/logging/docs/analyze/query-and-view>. Accessed on: 2026-10-07.
