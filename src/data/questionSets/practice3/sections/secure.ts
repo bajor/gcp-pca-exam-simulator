@@ -47,7 +47,7 @@ export const practiceExamThreeSecureSection = {
           id: "project-liens",
           title: "Protect projects with liens",
           url: "https://docs.cloud.google.com/resource-manager/docs/project-liens",
-          claim: "You can place a lien upon a project to block the project's deletion until you remove the lien.",
+          claim: "Project liens are a Preview feature under the Pre-GA Offerings Terms. You can place a lien upon a project to block the project's deletion until you remove the lien.",
         },
       ],
       choices: [
@@ -72,8 +72,8 @@ export const practiceExamThreeSecureSection = {
         {
           id: "d",
           text: "Place a lien on each production project, so that no one can delete a project until someone removes its lien.",
-          feedback: "Incorrect. A lien blocks deletion only until it is removed and must be placed on each project, so it limits neither who can remove it nor projects created later.",
-          evidenceIds: ["project-liens"],
+          feedback: "Incorrect. Project liens are a Preview feature, and each lien is placed on one project, so production projects created later are unprotected, while a deny policy on the folder is inherited by every project inside it.",
+          evidenceIds: ["project-liens", "deny-policies"],
         },
       ],
       correctChoiceId: "c",
@@ -108,7 +108,7 @@ export const practiceExamThreeSecureSection = {
       choices: [
         {
           id: "a",
-          text: "Create an environment tag, bind its production value to every production project, and enforce the serial port constraint at the organization where that value is attached.",
+          text: "Create an environment tag, bind its production value to every production project, and enforce the serial port constraint in an organization policy conditioned on that value.",
           feedback: "Correct. An organization policy conditioned on a tag applies wherever the tag is attached, so one policy covers every production project and its VMs in any folder while development projects keep serial access.",
           evidenceIds: ["scope-policies", "tags-overview"],
         },
@@ -201,7 +201,7 @@ export const practiceExamThreeSecureSection = {
       section: "secure",
       objective: "3.1 Designing for security: 3.1.d separation of duties",
       caseStudyId: "knightmotives-automotive",
-      prompt: "After past data breaches, KnightMotives Automotive is tightening security in Google Cloud. Twelve platform engineers hold the Project IAM Admin role on every production project at all times, although each needs it only a few times a month. The security team wants that role granted only when an engineer requests it for a task, approved by a second person, removed automatically after a few hours, and recorded for audits. What should you do? Choose two.",
+      prompt: "After past data breaches, KnightMotives Automotive is tightening security in Google Cloud. Twelve platform engineers hold the Project IAM Admin role on every production project at all times, although each needs it only a few times a month. The security team wants that role granted only when an engineer requests it for a task and a second person approves, and removed automatically after a few hours. What should you do? Choose two.",
       verifiedOn: "2026-10-14",
       evidence: [
         {
@@ -220,12 +220,6 @@ export const practiceExamThreeSecureSection = {
           title: "Attribute reference for IAM Conditions",
           url: "https://docs.cloud.google.com/iam/docs/conditions-attribute-reference",
           claim: "Date/time attributes in IAM Conditions set expirable, scheduled, or limited-duration access to Google Cloud resources.",
-        },
-        {
-          id: "key-risks",
-          title: "Best practices for managing service account keys",
-          url: "https://docs.cloud.google.com/iam/docs/best-practices-for-managing-service-account-keys",
-          claim: "Credentials can leak to places where they are not supposed to be stored, and a bad actor can use leaked credentials to gain a foothold in your environment.",
         },
       ],
       choices: [
@@ -250,8 +244,8 @@ export const practiceExamThreeSecureSection = {
         {
           id: "d",
           text: "Store the password of a shared admin account in Secret Manager, and let the engineers retrieve it whenever they need the role.",
-          feedback: "Incorrect. A shared credential can leak and hides which engineer acted, and retrieving it needs no approval, while Privileged Access Manager grants the role to each engineer individually.",
-          evidenceIds: ["key-risks", "pam"],
+          feedback: "Incorrect. Retrieving a shared password needs no request or approval and is not revoked after a few hours, while Privileged Access Manager grants the role to each requester and revokes it when the grant ends.",
+          evidenceIds: ["pam"],
         },
         {
           id: "e",
@@ -317,7 +311,7 @@ export const practiceExamThreeSecureSection = {
       kind: "single",
       section: "secure",
       objective: "3.1 Designing for security: 3.1.g secure remote access",
-      prompt: "A software company's platform engineers run Terraform from their laptops against a shared Google Cloud project, using a key for the deployment service account that each engineer downloaded. A security review now forbids service account keys and requires that each engineer's use of the deployment service account can be revoked individually and traced to that engineer in audit logs. The engineers must not hold the deployment roles themselves, and they must keep running Terraform from their laptops. What should you do?",
+      prompt: "A software company's platform engineers run Terraform from their laptops against a shared Google Cloud project, using a key for the deployment service account that each engineer downloaded. A security review now forbids service account keys and requires that each engineer's use of the deployment service account can be revoked individually and traced to that engineer in audit logs. The engineers must not hold the deployment roles themselves. What should you do?",
       verifiedOn: "2026-10-14",
       evidence: [
         {
@@ -349,7 +343,7 @@ export const practiceExamThreeSecureSection = {
         {
           id: "c",
           text: "Grant each engineer the Service Account Token Creator role on the deployment service account, and configure Terraform to impersonate it.",
-          feedback: "Correct. Impersonation gives each engineer short-lived credentials for the service account without keys or direct roles, each engineer's grant can be removed individually, and audit logs show both identities.",
+          feedback: "Correct. Impersonation gives each engineer short-lived credentials for the service account without keys or direct roles, each engineer's grant can be removed individually, and most audit logs show both identities.",
           evidenceIds: ["impersonation"],
         },
         {
@@ -366,7 +360,7 @@ export const practiceExamThreeSecureSection = {
       kind: "single",
       section: "secure",
       objective: "3.1 Designing for security: 3.1.h securing software supply chain",
-      prompt: "A fintech company's Cloud Build pipelines install Python packages directly from the public PyPI index. Last month, a PyPI outage stopped every build for two hours, and the security team cannot see which public packages the builds use. The company wants every public Python package to come through one place in Google Cloud that keeps copies of the packages already used, without uploading packages by hand and without running its own package proxy servers. What should you do?",
+      prompt: "A grocery delivery company's Cloud Build pipelines install Python packages directly from the public PyPI index. Last month, a PyPI outage stopped every build for two hours, and the security team cannot see which public packages the builds use. The company wants every public Python package to come through one place in Google Cloud that keeps copies of the packages already used, without uploading packages by hand and without running its own package proxy servers. What should you do?",
       verifiedOn: "2026-10-14",
       evidence: [
         {
@@ -490,6 +484,12 @@ export const practiceExamThreeSecureSection = {
           url: "https://docs.cloud.google.com/assured-workloads/docs/control-packages/eu-data-boundary",
           claim: "The Assured Workloads EU Data Boundary control package sets data location controls to support EU-only regions.",
         },
+        {
+          id: "protection-levels",
+          title: "Protection levels",
+          url: "https://docs.cloud.google.com/kms/docs/protection-levels",
+          claim: "Cloud KMS keys with the SOFTWARE protection level are used for cryptographic operations performed in software, and Cloud KMS keys can be generated by Google or imported.",
+        },
       ],
       choices: [
         {
@@ -508,7 +508,7 @@ export const practiceExamThreeSecureSection = {
           id: "c",
           text: "Protect the data with Cloud KMS software keys, rotate them every 90 days, and limit the decrypt role to a few service accounts.",
           feedback: "Incorrect. Cloud KMS software keys are created and held in Google Cloud, so rotation and narrow roles do not move the keys to KnightMotives' external key manager.",
-          evidenceIds: ["ekm"],
+          evidenceIds: ["protection-levels", "ekm"],
         },
         {
           id: "d",
@@ -598,13 +598,19 @@ export const practiceExamThreeSecureSection = {
           id: "log-buckets",
           title: "Configure log buckets",
           url: "https://docs.cloud.google.com/logging/docs/buckets",
-          claim: "You can set a log bucket's retention period to between 1 day and 3650 days, and if you don't customize it, the default is 30 days.",
+          claim: "You can set a log bucket's retention period to between 1 day and 3650 days, and if you don't customize it, the default is 30 days. You can't change the retention period of the _Required log bucket.",
         },
         {
           id: "aggregated-sinks",
           title: "Collate and route organization- and folder-level logs to supported destinations",
           url: "https://docs.cloud.google.com/logging/docs/export/aggregated_sinks",
           claim: "Aggregated sinks combine and route log entries from all resources in a folder or organization to a central destination, with filters that control which entries are routed.",
+        },
+        {
+          id: "required-sink",
+          title: "Route log entries",
+          url: "https://docs.cloud.google.com/logging/docs/routing/overview",
+          claim: "The _Required sink's filter includes Access Transparency logs together with Admin Activity and System Event audit logs.",
         },
       ],
       choices: [
@@ -630,7 +636,7 @@ export const practiceExamThreeSecureSection = {
           id: "d",
           text: "Create an aggregated sink that routes the Access Transparency logs to a log bucket with a seven-year retention period.",
           feedback: "Correct. Access Transparency logs record Google personnel access, and an aggregated sink can route them from the whole organization to a bucket whose retention can be set to seven years.",
-          evidenceIds: ["access-transparency", "aggregated-sinks", "log-buckets"],
+          evidenceIds: ["access-transparency", "aggregated-sinks", "log-buckets", "required-sink"],
         },
         {
           id: "e",

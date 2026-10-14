@@ -90,7 +90,7 @@ The other 52 questions use considerations that earlier sets already cover, with 
 | pca-p3-secure-08 | single | 3.1.i | T11 | yes | none | Organization policy that limits Model Garden models to an approved list | d | D6, D4, D1 | L2, L4 |
 | pca-p3-secure-09 | single | 3.2.a | T8 | no | KnightMotives Automotive | Cloud External Key Manager keys held outside Google | b | D7, D7, D7 | L3, L4 |
 | pca-p3-secure-10 | single | 3.2.b | T8 | no | none | Sensitive Data Protection discovery profiles across BigQuery | c | D1, D7, D2 | L3, L4 |
-| pca-p3-secure-11 | multiple | 3.2.d | T8 | no | EHR Healthcare | Access Approval for Google personnel access, and Access Transparency logs kept for seven years (choose two) | c, d | D6, D6, D4 | L2, L4 |
+| pca-p3-secure-11 | multiple | 3.2.d | T8 | no | EHR Healthcare | Access Approval for Google personnel access, and Access Transparency logs kept for seven years (choose two) | c, d | D6, D6, D7 | L2, L4 |
 
 ### Plan: analyze
 
@@ -186,3 +186,9 @@ Section authors may change a planned row before writing its section. Each change
   - Full draft: 60 questions, 5 choose-two questions, correct letters a 15, b 14, c 14, d 12, and the correct option strictly the longest in 7 of 55 single-choice questions. 27 questions have a near-miss pair, and the median reading load is 164.5 words.
   - EHR Healthcare has 8 questions in 5 sections and KnightMotives Automotive 8 in 6 sections. AI is decisive in 7 questions. The allocation matches the coverage matrix, and no consideration is used more than twice. No field shares a run of more than 4 words with a case study.
   - Question types: T1 5, T2 4, T3 4, T4 6, T5 4, T6 6, T7 8, T8 3, T9 5, T10 8, T11 5, T12 2.
+- 2026-10-14: Applied the fresh-session review of the `secure` and `analyze` sections after #40 and #43 merged. All 20 keys were confirmed.
+  - secure-01's lien option now states that project liens are a Preview feature and covers only one project, because the liens page is Preview and does not say which roles can remove a lien.
+  - secure-04's shared-password feedback now rests on Privileged Access Manager's documented grant and revocation, instead of a service account key page.
+  - analyze-01's external-address option now uses Google Cloud's published external IP ranges, because Cloud Build publishes no ranges for its default pool, and its stem names the change that broke the builds.
+  - secure-11 cites the _Required sink, which receives Access Transparency logs and whose bucket retention can't change, analyze-04 cites the complete violation list in the logs, and secure-09 cites the Cloud KMS protection levels.
+  - secure-04 and secure-06 now state three constraints each, and secure-07 and analyze-06 use organization types that no other set uses.
