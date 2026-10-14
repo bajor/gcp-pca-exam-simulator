@@ -618,7 +618,7 @@ export const practiceExamTwoDesignSection = {
       section: "design",
       objective: "1.4 Creating a migration plan: 1.4.a integrating solutions with existing systems",
       prompt: "A food distributor is building new supply chain applications on Google Cloud that must launch this year, but its inventory data stays on an on-premises mainframe that will be replaced within three years. The mainframe team can expose inventory transactions as internal APIs, and it worries that the new applications will overload the mainframe. The architects require that replacing the mainframe later must not force changes to the new applications, and that the applications read current inventory, not daily snapshots. What should you do?",
-      verifiedOn: "2026-10-02",
+      verifiedOn: "2026-10-14",
       evidence: [
         {
           id: "apigee",
@@ -630,7 +630,7 @@ export const practiceExamTwoDesignSection = {
       choices: [
         {
           id: "a",
-          text: "Have the new applications call the mainframe's inventory APIs directly, with quotas in each application that limit the load on the mainframe.",
+          text: "Have the new applications call the mainframe's inventory APIs directly, with rate limits in each application that cap the load on the mainframe.",
           feedback: "Incorrect. Applications that call the mainframe's APIs directly depend on its interface, so replacing the mainframe would force changes to every application, while an API proxy keeps the interface consistent.",
           evidenceIds: ["apigee"],
         },
@@ -648,8 +648,8 @@ export const practiceExamTwoDesignSection = {
         },
         {
           id: "d",
-          text: "Put Apigee API proxies in front of the mainframe's inventory APIs, with quotas that limit the load on the mainframe, and have the new applications call only the proxies.",
-          feedback: "Correct. The proxies give the applications a consistent interface, so the backend can change without disrupting them, quotas protect the mainframe, and every call still reads current inventory.",
+          text: "Put Apigee API proxies in front of the mainframe's inventory APIs, with rate limits that cap the load on the mainframe, and have the new applications call only the proxies.",
+          feedback: "Correct. The proxies give the applications a consistent interface, so the backend can change without disrupting them, rate limiting protects the mainframe, and every call still reads current inventory.",
           evidenceIds: ["apigee"],
         },
       ],

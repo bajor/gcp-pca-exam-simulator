@@ -17,7 +17,7 @@ const bqReference = {
   id: "bq-reference",
   title: "bq command-line tool reference",
   url: "https://docs.cloud.google.com/bigquery/docs/reference/bq-cli-reference",
-  claim: "The bq load command loads data into a table, for example from a CSV file in Cloud Storage, and the bq cp command creates a copy of a table, a table clone, or a table snapshot.",
+  claim: "The bq load command loads data into a table, for example from a CSV file in Cloud Storage, and the bq cp command creates a copy of a table, a table clone, or a table snapshot. To use the bq tool locally, you install and configure the gcloud CLI, and bq commands use the service account credentials that you set through the gcloud CLI.",
 } as const;
 
 export const practiceExamTwoImplementSection = {
@@ -29,8 +29,8 @@ export const practiceExamTwoImplementSection = {
       kind: "single",
       section: "implement",
       objective: "5.1 Advising development and operation teams to ensure the successful deployment of the solution: 5.1.a application and infrastructure deployment",
-      prompt: "A media streaming company deploys its recommendation API to GKE with Cloud Deploy. Last month, a release with a bad model configuration reached all users at once and lowered engagement for a day before anyone rolled it back. The team now wants each release to reach only a small share of traffic first, to run its automated API tests against the new version without manual steps, and to stop the rollout if those tests fail. What should you do?",
-      verifiedOn: "2026-10-07",
+      prompt: "A weather forecasting company deploys its forecast API to GKE with Cloud Deploy. Last month, a release with a bad model configuration reached all users at once and served wrong forecasts for a day before anyone rolled it back. The team now wants each release to reach only a small share of traffic first, to run its automated API tests against the new version without manual steps, and to stop the rollout if those tests fail. What should you do?",
+      verifiedOn: "2026-10-14",
       evidence: [
         {
           id: "deploy-canary",
@@ -61,7 +61,7 @@ export const practiceExamTwoImplementSection = {
         },
         {
           id: "d",
-          text: "Deploy each release to all users with a rolling update, and roll the release back from Cloud Deploy if engagement drops in the following days.",
+          text: "Deploy each release to all users with a rolling update, and roll the release back from Cloud Deploy if users report wrong forecasts in the following days.",
           feedback: "Incorrect. A rolling update to all users exposes everyone before any test runs, while a canary rolls a new version out to a subset of users before rolling out fully.",
           evidenceIds: ["deploy-canary"],
         },
@@ -75,7 +75,7 @@ export const practiceExamTwoImplementSection = {
       objective: "5.1 Advising development and operation teams to ensure the successful deployment of the solution: 5.1.b API management best practices",
       caseStudyId: "knightmotives-automotive",
       prompt: "KnightMotives Automotive exposes its build-to-order API to dealer systems through Apigee, with a daily quota for each dealer. The order backend runs on KnightMotives' outdated mainframe, which slows down above 50 requests per second. Last week, a dealer system's retry bug sent 2,000 requests in 10 seconds, stayed within its daily quota, and made ordering unreliable for every dealer. KnightMotives wants to protect the mainframe from such bursts without changing the dealers' daily allowances, the dealer systems, or the mainframe. What should you do?",
-      verifiedOn: "2026-10-07",
+      verifiedOn: "2026-10-14",
       evidence: [
         {
           ...knightMotivesCaseStudy,
@@ -85,7 +85,7 @@ export const practiceExamTwoImplementSection = {
           id: "spike-arrest",
           title: "SpikeArrest policy",
           url: "https://docs.cloud.google.com/apigee/docs/api-platform/reference/policies/spike-arrest-policy",
-          claim: "The SpikeArrest policy protects against traffic surges by throttling the number of requests that an API proxy processes and sends to a backend. The Quota policy sets how many requests an app may submit over an hour, day, week, or month, and Google recommends Quota for business contracts and SpikeArrest for sudden spikes in traffic.",
+          claim: "The SpikeArrest policy protects against traffic surges by throttling the number of requests that an API proxy processes and sends to a backend. Google recommends the Quota policy for business contracts with developers and partners, rather than for operational traffic management, and SpikeArrest for sudden spikes in API traffic.",
         },
       ],
       choices: [
@@ -98,7 +98,7 @@ export const practiceExamTwoImplementSection = {
         {
           id: "b",
           text: "Add a Quota policy to the API proxy with a lower daily limit for each dealer, so that bursts are throttled before they reach the backend.",
-          feedback: "Incorrect. A Quota policy counts requests over an hour or longer to enforce business contracts, so a lower daily limit changes the dealers' allowances and still lets a 10-second burst through.",
+          feedback: "Incorrect. A lower daily limit changes the dealers' daily allowances, which KnightMotives wants to keep, and Google recommends Quota for business contracts and SpikeArrest for sudden spikes in traffic.",
           evidenceIds: ["spike-arrest"],
         },
         {
@@ -122,7 +122,7 @@ export const practiceExamTwoImplementSection = {
       section: "implement",
       objective: "5.1 Advising development and operation teams to ensure the successful deployment of the solution: 5.1.c testing frameworks",
       prompt: "A logistics company's CI pipeline in Cloud Build runs thousands of unit tests on its routing service's code and then builds a container image. Last week, a base-image update removed the time zone files that the service reads at startup. All unit tests passed because they run outside the container, and the broken image reached staging. The team wants the pipeline to catch missing files and broken commands in each built image before the image is pushed. What should you do?",
-      verifiedOn: "2026-10-07",
+      verifiedOn: "2026-10-14",
       evidence: [
         {
           id: "image-tests",
@@ -152,8 +152,8 @@ export const practiceExamTwoImplementSection = {
         },
         {
           id: "d",
-          text: "Add a Container Structure Tests step after the build that checks the image for the required files and commands, and fail the build if a check fails.",
-          feedback: "Correct. Testing the structure of the built image checks that commands run as expected inside the container and that specific files are in place, which unit tests outside the container cannot do.",
+          text: "Add a step after the build that runs structure tests on the image for the required files and commands, and fail the build if a check fails.",
+          feedback: "Correct. A structure test of the built image, for example with the Container Structure Tests framework, checks that commands run as expected inside the container and that specific files are in place.",
           evidenceIds: ["image-tests"],
         },
       ],
@@ -165,7 +165,7 @@ export const practiceExamTwoImplementSection = {
       section: "implement",
       objective: "5.1 Advising development and operation teams to ensure the successful deployment of the solution: 5.1.d data and system migration and management tooling",
       prompt: "A hospital group plans to move 120 VMware VMs from its data center to Compute Engine over three months. Several VMs run applications whose vendors no longer exist, so the team cannot reinstall or reconfigure them. Each VM may be offline only during a short cutover window, and the team wants to test each migrated VM in Google Cloud before its cutover while the source VM keeps running. What should you do?",
-      verifiedOn: "2026-10-07",
+      verifiedOn: "2026-10-14",
       evidence: [
         {
           id: "m2vm-overview",
@@ -177,7 +177,7 @@ export const practiceExamTwoImplementSection = {
           id: "m2vm-lifecycle",
           title: "VM migration process",
           url: "https://docs.cloud.google.com/migrate/virtual-machines/docs/5.0/discover/lifecycle",
-          claim: "Migrate to Virtual Machines continuously replicates disk data from the source VMs to Google Cloud without downtime on the source. You can create test clones from the replicated data and test them on Google Cloud while the source keeps running, and then perform a predictable cut-over.",
+          claim: "Migrate to Virtual Machines lifts and shifts VMs to Compute Engine with minor automatic modifications. It continuously replicates disk data from the source VMs to Google Cloud without downtime on the source. You can create test clones from the replicated data and test them on Google Cloud while the source keeps running, and then perform a predictable cut-over.",
         },
         {
           id: "dms-overview",
@@ -190,7 +190,7 @@ export const practiceExamTwoImplementSection = {
         {
           id: "a",
           text: "Export each VM as a disk image file, upload the files to Cloud Storage, and import them as Compute Engine images during each cutover window.",
-          feedback: "Incorrect. Exporting, uploading, and importing a whole VM during the cutover takes far longer than a short window and gives no tested copy beforehand, while continuous replication keeps the source running until the cut-over.",
+          feedback: "Incorrect. Importing each VM only during its cutover window leaves no migrated copy to test beforehand, while Migrate to Virtual Machines lets the team test clones while the source keeps running.",
           evidenceIds: ["m2vm-lifecycle"],
         },
         {
@@ -202,8 +202,8 @@ export const practiceExamTwoImplementSection = {
         {
           id: "c",
           text: "Rebuild each application on new Compute Engine VMs from installation media, and copy the data across with a script during each cutover window.",
-          feedback: "Incorrect. Rebuilding from installation media requires reinstalling and reconfiguring applications whose vendors no longer exist, which the team cannot do, while Migrate to Virtual Machines moves the VMs as they are.",
-          evidenceIds: ["m2vm-overview"],
+          feedback: "Incorrect. Rebuilding from installation media requires reinstalling and reconfiguring applications whose vendors no longer exist, which the team cannot do, while Migrate to Virtual Machines lifts and shifts the VMs with only minor automatic modifications.",
+          evidenceIds: ["m2vm-lifecycle"],
         },
         {
           id: "d",
@@ -219,8 +219,8 @@ export const practiceExamTwoImplementSection = {
       kind: "single",
       section: "implement",
       objective: "5.2 Interacting with Google Cloud programmatically: 5.2.a Cloud Shell Editor, Cloud Code, and Cloud Shell Terminal",
-      prompt: "A university's teaching assistants maintain small Python scripts that manage course resources in a Google Cloud project. They work from shared library computers on which they cannot install software, and each uses the scripts a few hours a week. They need an editor, the Google Cloud CLI already authenticated as their own accounts, and files that persist between sessions. The department has no budget for development infrastructure and no one to administer it. What should you do?",
-      verifiedOn: "2026-10-07",
+      prompt: "A charity's volunteer coordinators maintain small Python scripts that manage event resources in a Google Cloud project. They work from shared office computers on which they cannot install software, and each uses the scripts a few hours a week. They need an editor, the Google Cloud CLI already authenticated as their own accounts, and files that persist between sessions. The charity has no budget for development infrastructure and no one to administer it. What should you do?",
+      verifiedOn: "2026-10-14",
       evidence: [
         {
           id: "cloud-shell",
@@ -250,32 +250,32 @@ export const practiceExamTwoImplementSection = {
           id: "cloud-workstations",
           title: "Cloud Workstations overview",
           url: "https://docs.cloud.google.com/workstations/docs/overview",
-          claim: "Cloud Workstations provides managed development environments that are defined by workstation configurations and grouped in workstation clusters attached to a VPC network.",
+          claim: "Cloud Workstations provides managed development environments that are defined by workstation configurations and grouped in workstation clusters attached to a VPC network. Workstations run on Compute Engine VMs in your project, and administrators and platform teams create the workstation configurations.",
         },
       ],
       choices: [
         {
           id: "a",
-          text: "Have the assistants open Cloud Shell Editor in the browser, which includes the Google Cloud CLI authenticated as their accounts and a persistent home directory.",
+          text: "Have the coordinators open Cloud Shell Editor in the browser, which includes the Google Cloud CLI authenticated as their accounts and a persistent home directory.",
           feedback: "Correct. Cloud Shell is free and runs in the browser with the Google Cloud CLI pre-installed and authenticated, and its home directory persists between sessions, which suits a few hours of use each week.",
           evidenceIds: ["cloud-shell", "cloud-shell-storage", "cloud-shell-pricing", "cloud-shell-quotas"],
         },
         {
           id: "b",
-          text: "Create a Cloud Workstations cluster and a workstation configuration, and give each assistant a workstation that runs a browser-based IDE with the Google Cloud CLI.",
-          feedback: "Incorrect. Cloud Workstations needs workstation clusters and configurations that someone must set up and pay for, which the department cannot provide.",
+          text: "Create a Cloud Workstations cluster and a workstation configuration, and give each coordinator a workstation that runs a browser-based IDE with the Google Cloud CLI.",
+          feedback: "Incorrect. Cloud Workstations needs workstation clusters and configurations that someone must set up and pay for, which the charity cannot provide.",
           evidenceIds: ["cloud-workstations", "cloud-shell-pricing"],
         },
         {
           id: "c",
-          text: "Create a Compute Engine VM with a remote desktop for each assistant, and install an IDE and the Google Cloud CLI on each VM.",
-          feedback: "Incorrect. VMs with remote desktops are development infrastructure that the department would have to pay for and administer, while Cloud Shell is free.",
+          text: "Create a Compute Engine VM with a remote desktop for each coordinator, and install an IDE and the Google Cloud CLI on each VM.",
+          feedback: "Incorrect. VMs with remote desktops are development infrastructure that the charity would have to pay for and administer, while Cloud Shell is free.",
           evidenceIds: ["cloud-shell-pricing"],
         },
         {
           id: "d",
-          text: "Install Visual Studio Code with the Cloud Code extension and the Google Cloud CLI on each of the shared library computers.",
-          feedback: "Incorrect. The assistants cannot install software on the library computers, while Cloud Shell needs only a web browser.",
+          text: "Install Visual Studio Code with the Cloud Code extension and the Google Cloud CLI on each of the shared office computers.",
+          feedback: "Incorrect. The coordinators cannot install software on the office computers, while Cloud Shell needs only a web browser.",
           evidenceIds: ["cloud-shell"],
         },
       ],
@@ -287,7 +287,7 @@ export const practiceExamTwoImplementSection = {
       section: "implement",
       objective: "5.2 Interacting with Google Cloud programmatically: 5.2.b Google Cloud SDKs",
       prompt: "A retailer's on-premises server exports the day's sales to CSV files each night. A bash script on that server must upload the files to a Cloud Storage bucket and then load them into a BigQuery table. The operations team wants to use only the command-line tools that come with the Google Cloud CLI, and it does not want to write its own HTTP calls or authentication code. What should you do?",
-      verifiedOn: "2026-10-07",
+      verifiedOn: "2026-10-14",
       evidence: [
         {
           id: "gcloud-storage-cp",
@@ -296,6 +296,12 @@ export const practiceExamTwoImplementSection = {
           claim: "The gcloud storage cp command uploads, downloads, and copies Cloud Storage objects, and it copies data between the local file system and the cloud.",
         },
         bqReference,
+        {
+          id: "gcloud-auth",
+          title: "Authenticate for the gcloud CLI",
+          url: "https://docs.cloud.google.com/sdk/docs/authenticate",
+          claim: "All gcloud CLI commands need to authenticate to Google Cloud APIs. Workloads that run outside of Google Cloud can authenticate with a credential file that an environment variable or a gcloud CLI property specifies for automatic authentication.",
+        },
         {
           id: "gcloud-compute-scp",
           title: "gcloud compute scp",
@@ -320,13 +326,13 @@ export const practiceExamTwoImplementSection = {
           id: "c",
           text: "Upload the files and start the load job with curl calls to the Cloud Storage and BigQuery REST APIs, using an access token that the script requests itself.",
           feedback: "Incorrect. curl calls with a token that the script manages are the HTTP and authentication code that the team does not want to write, while the Google Cloud CLI tools handle both.",
-          evidenceIds: ["gcloud-storage-cp", "bq-reference"],
+          evidenceIds: ["gcloud-storage-cp", "bq-reference", "gcloud-auth"],
         },
         {
           id: "d",
           text: "Upload the files with gcloud storage cp, and then load them into the table with bq load.",
-          feedback: "Correct. gcloud storage cp copies the files from the local file system to Cloud Storage, and bq load loads the CSV data from Cloud Storage into the BigQuery table.",
-          evidenceIds: ["gcloud-storage-cp", "bq-reference"],
+          feedback: "Correct. gcloud storage cp and bq load come with the Google Cloud CLI and use the credentials configured for it, and they upload the files to Cloud Storage and load the CSV data into the table.",
+          evidenceIds: ["gcloud-storage-cp", "bq-reference", "gcloud-auth"],
         },
       ],
       correctChoiceId: "d",
@@ -338,7 +344,7 @@ export const practiceExamTwoImplementSection = {
       section: "implement",
       objective: "5.2 Interacting with Google Cloud programmatically: 5.2.f Google API client libraries",
       prompt: "A claims company's Python service sends each claim note to Gemini on Agent Platform with hand-written REST requests, and it parses the model's free-text answers with regular expressions. The parsing breaks whenever the model words its answers differently, and the request code breaks when request fields change. The developers want Google's supported library for Gemini instead of hand-written requests, and answers that downstream systems can always read as JSON with fixed fields. What should you do? Choose two.",
-      verifiedOn: "2026-10-07",
+      verifiedOn: "2026-10-14",
       evidence: [
         {
           id: "genai-sdk",
@@ -350,7 +356,7 @@ export const practiceExamTwoImplementSection = {
           id: "structured-output",
           title: "Structured output",
           url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/capabilities/control-generated-output",
-          claim: "When you include a response schema with a prompt, the model's response always follows the schema. Generative model outputs can vary, so a response schema ensures that you always receive valid JSON that downstream tasks can rely on, without post-processing.",
+          claim: "When you include a response schema with a prompt, the model's response always follows the schema. Generative model outputs can vary, so a response schema ensures valid JSON that downstream tasks can rely on, and requests must include both a response schema and the application/json response MIME type to ensure valid JSON.",
         },
         {
           id: "sdk-migration",
@@ -369,13 +375,13 @@ export const practiceExamTwoImplementSection = {
         {
           id: "b",
           text: "Replace the hand-written REST requests with the Google Gen AI SDK for Python, which provides the supported interface to Gemini models on Agent Platform.",
-          feedback: "Correct. The Google Gen AI SDK provides a unified interface to Gemini models on Agent Platform, so the service no longer builds requests by hand.",
-          evidenceIds: ["genai-sdk"],
+          feedback: "Correct. The Google Gen AI SDK provides a unified interface to Gemini models on Agent Platform and replaces the deprecated generative AI modules, so the service no longer builds requests by hand.",
+          evidenceIds: ["genai-sdk", "sdk-migration"],
         },
         {
           id: "c",
-          text: "Set a response schema in each request, so that the model's answers always follow the schema as valid JSON with the fields that downstream systems expect.",
-          feedback: "Correct. When a request includes a response schema, the response always follows it, so downstream systems can rely on valid JSON with fixed fields.",
+          text: "Set a response schema and the application/json response MIME type in each request, so that the model returns valid JSON with the fields that downstream systems expect.",
+          feedback: "Correct. A request that includes a response schema and the application/json response MIME type returns valid JSON that follows the schema, so downstream systems can rely on fixed fields.",
           evidenceIds: ["structured-output"],
         },
         {
@@ -386,8 +392,8 @@ export const practiceExamTwoImplementSection = {
         },
         {
           id: "e",
-          text: "Tune a Gemini model on example claim notes and answers, so that the tuned model learns to answer in the same format every time.",
-          feedback: "Incorrect. Generative model outputs can vary, so a tuned model still does not guarantee the format, while a response schema ensures that every answer is valid JSON.",
+          text: "Tune a Gemini model on example claim notes and answers, so that the tuned model learns to answer in the format of the examples.",
+          feedback: "Incorrect. Generative model outputs can vary, so a tuned model still does not guarantee the format, while a response schema with the application/json response MIME type ensures valid JSON.",
           evidenceIds: ["structured-output"],
         },
       ],
