@@ -1,10 +1,11 @@
 import type { ExamCatalogEntry } from "../../domain/catalog";
 import type { QuestionSet } from "../../domain/questions";
-import { candidateQuestionSets } from "./registry";
+import { practiceExamOneCandidateQuestionSets } from "./practice1/candidates";
 
-// Publishes only a registered candidate; `make verify-sources` checks that it has an exact acceptance record.
+// Imports only the candidates of published exams, so the app bundle never contains unreviewed drafts.
+// `make verify-sources` checks that each published candidate has an exact acceptance record.
 function acceptedCandidate(id: string): QuestionSet {
-  const questionSet = candidateQuestionSets.find((candidate) => candidate.id === id);
+  const questionSet = practiceExamOneCandidateQuestionSets.find((candidate) => candidate.id === id);
   if (questionSet === undefined) {
     throw new Error(`${id}: the accepted candidate is not registered.`);
   }

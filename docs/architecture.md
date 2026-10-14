@@ -13,7 +13,7 @@ timestamp: 2026-10-01T00:00:00Z
 
 The browser loads a static React application from GitHub Pages at `https://bajor.github.io/gcp-pca-exam-simulator/`. The application imports a typed catalog of immutable TypeScript question sets, stores current or completed attempts in browser `localStorage`, and opens cited Google Cloud documentation in external pages. There is no application server or user account.
 
-Since 2026-10-14 the catalog lists Practice Exam 1 as available, using the accepted candidate `professional-cloud-architect-v6-1-practice-1-v2`, and Practice Exams 2 and 3 as coming soon. The application was ported from the Professional Machine Learning Engineer (PMLE) simulator without its question content, as recorded in [ADR 0001](/adr/0001-port-pmle-simulator.md).
+After its acceptance on 2026-10-14, the catalog lists Practice Exam 1 as available, using the accepted candidate `professional-cloud-architect-v6-1-practice-1-v2`, and Practice Exams 2 and 3 as coming soon. The application was ported from the Professional Machine Learning Engineer (PMLE) simulator without its question content, as recorded in [ADR 0001](/adr/0001-port-pmle-simulator.md).
 
 ## Module Ownership
 
@@ -25,7 +25,7 @@ Since 2026-10-14 the catalog lists Practice Exam 1 as available, using the accep
 | `src/domain/catalog.ts` | Available and coming-soon catalog entry types. |
 | `src/data/questionSets/practice<number>/` | One practice exam's section modules, draft manifests, and candidate list. The directory is created when the first section of that exam is authored. |
 | `src/data/questionSets/registry.ts` | Aggregates every exam's drafts and candidates for structural, source, and audit verification. |
-| `src/data/questionSets/index.ts` | Runtime catalog of available and coming-soon entries. |
+| `src/data/questionSets/index.ts` | Runtime catalog of available and coming-soon entries. It imports only the candidate lists of published exams, not the verification registry. |
 | `docs/reviews/` | Independent acceptance and rejection records checked by CI. |
 | `docs/authoring/` | The question style guide and objective coverage matrix, which define a good question and a complete set. |
 | `.claude/skills/pca-question-authoring/` | The procedure for planning, sourcing, writing, registering, and verifying question sections. |
