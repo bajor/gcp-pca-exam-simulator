@@ -352,11 +352,13 @@ it("revises one question in a new section and leaves the original section unchan
     prompt: "A revised prompt.",
     verifiedOn: "2026-10-07",
     feedback: { a: "Correct. The revised feedback." },
+    choiceTexts: { b: "A revised option text." },
   });
   expect(revised.author).toBe("reviser");
   expect(revised.questions[0]).toMatchObject({ id: target.id, prompt: "A revised prompt.", verifiedOn: "2026-10-07" });
   expect(revised.questions[0].choices).toHaveLength(target.choices.length);
   expect(revised.questions[0].choices.find((choice) => choice.id === "a")?.feedback).toBe("Correct. The revised feedback.");
+  expect(revised.questions[0].choices.find((choice) => choice.id === "b")?.text).toBe("A revised option text.");
   expect(revised.questions.slice(1)).toEqual(others);
   expect(section.questions[0].prompt).toBe(originalPrompt);
 });
