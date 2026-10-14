@@ -30,7 +30,7 @@ The plan allocates questions exactly as the coverage matrix requires and keeps t
 | AI decisive (6 to 12) | 7 |
 | Case-study questions (12 to 18) | 16: Altostrat Media 8 in five sections, KnightMotives Automotive 8 in five sections |
 | T4 troubleshooting (at least 5) | 5 |
-| T6 reliability and recovery (at least 5) | 6 |
+| T6 reliability and recovery (at least 5) | 5 |
 | T7 security and identity (at least 6) | 10 |
 | T9 cost optimization (at least 4) | 5 |
 | T3 migration planning (at least 3) | 3 |
@@ -38,7 +38,7 @@ The plan allocates questions exactly as the coverage matrix requires and keeps t
 | Considerations of objectives 1.1, 1.5, 2.4, and 2.5 | 1.1.a, 1.1.b, 1.1.c, 1.1.h, 1.5.b, 2.4.c, and 2.5.b, none of which Practice Exam 1 uses |
 | Feasibility check (coverage rule 4), counting Practice Exams 1 and 2 as written | Passes for all 22 objectives. Practice Exam 3 must use 1.1.e, 1.1.f, 1.1.k, 1.1.l, 1.5.a, 2.4.b, and 2.5.c, and must also cover 2.2.f. |
 
-The plan uses every consideration that Practice Exam 1 left unused, except those reserved for Practice Exam 3 above. Near-miss pairs (lever L2) and the longest-option limit are checked per section with `npm run question-set-report`. Kind is `single` or `multiple` (choose-two). T3 and T4 are exactly at their minimums, so a revision that changes one of those questions must keep its type or add another question of the same type.
+The plan uses every consideration that Practice Exam 1 left unused, except those reserved for Practice Exam 3 above. Near-miss pairs (lever L2) and the longest-option limit are checked per section with `npm run question-set-report`. Kind is `single` or `multiple` (choose-two). T3, T4, and T6 are exactly at their minimums, so a revision that changes one of those questions must keep its type or add another question of the same type.
 
 ### Plan: design
 
@@ -112,8 +112,8 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
 |---|---|---|---|---|---|---|---|---|---|
 | pca-p2-implement-01 | single | 5.1.a | T10 | no | none | Cloud Deploy canary with automated deployment verification | c | D2, D7, D8 | L2, L4 |
 | pca-p2-implement-02 | single | 5.1.b | T1 | no | KnightMotives Automotive | Apigee SpikeArrest policy that protects a fragile backend from bursts | a | D7, D2, D6 | L2, L4 |
-| pca-p2-implement-03 | single | 5.1.c | T6 | no | none | Container structure tests in CI for each built image | d | D6, D3, D8 | L3, L4 |
-| pca-p2-implement-04 | single | 5.1.d | T3 | no | none | Migrate to Virtual Machines with continuous replication and test clones | b | D3, D1, D7 | L3, L4 |
+| pca-p2-implement-03 | single | 5.1.c | T10 | no | none | Structure tests in CI for each built image | d | D6, D3, D8 | L3, L4 |
+| pca-p2-implement-04 | single | 5.1.d | T3 | no | none | Migrate to Virtual Machines with continuous replication and test clones | b | D7, D1, D3 | L3, L4 |
 | pca-p2-implement-05 | single | 5.2.a | T10 | no | none | Cloud Shell Editor for browser-based work without installs or a budget | a | D2, D1, D3 | L2, L4 |
 | pca-p2-implement-06 | single | 5.2.b | T10 | no | none | gcloud storage cp and bq load in a nightly script | d | D7, D7, D1 | L2, L4 |
 | pca-p2-implement-07 | multiple | 5.2.f | T11 | yes | none | Google Gen AI SDK and a response schema instead of hand-written REST and parsing (choose two) | b, c | D1, D7, D2 | L3, L4 |
@@ -177,6 +177,14 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
   - Full draft: 60 questions, 4 choose-two questions, correct letters a 15, b 14, c 14, d 13, and the correct option strictly the longest in 13 of 56 single-choice questions. 49 questions have a near-miss pair, and the median reading load is 174 words.
   - Altostrat Media and KnightMotives Automotive have 8 questions each, in 5 sections each. AI is decisive in 7 questions, and every consideration is used at most once.
   - Question types: T1 5, T2 4, T3 3, T4 5, T5 2, T6 6, T7 10, T8 3, T9 5, T10 9, T11 6, T12 2. Every type minimum is met.
+- 2026-10-14: Applied the fresh-session review of the `implement` section. All 7 keys were confirmed.
+  - implement-07's correct choice c now sets the application/json response MIME type with the response schema, because Google's structured output page requires both to ensure valid JSON. Choice e and the evidence claim say the same.
+  - implement-02's choice b feedback no longer says that a Quota policy counts only over an hour or longer, because Quota periods can be as short as a minute. It cites Google's advice to use Quota for business contracts and SpikeArrest for sudden spikes.
+  - design-12 now protects the mainframe with rate limits instead of quotas, so that it agrees with that advice and with implement-02. Its source was verified again on 2026-10-14.
+  - implement-01 now describes a weather forecasting company, so that it does not repeat Altostrat Media facts outside a case-study question. implement-05 now describes a charity, because Google Workspace for Education blocks Cloud Shell by default.
+  - implement-03's key names structure tests instead of the Container Structure Tests tool, which its README says is not officially supported and is in maintenance mode. The question is now type T10, which leaves T6 at its minimum of 5.
+  - implement-04's choice a and c feedback, implement-06's choice d feedback, and implement-07's choice b feedback now state only what their sources support. implement-06 cites the gcloud CLI authentication page.
+  - Every source of the implement questions was read again, and all 7 questions were verified again on 2026-10-14.
 - 2026-10-14: Applied the fresh-session review of the `operate` section. Six keys were confirmed; operate-06's key could not be carried out as written and was corrected.
   - operate-06 now records the Cloud Deploy metrics each month, starting before the changes, because the metrics cover only a rolling 30 days. The changes are now planned for next month instead of last quarter.
   - operate-01's choice a now reads the alert emails with a Cloud Run service, a near-miss of the key that fails Google's recommendation to use webhook or Pub/Sub channels for automation. Before this change, only the key automated anything.
