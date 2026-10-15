@@ -356,7 +356,7 @@ export const practiceExamThreeProvisionSection = {
         },
         {
           id: "d",
-          text: "Move the data to a Hyperdisk Throughput volume, and raise its throughput before each quarterly reprocessing job starts.",
+          text: "Move the data to a Hyperdisk Throughput volume, and change its capacity and throughput separately as the data and the quarterly peaks require.",
           feedback: "Incorrect. Hyperdisk Throughput serves applications that don't need high IOPS, while the reprocessing job needs three times the usual IOPS.",
           evidenceIds: ["hyperdisk-types"],
         },
