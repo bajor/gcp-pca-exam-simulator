@@ -13,7 +13,7 @@ timestamp: 2026-10-14T00:00:00Z
 
 Implement [PRD 0002](/prd/0002-practice-exam-question-sets.md) for Practice Exam 3 by following the authoring skill `.claude/skills/pca-question-authoring/SKILL.md`, the [question style guide](/authoring/question-style-guide.md), and the [objective coverage matrix](/authoring/coverage-matrix.md).
 
-- Set identifier: `professional-cloud-architect-v6-1-practice-3`, version 1.
+- Set identifier: `professional-cloud-architect-v6-1-practice-3`, version 1, followed by `professional-cloud-architect-v6-1-practice-3-v2`, version 2, after the independent review rejected three questions.
 - Authors: `claude-opus-5.5-p3-<section>-<YYYYMMDD>`, one identifier per section, dated on the day its section is written.
 - Case studies: EHR Healthcare and KnightMotives Automotive. The coverage matrix lets the Practice Exam 3 author choose two case studies. Practice Exams 1 and 2 already use all four, and this pair has not been used together. Both case studies still state many untested requirements whose decisions rest on generally available infrastructure products: provider data ingestion, latency to all customers, multiple container environments, and centralized visibility for EHR Healthcare; plant connectivity, the security program after breaches, dealer and CRM integration, and vehicle data for KnightMotives Automotive.
 - Guide check: on 2026-10-14 the certification page linked the current guide, which is byte-identical to the copy checked on 2026-10-02, with the same six sections, weights, and four case studies. All four case-study documents are byte-identical to the copies checked on 2026-10-02.
@@ -201,3 +201,10 @@ Section authors may change a planned row before writing its section. Each change
 - 2026-10-14: Registered candidate `professional-cloud-architect-v6-1-practice-3` version 1 in `src/data/questionSets/practice3/candidates.ts` for the independent acceptance review. All six sections have been reviewed, and every review has been applied.
   - Measurements: 60 questions, 5 choose-two questions, correct letters a 15, b 14, c 14, d 12, and the correct option strictly the longest in 7 of 55 single-choice questions. 28 questions have a near-miss pair, and the median reading load is 165 words.
   - EHR Healthcare has 8 questions in 5 sections and KnightMotives Automotive 8 in 6 sections. AI is decisive in 7 questions. Types: T1 5, T2 4, T3 4, T4 6, T5 4, T6 6, T7 8, T8 3, T9 5, T10 8, T11 5, T12 2.
+- 2026-10-14: The independent acceptance review (PR #51) rejected version 1. 57 of 60 questions passed, and secure-10, analyze-04, and analyze-08 were returned because one distractor in each failed no stated requirement.
+  - Version 2, `professional-cloud-architect-v6-1-practice-3-v2`, is registered as a second candidate. Version 1 stays registered and unchanged, because the rejection record is bound to it.
+  - The new modules `secureV2.ts` and `analyzeV2.ts` derive from the version 1 modules with `reviseQuestionInSection`, which now also accepts revised option text, and they change only the three rejected questions (authors `claude-opus-5.5-p3-secure-v2-20261014` and `claude-opus-5.5-p3-analyze-v2-20261014`).
+  - secure-10's option d now runs an inspection job against each copied table, which is possible but scans the tables one by one.
+  - analyze-04 now also rules out building or running additional clusters, which option d's copy cluster would need.
+  - analyze-08 now requires a decision within three months and a budget for one production build, which option d's year of two production builds fails.
+  - The sources of the three questions were read again on 2026-10-14. The set's measurements are unchanged.

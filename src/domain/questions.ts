@@ -280,6 +280,7 @@ export interface QuestionRevision {
   readonly prompt: string;
   readonly verifiedOn: BaseQuestion["verifiedOn"];
   readonly feedback: Partial<Readonly<Record<ChoiceId, string>>>;
+  readonly choiceTexts?: Partial<Readonly<Record<ChoiceId, string>>>;
 }
 
 // Builds the next version of a section with one question revised. Corrections use it instead of editing
@@ -304,10 +305,11 @@ export function reviseQuestionInSection<S extends ExamSection>(
 
 function reviseQuestion<Q extends Question>(question: Q, revision: QuestionRevision): Q {
   // Mapping a fixed-length choice tuple keeps its length, which the tuple type cannot express through map.
-  const choices = question.choices.map((choice) => {
-    const feedback = revision.feedback[choice.id];
-    return feedback === undefined ? choice : { ...choice, feedback };
-  }) as unknown as Q["choices"];
+  const choices = question.choices.map((choice) => ({
+    ...choice,
+    text: revision.choiceTexts?.[choice.id] ?? choice.text,
+    feedback: revision.feedback[choice.id] ?? choice.feedback,
+  })) as unknown as Q["choices"];
   return { ...question, prompt: revision.prompt, verifiedOn: revision.verifiedOn, choices };
 }
 
