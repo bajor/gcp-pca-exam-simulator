@@ -168,7 +168,7 @@ If the review rejects the candidate, keep the rejected draft and candidate regis
 
 ## Publication
 
-After the acceptance record for the exact candidate is merged, replace the exam's coming-soon entry in `src/data/questionSets/index.ts` with an available entry. Look up the accepted candidate by identifier and throw an error if it is missing. `make verify-sources` then confirms that the published set has an exact acceptance and no matching rejection.
+After the acceptance record for the exact candidate is merged, add the exam's candidate list to `publishedExamCandidates` in `src/data/questionSets/index.ts`, and replace the exam's coming-soon entry with an available entry. Look up the accepted candidate by identifier and throw an error if it is missing. `make verify-sources` then confirms that the published set has an exact acceptance and no matching rejection.
 
 ## Acceptance Criteria
 

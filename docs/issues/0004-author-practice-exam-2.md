@@ -2,7 +2,7 @@
 type: Issue
 title: Author Practice Exam 2
 description: Plan, author, review, and publish the second original 60-question PCA practice set, with the Altostrat Media and KnightMotives Automotive case studies.
-status: in-progress
+status: complete
 labels: [content]
 blocked_by: []
 tracker: "One pull request per section, then candidate review and publication"
@@ -202,3 +202,6 @@ The plan uses every consideration that Practice Exam 1 left unused, except those
   - Version 2, `professional-cloud-architect-v6-1-practice-2-v2`, is registered as a second candidate. Version 1 stays registered and unchanged, because the rejection record is bound to it.
   - The new module `provisionV2.ts` derives from the version 1 module with `reviseQuestionInSection` and changes only provision-09 (author `claude-opus-5.5-p2-provision-v2-20261014`).
   - provision-09 now also states that the code and the rules file can't change this quarter, and that the bank accepts the cost of one idle instance but not of more instances than the traffic needs. Its choice b, c, and d feedback names these constraints. It stays type T4, and its sources were verified again on 2026-10-14.
+- 2026-10-14: The independent acceptance review (PR #44) accepted version 2 with all 60 questions and no exceptions. The record is bound to SHA-256 `19f8f70af38a90d7e0e5b600c3bfebd745aec3259d6307b616cbe82cc2db8ba0`.
+  - The runtime catalog in `src/data/questionSets/index.ts` now lists Practice Exam 2 as available. It looks up the accepted candidate `professional-cloud-architect-v6-1-practice-2-v2` among the candidates of published exams and throws an error if the candidate is not registered.
+  - The reviewer observed that `reviseQuestionInSection` replaces a section's author, so the version 2 authors list names only the version 2 provision author. Practice Exam 1 version 2 has the same property.
