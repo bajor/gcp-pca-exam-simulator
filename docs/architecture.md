@@ -13,7 +13,7 @@ timestamp: 2026-10-01T00:00:00Z
 
 The browser loads a static React application from GitHub Pages at `https://bajor.github.io/gcp-pca-exam-simulator/`. The application imports a typed catalog of immutable TypeScript question sets, stores current or completed attempts in browser `localStorage`, and opens cited Google Cloud documentation in external pages. `vite.config.ts` builds each published practice exam's question data into its own chunk, and the question model that the exams and the application share, `src/domain/questions.ts` and `src/domain/caseStudies.ts`, into one more chunk. There is no application server or user account.
 
-After their acceptance on 2026-10-14, the catalog lists Practice Exams 1 and 2 as available, using the accepted candidates `professional-cloud-architect-v6-1-practice-1-v2` and `professional-cloud-architect-v6-1-practice-2-v2`, and Practice Exam 3 as coming soon. The application was ported from the Professional Machine Learning Engineer (PMLE) simulator without its question content, as recorded in [ADR 0001](/adr/0001-port-pmle-simulator.md).
+After their acceptance on 2026-10-14 and 2026-10-15, the catalog lists Practice Exams 1, 2, and 3 as available, using the accepted candidates `professional-cloud-architect-v6-1-practice-1-v2`, `professional-cloud-architect-v6-1-practice-2-v2`, and `professional-cloud-architect-v6-1-practice-3-v2`. The application was ported from the Professional Machine Learning Engineer (PMLE) simulator without its question content, as recorded in [ADR 0001](/adr/0001-port-pmle-simulator.md).
 
 ## Module Ownership
 

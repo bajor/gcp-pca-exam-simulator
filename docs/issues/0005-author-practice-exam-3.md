@@ -2,7 +2,7 @@
 type: Issue
 title: Author Practice Exam 3
 description: Plan, author, review, and publish the third original 60-question PCA practice set, with the EHR Healthcare and KnightMotives Automotive case studies.
-status: in-progress
+status: complete
 labels: [content]
 blocked_by: []
 tracker: "One pull request per section, then candidate review and publication"
@@ -208,3 +208,6 @@ Section authors may change a planned row before writing its section. Each change
   - analyze-04 now also rules out building or running additional clusters, which option d's copy cluster would need.
   - analyze-08 now requires a decision within three months and a budget for one production build, which option d's year of two production builds fails.
   - The sources of the three questions were read again on 2026-10-14. The set's measurements are unchanged.
+- 2026-10-15: The independent acceptance review (PR #53) accepted version 2 with all 60 questions and no exceptions. The record is bound to SHA-256 `a631c5a12a43c632f8da0258ee746d86b8648b926cc023d7307bb0f98535f8fe`.
+  - The runtime catalog in `src/data/questionSets/index.ts` now lists Practice Exam 3 as available. It looks up the accepted candidate `professional-cloud-architect-v6-1-practice-3-v2` among the candidates of published exams and throws an error if the candidate is not registered.
+  - With Practice Exams 1, 2, and 3 accepted, every testable consideration of the exam guide is the primary topic of at least one question, and all four case studies are used.
