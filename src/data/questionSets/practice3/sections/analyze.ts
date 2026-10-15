@@ -28,7 +28,7 @@ export const practiceExamThreeAnalyzeSection = {
       kind: "single",
       section: "analyze",
       objective: "4.1 Analyzing and defining technical processes: 4.1.b continuous integration and continuous deployment",
-      prompt: "A company's Cloud Build pipeline runs integration tests against a database at 10.20.0.15 in its VPC network, and the database has no external IP address. Every build now fails with connection timeouts at the test step, while the same tests pass from a VM in the VPC network. The builds run in Cloud Build's default pool. Security rules forbid an external IP address on the database, and the team wants to keep Cloud Build without managing build servers. What should you do?",
+      prompt: "A company's Cloud Build pipeline runs integration tests against a database at 10.20.0.15 in its VPC network. Last week, the security team removed the database's external IP address, and every build now fails with connection timeouts at the test step, while the same tests pass from a VM in the VPC network. The builds run in Cloud Build's default pool. Security rules forbid an external IP address on the database, and the team wants to keep Cloud Build without managing build servers. What should you do?",
       verifiedOn: "2026-10-14",
       evidence: [
         {
@@ -37,13 +37,19 @@ export const practiceExamThreeAnalyzeSection = {
           url: "https://docs.cloud.google.com/build/docs/private-pools/private-pools-overview",
           claim: "By default, builds run in a hosted environment with access to the public internet, and the default pool has limits on private network access. Private pools are dedicated, fully managed pools of workers that can access resources in a private network through a VPC peering connection with your VPC network, with no infrastructure to set up, upgrade, or scale.",
         },
+        {
+          id: "compute-ip-ranges",
+          title: "Google Compute Engine FAQ",
+          url: "https://docs.cloud.google.com/compute/docs/faq",
+          claim: "Google Cloud publishes a JSON-formatted list of customer-usable global and regional external IP address ranges in cloud.json.",
+        },
       ],
       choices: [
         {
           id: "a",
-          text: "Give the database an external IP address, and allow connections only from Cloud Build's published IP ranges with a firewall rule.",
-          feedback: "Incorrect. An external IP address on the database breaks the security rules, while a private pool reaches the database's internal address through VPC peering.",
-          evidenceIds: ["private-pools"],
+          text: "Give the database an external IP address, and allow connections only from Google Cloud's published external IP ranges with a firewall rule.",
+          feedback: "Incorrect. An external IP address on the database breaks the security rules, and Google Cloud's published ranges include addresses that other customers use, while a private pool reaches the database's internal address through VPC peering.",
+          evidenceIds: ["private-pools", "compute-ip-ranges"],
         },
         {
           id: "b",
@@ -158,7 +164,7 @@ export const practiceExamThreeAnalyzeSection = {
         {
           id: "d",
           text: "Switch to a larger Gemini model with a bigger context window, so that it can read and summarize longer documents.",
-          feedback: "Incorrect. The team does not want to switch models, and the documents are not longer than before, because the limit reached is the output token limit in the request.",
+          feedback: "Incorrect. The team does not want to switch models, and a bigger context window does not help, because the limit reached is the output token limit set in the request.",
           evidenceIds: ["gemini-inference"],
         },
       ],
@@ -184,6 +190,12 @@ export const practiceExamThreeAnalyzeSection = {
           url: "https://docs.cloud.google.com/kubernetes-engine/policy-controller/docs/how-to/creating-policy-controller-constraints",
           claim: "Constraints are enforced by default, and a violation prevents the cluster operation. You can set a constraint's spec.enforcementAction to dryrun to report violations without preventing the operation.",
         },
+        {
+          id: "constraint-audit",
+          title: "Auditing using constraints",
+          url: "https://docs.cloud.google.com/kubernetes-engine/policy-controller/docs/how-to/auditing-constraints",
+          claim: "A constraint's output shows at most 20 violations, and when there are more, you can view the complete list in the logs.",
+        },
       ],
       choices: [
         {
@@ -201,8 +213,8 @@ export const practiceExamThreeAnalyzeSection = {
         {
           id: "c",
           text: "Apply the constraint with the dryrun enforcement action, and review the reported violations across the clusters.",
-          feedback: "Correct. A dryrun constraint reports every violation without preventing operations, so the team gets the complete list first and enforces the rule after owners fix their workloads.",
-          evidenceIds: ["constraint-enforcement", "policy-controller"],
+          feedback: "Correct. A dryrun constraint reports violations without preventing operations, and the logs hold the complete list, so the team sees every violation first and enforces the rule after owners fix their workloads.",
+          evidenceIds: ["constraint-enforcement", "constraint-audit", "policy-controller"],
         },
         {
           id: "d",
@@ -261,7 +273,7 @@ export const practiceExamThreeAnalyzeSection = {
       kind: "single",
       section: "analyze",
       objective: "4.2 Analyzing and defining business processes: 4.2.a stakeholder management",
-      prompt: "An online furniture retailer's engineering team wants to rebuild order processing on Cloud Run, and the CFO must approve the budget. The finance team objects because cloud invoices change every month and finance cannot see what the spending delivers. Engineering and finance have argued about it for two months. The company wants a decision that both teams accept, and it wants cloud costs to stay tied to business results afterward. What should you do?",
+      prompt: "An online pet supply retailer's engineering team wants to rebuild order processing on Cloud Run, and the CFO must approve the budget. The finance team objects because cloud invoices change every month and finance cannot see what the spending delivers. Engineering and finance have argued about it for two months. The company wants a decision that both teams accept, and it wants cloud costs to stay tied to business results afterward. What should you do?",
       verifiedOn: "2026-10-14",
       evidence: [
         {
