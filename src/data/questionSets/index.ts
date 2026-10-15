@@ -1,11 +1,17 @@
 import type { ExamCatalogEntry } from "../../domain/catalog";
 import type { QuestionSet } from "../../domain/questions";
 import { practiceExamOneCandidateQuestionSets } from "./practice1/candidates";
+import { practiceExamTwoCandidateQuestionSets } from "./practice2/candidates";
+
+const publishedExamCandidates: readonly QuestionSet[] = [
+  ...practiceExamOneCandidateQuestionSets,
+  ...practiceExamTwoCandidateQuestionSets,
+];
 
 // Imports only the candidates of published exams, so the app bundle never contains unreviewed drafts.
 // `make verify-sources` checks that each published candidate has an exact acceptance record.
 function acceptedCandidate(id: string): QuestionSet {
-  const questionSet = practiceExamOneCandidateQuestionSets.find((candidate) => candidate.id === id);
+  const questionSet = publishedExamCandidates.find((candidate) => candidate.id === id);
   if (questionSet === undefined) {
     throw new Error(`${id}: the accepted candidate is not registered.`);
   }
@@ -18,9 +24,8 @@ export const examCatalog: readonly ExamCatalogEntry[] = [
     questionSet: acceptedCandidate("professional-cloud-architect-v6-1-practice-1-v2"),
   },
   {
-    availability: "coming-soon",
-    id: "professional-cloud-architect-v6-1-practice-2",
-    title: "Professional Cloud Architect Practice Exam 2",
+    availability: "available",
+    questionSet: acceptedCandidate("professional-cloud-architect-v6-1-practice-2-v2"),
   },
   {
     availability: "coming-soon",
