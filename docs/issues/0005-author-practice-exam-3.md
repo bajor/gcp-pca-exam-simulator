@@ -114,7 +114,7 @@ The other 52 questions use considerations that earlier sets already cover, with 
 | pca-p3-implement-02 | single | 5.1.b | T1 | no | none | Apigee OAuthV2 client credentials grant for partner systems instead of static keys | a | D5, D7, D1 | L2, L4 |
 | pca-p3-implement-03 | single | 5.1.d | T3 | no | KnightMotives Automotive | Datastream replication from the ERP database to BigQuery | d | D1, D3, D6 | L3, L4 |
 | pca-p3-implement-04 | single | 5.1.d | T3 | no | none | Storage Transfer Service event-driven transfers from Amazon S3 | b | D1, D7, D3 | L2, L4 |
-| pca-p3-implement-05 | single | 5.2.c | T10 | no | none | Firestore emulator that gives each CI run an empty, isolated database | a | D2, D7, D1 | L3, L4 |
+| pca-p3-implement-05 | single | 5.2.c | T10 | no | none | Firestore emulator for each CI run, with composite indexes checked against a real database before release | a | D2, D7, D1 | L2, L4 |
 | pca-p3-implement-06 | single | 5.2.d | T10 | no | EHR Healthcare | Infrastructure Manager deployments that create each new environment from Terraform | c | D1, D7, D6 | L2, L4 |
 | pca-p3-implement-07 | multiple | 5.2.e | T7 | no | none | Workload Identity Federation for GKE instead of keys or the node service account (choose two) | a, d | D5, D4, D5 | L2, L4 |
 
@@ -125,7 +125,7 @@ The other 52 questions use considerations that earlier sets already cover, with 
 | pca-p3-operate-01 | single | 6.1.a | T10 | no | KnightMotives Automotive | Incident response with defined roles and practiced drills | b | D6, D2, D8 | L3, L4 |
 | pca-p3-operate-02 | single | 6.2.a | T4 | no | none | Ops Agent to collect VM memory metrics | d | D6, D7, D1 | L2, L4 |
 | pca-p3-operate-03 | single | 6.2.a | T9 | no | none | Exclusion filter on the _Default sink for DEBUG entries to cut logging cost | a | D7, D7, D6 | L1, L4 |
-| pca-p3-operate-04 | single | 6.3.a | T10 | yes | none | Traffic split between two models deployed to one Agent Platform endpoint | c | D2, D7, D8 | L2, L4 |
+| pca-p3-operate-04 | single | 6.3.a | T10 | yes | none | Traffic split between two models deployed to one Agent Platform endpoint | c | D2, D6, D8 | L2, L4 |
 | pca-p3-operate-05 | single | 6.4.a | T4 | no | none | Personalized Service Health to check for a Google Cloud incident before escalating | d | D8, D6, D2 | L3, L6 |
 | pca-p3-operate-06 | single | 6.5.a | T6 | no | none | Synthetic monitor success rate as a release quality measure | b | D6, D7, D6 | L3, L4 |
 | pca-p3-operate-07 | single | 6.6.a | T6 | no | none | Regular recovery drills that restore backups and measure the recovery time | a | D6, D7, D8 | L2, L6 |
@@ -192,3 +192,9 @@ Section authors may change a planned row before writing its section. Each change
   - analyze-01's external-address option now uses Google Cloud's published external IP ranges, because Cloud Build publishes no ranges for its default pool, and its stem names the change that broke the builds.
   - secure-11 cites the _Required sink, which receives Access Transparency logs and whose bucket retention can't change, analyze-04 cites the complete violation list in the logs, and secure-09 cites the Cloud KMS protection levels.
   - secure-04 and secure-06 now state three constraints each, and secure-07 and analyze-06 use organization types that no other set uses.
+- 2026-10-14: Applied the fresh-session review of the `implement` and `operate` sections and the near-miss edits. All 17 keys were confirmed, and the full draft meets every PRD 0002 target.
+  - implement-02's API key feedback no longer says keys never expire, because Apigee verifies that consumer keys are not expired or revoked. It cites Apigee's note that API keys work better as app identifiers than as security tokens.
+  - operate-04's second option is now a batch inference job, because rolling deployments to an endpoint are a Preview feature.
+  - implement-05 now also tests the emulator's documented limit: the emulator does not track composite indexes, so a real database must show which indexes new queries need. This keeps it apart from Practice Exam 1's implement-05, which tested the Spanner emulator for isolated CI runs.
+  - provision-06's Hyperdisk Throughput feedback states that its IOPS follow its throughput and that Google recommends Hyperdisk Balanced for Postgres. operate-01 no longer uses the word "always" or names the pillar in its stem, and the distractors of secure-03 and secure-07 no longer use "never" or "always".
+  - implement-03, operate-03, and operate-06 cite the documented source impact of Datastream, the log bucket requirement of Cloud Logging tools, and the uptime check limits.

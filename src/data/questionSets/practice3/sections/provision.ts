@@ -332,7 +332,7 @@ export const practiceExamThreeProvisionSection = {
           id: "hyperdisk-types",
           title: "Google Cloud Hyperdisk overview",
           url: "https://docs.cloud.google.com/compute/docs/disks/hyperdisks",
-          claim: "Hyperdisk Throughput provides high throughput for bandwidth-intensive and capacity-intensive applications that don't need high IOPS.",
+          claim: "Google recommends Hyperdisk Balanced for most workloads, including Postgres and MySQL. Hyperdisk Throughput provides high throughput for bandwidth-intensive and capacity-intensive applications that don't need high IOPS, and its IOPS can't be specified but follow its throughput level, up to 9,600 IOPS per volume.",
         },
       ],
       choices: [
@@ -357,7 +357,7 @@ export const practiceExamThreeProvisionSection = {
         {
           id: "d",
           text: "Move the data to a Hyperdisk Throughput volume, and change its capacity and throughput separately as the data and the quarterly peaks require.",
-          feedback: "Incorrect. Hyperdisk Throughput serves applications that don't need high IOPS, while the reprocessing job needs three times the usual IOPS.",
+          feedback: "Incorrect. Hyperdisk Throughput is meant for applications that don't need high IOPS, and you can't specify its IOPS, which follow its throughput level, while Google recommends Hyperdisk Balanced for Postgres.",
           evidenceIds: ["hyperdisk-types"],
         },
       ],

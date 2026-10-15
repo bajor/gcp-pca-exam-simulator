@@ -16,7 +16,7 @@ export const practiceExamThreeOperateSection = {
       section: "operate",
       objective: "6.1 Understanding the principles and recommendations of the operational excellence pillar of the Google Cloud Well-Architected Framework: 6.1.a understanding the principles and recommendations of the operational excellence pillar of the Google Cloud Well-Architected Framework",
       caseStudyId: "knightmotives-automotive",
-      prompt: "During a security incident last month, engineers from five KnightMotives Automotive teams worked on the same systems in parallel without coordinating, two teams undid each other's fixes, and nobody kept dealers informed. Security is a top concern after the company's earlier breaches, and it is now writing a plan for responding to incidents. KnightMotives wants future incidents handled by a coordinated team with clear communication, as the operational excellence pillar recommends. What should you do?",
+      prompt: "During a security incident last month, engineers from five KnightMotives Automotive teams worked on the same systems in parallel without coordinating, two teams undid each other's fixes, and nobody kept dealers informed. Security is a top concern after the company's earlier breaches, and it is now writing a plan for responding to incidents. KnightMotives wants future incidents handled by a coordinated team with clear communication. What should you do?",
       verifiedOn: "2026-10-14",
       evidence: [
         {
@@ -45,7 +45,7 @@ export const practiceExamThreeOperateSection = {
         },
         {
           id: "c",
-          text: "Page every engineer in all five teams for each incident, so that the response always has enough people working on it.",
+          text: "Page every engineer in all five teams for each incident, so that the response has as many people working on it as possible.",
           feedback: "Incorrect. Paging everyone adds people without roles or a coordinator, which repeats the uncoordinated work that undid fixes last month.",
           evidenceIds: ["manage-incidents"],
         },
@@ -119,7 +119,7 @@ export const practiceExamThreeOperateSection = {
           id: "log-routing",
           title: "Route log entries",
           url: "https://docs.cloud.google.com/logging/docs/routing/overview",
-          claim: "A sink routes a log entry to its destination when the entry matches the sink's inclusion filter but doesn't match any of its exclusion filters.",
+          claim: "A sink routes a log entry to its destination when the entry matches the sink's inclusion filter but doesn't match any of its exclusion filters. To use the visualization and analysis tools of Cloud Logging, you must store your log entries in log buckets.",
         },
         {
           id: "logging-pricing",
@@ -151,7 +151,7 @@ export const practiceExamThreeOperateSection = {
           id: "c",
           text: "Create a sink that routes every log entry to a Cloud Storage bucket, and disable the _Default sink for the project.",
           feedback: "Incorrect. Storage charges apply to every routed entry, including the DEBUG entries, and the teams would lose the WARNING entries that they read in Cloud Logging.",
-          evidenceIds: ["logging-pricing"],
+          evidenceIds: ["logging-pricing", "log-routing"],
         },
         {
           id: "d",
@@ -174,7 +174,13 @@ export const practiceExamThreeOperateSection = {
           id: "endpoint-deployment",
           title: "Deploy a model to an endpoint",
           url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/machine-learning/general/deployment",
-          claim: "You can deploy multiple models to an endpoint. Deploying a new model to the same endpoint lets it serve a small percentage of traffic, and you can gradually increase its traffic split until it serves 100%, without updating the application to a new endpoint URL. A rolling deployment replaces a deployed model.",
+          claim: "You can deploy multiple models to an endpoint. Deploying a new model to the same endpoint lets it serve a small percentage of traffic, and you can gradually increase its traffic split until it serves 100%, without updating the application to a new endpoint URL.",
+        },
+        {
+          id: "batch-inference",
+          title: "Get batch inferences from a custom trained model",
+          url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/machine-learning/predictions/get-batch-predictions",
+          claim: "To get batch inferences from a custom trained model, you specify an input source and an output location in Cloud Storage or BigQuery, and because all of the input data is known up front, the system partitions it across replicas when the job starts.",
         },
       ],
       choices: [
@@ -186,9 +192,9 @@ export const practiceExamThreeOperateSection = {
         },
         {
           id: "b",
-          text: "Replace the deployed model on the existing endpoint with the new version through a rolling deployment.",
-          feedback: "Incorrect. A rolling deployment replaces the deployed model, so the old version does not keep serving most requests for comparison.",
-          evidenceIds: ["endpoint-deployment"],
+          text: "Run a batch inference job with the new version on last month's applications, and compare its scores with the old version offline.",
+          feedback: "Incorrect. A batch inference job scores input data that is known up front, so the new version serves none of the live requests that the team wants to compare.",
+          evidenceIds: ["batch-inference"],
         },
         {
           id: "c",
@@ -266,7 +272,7 @@ export const practiceExamThreeOperateSection = {
           id: "uptime-checks",
           title: "Create public uptime checks",
           url: "https://docs.cloud.google.com/monitoring/uptime-checks",
-          claim: "Public uptime checks test the availability of URLs and resources by sending periodic HTTP, HTTPS, or TCP requests, and an alerting policy can notify you if the target fails to respond.",
+          claim: "Public uptime checks test the availability of URLs and resources by sending periodic HTTP, HTTPS, or TCP requests, and an alerting policy can notify you if the target fails to respond. Uptime checks don't load page assets or run JavaScript.",
         },
       ],
       choices: [
@@ -285,7 +291,7 @@ export const practiceExamThreeOperateSection = {
         {
           id: "c",
           text: "Create an uptime check on the checkout page's URL, and alert when the page stops returning a successful response to the check.",
-          feedback: "Incorrect. An uptime check only tests whether the URL responds, so it misses a broken payment step on a page that still loads.",
+          feedback: "Incorrect. An uptime check sends periodic requests to the URL and doesn't run JavaScript, so it misses a broken saved-card payment step on a page that still loads.",
           evidenceIds: ["uptime-checks"],
         },
         {

@@ -90,7 +90,7 @@ export const practiceExamThreeImplementSection = {
           id: "api-keys",
           title: "API keys",
           url: "https://docs.cloud.google.com/apigee/docs/api-platform/security/api-keys",
-          claim: "An API key, known in Apigee as a consumer key, is a string value that a client app passes to your API proxies, and API key validation is the simplest form of app-based security.",
+          claim: "An API key, known in Apigee as a consumer key, is a string value that a client app passes to your API proxies. Because API keys can easily be extracted from app code and used to access an API, they work better as unique app identifiers than as security tokens.",
         },
       ],
       choices: [
@@ -103,7 +103,7 @@ export const practiceExamThreeImplementSection = {
         {
           id: "b",
           text: "Keep the API keys, and rotate every partner's key each month by issuing a new key and revoking the old one.",
-          feedback: "Incorrect. An API key is a static string that stays valid until it is revoked, so monthly rotation still leaves keys that do not expire within an hour.",
+          feedback: "Incorrect. Monthly rotation keeps each API key valid for about a month instead of an hour, and Apigee notes that API keys work better as app identifiers than as security tokens.",
           evidenceIds: ["api-keys"],
         },
         {
@@ -138,7 +138,7 @@ export const practiceExamThreeImplementSection = {
           id: "datastream",
           title: "Datastream overview",
           url: "https://docs.cloud.google.com/datastream/docs/overview",
-          claim: "Datastream is a serverless change data capture and replication service that synchronizes data with minimal latency from operational databases, including Oracle, into BigQuery, with no resources to provision or manage.",
+          claim: "Datastream is a serverless change data capture and replication service that synchronizes data with minimal latency, and with minimal impact on the performance of the source, from operational databases, including Oracle, into BigQuery, with no resources to provision or manage.",
         },
         {
           id: "bq-reference",
@@ -169,7 +169,7 @@ export const practiceExamThreeImplementSection = {
         {
           id: "d",
           text: "Replicate the ERP tables to BigQuery with a Datastream stream that captures the changes from the Oracle database.",
-          feedback: "Correct. Datastream captures changes from Oracle and replicates them into BigQuery with minimal latency, without application changes, query load from analysts, or servers to manage.",
+          feedback: "Correct. Datastream replicates changes from Oracle into BigQuery with minimal latency and minimal impact on the source's performance, and it is serverless, with no resources to provision or manage.",
           evidenceIds: ["datastream", "case-study"],
         },
       ],
@@ -241,14 +241,14 @@ export const practiceExamThreeImplementSection = {
       kind: "single",
       section: "implement",
       objective: "5.2 Interacting with Google Cloud programmatically: 5.2.c Cloud Emulators",
-      prompt: "A fitness app's backend team runs integration tests in CI against a shared Firestore database in a test project. When two pipelines run at the same time, their tests overwrite each other's documents, and leftover test data keeps growing. The team wants each CI run to start with an empty, isolated database, without creating cloud resources or credentials for CI, and without changing the backend code, which uses a Firestore server client library. What should you do?",
+      prompt: "A fitness app's backend team runs integration tests in CI against a shared Firestore database in a test project. When two pipelines run at the same time, their tests overwrite each other's documents. The team wants each CI run to start with an empty, isolated database without creating cloud resources or credentials for that run, and it must learn before each release which composite indexes new queries need in production. The backend uses a Firestore server client library. What should you do?",
       verifiedOn: "2026-10-14",
       evidence: [
         {
           id: "firestore-emulator",
           title: "Use Firestore emulator locally",
           url: "https://docs.cloud.google.com/firestore/native/docs/emulator",
-          claim: "The Google Cloud CLI provides a local, in-memory Firestore emulator for testing that works with all Firestore client libraries and should be used only for local testing. Because it stores data only in memory, it does not persist data across runs. When the FIRESTORE_EMULATOR_HOST environment variable is set, the server client libraries automatically connect to the emulator.",
+          claim: "The Google Cloud CLI provides a local, in-memory Firestore emulator for testing that works with all Firestore client libraries and should be used only for local testing. Because it stores data only in memory, it does not persist data across runs. When the FIRESTORE_EMULATOR_HOST environment variable is set, the server client libraries automatically connect to the emulator. The emulator does not track composite indexes and executes any valid query, so you test against a real Firestore instance to determine which indexes you require.",
         },
         {
           id: "emulator-command",
@@ -266,8 +266,8 @@ export const practiceExamThreeImplementSection = {
       choices: [
         {
           id: "a",
-          text: "Start the Firestore emulator in each CI job, and set FIRESTORE_EMULATOR_HOST so that the client library connects to it.",
-          feedback: "Correct. Each job's emulator is local and in memory, so every run starts empty and isolated without cloud resources, and the client library connects to it through the environment variable.",
+          text: "Run the tests against a Firestore emulator in each CI job, and check the new queries against a real Firestore test database before each release.",
+          feedback: "Correct. Each job's in-memory emulator starts empty and isolated without cloud resources, and because the emulator does not track composite indexes, the release check against a real database finds the indexes needed.",
           evidenceIds: ["firestore-emulator", "emulator-command"],
         },
         {
@@ -278,14 +278,14 @@ export const practiceExamThreeImplementSection = {
         },
         {
           id: "c",
-          text: "Run one Firestore emulator on a shared CI server for all pipelines, and point every test run at that emulator's address.",
-          feedback: "Incorrect. One emulator keeps its data in memory for as long as it runs, so pipelines that share it still overwrite each other's documents.",
+          text: "Run the tests against a Firestore emulator in each CI job, and check the new queries against that emulator as well before each release.",
+          feedback: "Incorrect. The emulator does not track composite indexes and executes any valid query, so checking new queries against it cannot show which indexes production needs.",
           evidenceIds: ["firestore-emulator"],
         },
         {
           id: "d",
-          text: "Replace the Firestore client in the tests with hand-written fakes that keep documents in memory during each run.",
-          feedback: "Incorrect. Hand-written fakes replace the client library that the backend code uses, so the tests no longer exercise that code, while the emulator works with the real client library.",
+          text: "Replace the Firestore client in the tests with hand-written fakes that keep documents in memory during each CI run.",
+          feedback: "Incorrect. Hand-written fakes replace the client library that the backend uses and know nothing about Firestore indexes, so they cannot show which composite indexes production needs.",
           evidenceIds: ["firestore-emulator"],
         },
       ],
