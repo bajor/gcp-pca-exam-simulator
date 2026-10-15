@@ -112,9 +112,9 @@ The other 52 questions use considerations that earlier sets already cover, with 
 |---|---|---|---|---|---|---|---|---|---|
 | pca-p3-implement-01 | single | 5.1.a | T10 | no | none | Cloud Run revision tag to test a revision before it receives traffic | c | D7, D8, D2 | L2, L4 |
 | pca-p3-implement-02 | single | 5.1.b | T1 | no | none | Apigee OAuthV2 client credentials grant for partner systems instead of static keys | a | D5, D7, D1 | L2, L4 |
-| pca-p3-implement-03 | single | 5.1.d | T3 | no | KnightMotives Automotive | Datastream replication from the ERP database to BigQuery | d | D1, D6, D3 | L3, L4 |
+| pca-p3-implement-03 | single | 5.1.d | T3 | no | KnightMotives Automotive | Datastream replication from the ERP database to BigQuery | d | D1, D3, D6 | L3, L4 |
 | pca-p3-implement-04 | single | 5.1.d | T3 | no | none | Storage Transfer Service event-driven transfers from Amazon S3 | b | D1, D7, D3 | L2, L4 |
-| pca-p3-implement-05 | single | 5.2.c | T10 | no | none | Pub/Sub emulator for local and CI tests | a | D2, D7, D3 | L3, L4 |
+| pca-p3-implement-05 | single | 5.2.c | T10 | no | none | Firestore emulator that gives each CI run an empty, isolated database | a | D2, D7, D1 | L3, L4 |
 | pca-p3-implement-06 | single | 5.2.d | T10 | no | EHR Healthcare | Infrastructure Manager deployments that create each new environment from Terraform | c | D1, D7, D6 | L3, L4 |
 | pca-p3-implement-07 | multiple | 5.2.e | T7 | no | none | Workload Identity Federation for GKE instead of keys or the node service account (choose two) | a, d | D5, D4, D5 | L2, L4 |
 
@@ -174,3 +174,8 @@ Section authors may change a planned row before writing its section. Each change
   - analyze-03 tests the finish reason FINISH_REASON_MAX_TOKENS and the maxOutputTokens setting, and analyze-04 tests the dryrun enforcement action of Policy Controller constraints.
   - analyze-09's services must not be interrupted, which rules out Spot VMs on documented preemption.
   - Measurements after four sections, including the provision review: the correct option is strictly the longest in 3 of 42 single-choice questions, 18 questions have a near-miss pair, and the letters are a 11, b 11, c 11, d 9. No field shares a run of more than 4 words with a case study.
+- 2026-10-14: Authored the `implement` section (author `claude-opus-5.5-p3-implement-20261014`).
+  - implement-05 tests the Firestore emulator instead of the Pub/Sub emulator, because the Pub/Sub emulator runs only through the `gcloud beta emulators pubsub` commands, while `gcloud emulators firestore` is generally available.
+  - implement-02 tests the OAuthV2 client credentials grant with a token expiry, so that it differs from Practice Exam 1's implement-01 (API products and keys) and Practice Exam 2's implement-02 (SpikeArrest).
+  - implement-04 contrasts event-driven transfers from Amazon S3 with scheduled transfers, which run at most every hour, so that it differs from Practice Exam 2's agent-based transfers from an on-premises file system.
+  - Measurements after five sections: the correct option is strictly the longest in 4 of 48 single-choice questions, 20 questions have a near-miss pair, and the letters are a 13, b 12, c 13, d 10. No field shares a run of more than 4 words with a case study.
